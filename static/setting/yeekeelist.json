@@ -1,0 +1,92 @@
+{
+    "list": [
+        {
+            "header_color_class": "bg-gray-700",
+            "overlay_image": false,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 1 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": false
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 2 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 3 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 4 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 5 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 6 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 7 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        },
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 8 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "open": true
+        }
+    ]
+}

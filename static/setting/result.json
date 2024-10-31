@@ -1,0 +1,56 @@
+{
+    "date": "2024-08-20",
+    "data": [
+      {
+        "title": "หวยรัฐบาล",
+        "period_date": "2024-08-16",
+        "color": "red",
+        "headerImageBackground": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+        "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+        "lotto": {
+          "first": "123456",
+          "three_front": [
+            "123",
+            "456"
+          ],
+          "three_back": [
+            "789",
+            "012"
+          ],
+          "two": [
+            "34"
+          ]
+        }
+      },
+      {
+        "title": "หวยออมสิน",
+        "period_date": "2024-08-16",
+        "color": "pink",
+        "headerImageBackground": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+        "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+        "lotto": {
+          "three_front": [
+            "654"
+          ],
+          "two": [
+            "21"
+          ]
+        }
+      },
+      {
+        "title": "หวยธกส.",
+        "period_date": "2024-08-16",
+        "color": "blue",
+        "headerImageBackground": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+        "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+        "lotto": {
+          "three_front": [
+            "987"
+          ],
+          "two": [
+            "32"
+          ]
+        }
+      }
+    ]
+  }

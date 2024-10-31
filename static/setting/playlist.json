@@ -1,0 +1,94 @@
+{
+    "list": [
+        {
+            "header_color_class": "bg-red-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยยี่กี่",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยยี่กี่ หรือ หวยปิงปอง เป็นหวยที่เล่นง่ายและเล่นได้ตลอดเวลา.",
+            "button": "แทง",
+            "name": "yeekee",
+            "agent": true
+        },
+        {
+            "header_color_class": "bg-gray-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยไทย",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยไทย หรือ สลากกินแบ่งรัฐบาล ออกรางวัลทุกวันที่ 1 และ 16 ของเดือน.",
+            "button": "แทง",
+            "name": "thai",
+            "agent": true
+        },
+        {
+            "header_color_class": "bg-orange-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยลาว",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยลาว หรือ สลากพัฒนา ออกรางวัลทุกวันจันทร์ และ วันพฤหัสบดี.",
+            "button": "แทง",
+            "name": "lao"
+        },
+        {
+            "header_color_class": "bg-green-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยฮานอย",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยฮานอย หรือ หวยเวียดนาม ออกรางวัลทุกวัน.",
+            "button": "แทง",
+            "name": "hanoy"
+        },
+        {
+            "header_color_class": "bg-blue-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยหุ้น",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยหุ้นไทย และ หวยหุ้นต่างประเทศ ออกรางวัลทุกวันทำการ.",
+            "button": "แทง",
+            "name": "stock"
+        },
+        {
+            "header_color_class": "bg-lime-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยมาเลย์",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยมาเลย์ ออกรางวัลทุกวันพุธ วันเสาร์ และวันอาทิตย์.",
+            "button": "แทง",
+            "name": "malay"
+        },
+        {
+            "header_color_class": "bg-purple-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยรัฐบาล",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยรัฐบาลไทย ออกรางวัลทุกวันที่ 1 และ 16 ของทุกเดือน.",
+            "button": "แทง",
+            "name": "government"
+        },
+        {
+            "header_color_class": "bg-sky-500",
+            "overlay_image": true,
+            "header_image_background": "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG",
+            "icon": "https://cdn-icons-png.flaticon.com/512/630/630635.png",
+            "title": "หวยกัมพูชา",
+            "time": "เหลือเวลาอีก 0 วัน 00:00:00",
+            "detail": "หวยกัมพูชา ออกรางวัลทุกวัน.",
+            "button": "แทง",
+            "name": "cambodia"
+        }
+    ]
+}
