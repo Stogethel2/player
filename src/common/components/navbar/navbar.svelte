@@ -5,7 +5,7 @@
     let credits = 10
 </script>
 
-<div class="sticky w-full">
+<div class="sticky w-full navbar">
     <div class="bg-white shadow-md w-full">
         <div class="">
             <OptionNavbar />
@@ -17,3 +17,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    .navbar {
+      z-index: 9999;
+    }
+  </style>
