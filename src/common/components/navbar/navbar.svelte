@@ -1,7 +1,7 @@
 <script lang="ts">
     import OptionNavbar from "./option_navbar.svelte";
     import CoreNavbar from "./core_navbar.svelte";
-    let name = "088-888-8888"
+    export let name = "088-888-8888"
     let credits = 10
 </script>
 
