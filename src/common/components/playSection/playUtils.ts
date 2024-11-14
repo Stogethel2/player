@@ -34,10 +34,10 @@ export interface LotteryTypeChangeEvent {
 
 export function handleLotteryTypesChanged(
   event: CustomEvent<LotteryTypeChangeEvent>,
-  activeLotteryTypesStore: Writable<string[]>
+  activeLotteryTypesStore: Writable<string>
 ): { currentLotteryType: string; currentInputLength: number } {
   const { activeTypes, inputLength, selectedType, action } = event.detail;
-  activeLotteryTypesStore.set(activeTypes);
+  activeLotteryTypesStore.set(selectedType);
 
   if (action === "deactivate" && activeTypes.length > 0) {
     const newCurrentType = activeTypes[0];

@@ -7,7 +7,7 @@
 
   export let inputLength: number = 3;
   export let lotteryType: string = "";
-  export let activeLotteryTypesStore: Writable<string[]>;
+  export let activeLotteryTypesStore: Writable<any>;
 
   let inputValues: string[] = [];
   let currentIndex = 0;
@@ -53,6 +53,8 @@
   }
 
   function handleNumpadClick(value: (typeof NUMPAD_LAYOUT)[number]): void {
+    const a = LotteryBetStore.getAllBetEntries();
+    console.log(a);
     if (typeof value === "number" || value === "Rand") {
       if (currentIndex < inputLength) {
         const newValue =
@@ -78,15 +80,13 @@
 
   function handleSubmit(): void {
     const number = inputValues.join("");
-    if (lotteryType && !LotteryBetStore.checkBetEntryExists(number, lotteryType)) {
+    if (
+      lotteryType &&
+      !LotteryBetStore.checkBetEntryExists(number, lotteryType)
+    ) {
       const activeTypes = get(activeLotteryTypesStore);
-      const currentPrefix = lotteryType.split("-")[0];
 
-      activeTypes
-        .filter((type) => type.startsWith(currentPrefix))
-        .forEach((type) => {
-          LotteryBetStore.addBetEntry(type, number);
-        });
+      LotteryBetStore.addBetEntry(activeTypes.id, number);
     }
     resetInputs();
   }
