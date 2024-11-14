@@ -2,7 +2,6 @@
   import AlarmClock from "lucide-svelte/icons/alarm-clock";
   import ButtonCardLotto from "./buttonCardLotto.svelte";
   import { goto } from "$app/navigation";
-
   export let headerColorClass = "bg-gradient-to-r from-blue-500 to-purple-600";
   export let headerImageBackground: string | null = null;
   export let icon;
@@ -12,15 +11,17 @@
   export let open = true;
   export let agent = false;
   export let name: string;
+  export let lottoId: string;
 
   function handleButtonClick() {
     console.log("Button clicked for:", name);
     if (name === "yeekee") {
       goto("/yeekee");
     } else {
-      goto("/play");
+      goto("/play?lottoId=" + lottoId);
     }
   }
+
 </script>
 
 <div

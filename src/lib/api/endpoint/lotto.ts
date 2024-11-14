@@ -1,11 +1,6 @@
-import apiClient from '../apiClient';
+import type { ApiResponse } from '$lib';
 import type { AxiosResponse } from 'axios';
-
-interface ApiResponse<T> {
-    message: string;
-    code: number;
-    data: T;
-}
+import apiClient from '../apiClient';
 
 export const lottoApi = {
     /* Get all active lottos */
@@ -17,9 +12,9 @@ export const lottoApi = {
     },
 
     /* Get lotto by ID */
-    getLottoById: async (id: number): Promise<Response> => {
+    getLottoById: async (id: string): Promise<any> => {
         const response: AxiosResponse<Response> = await apiClient.get(`/public/lotto/${id}`);
-        return response.data;
+        return response.data.data;
     },
 };
 

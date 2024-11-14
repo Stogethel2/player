@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { lottoRoundApi } from "$lib";
   import { lottoApi } from "$lib/api/endpoint/lotto";
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
@@ -13,9 +14,8 @@
       if (category === "yeekee") {
         lottoData = await fetch("/setting/yeekeelist.json"); // ดึงข้อมูลจาก static/settings.json
       } else {
-        lottoData = await lottoApi.getActiveLottos();
+        lottoData = await lottoRoundApi.getActiveLottoRounds();
       }
-
       playlist = lottoData;
       const colors = [
         "bg-red-500",
@@ -48,13 +48,27 @@
         headerColorClass={card.header_color_class}
         headerImageBackground={"https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
         icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
-        title={card.lotto_name}
+        title={card.lotto.lotto_name}
         countDownText={"เหลือเวลาอีก 0 วัน 00:00:00"}
-        details={card.description}
-        open={card.is_active}
-        name={'test'}
-        agent={card.lotto_name}
+        details={card.round_date}
+        open={true}
+        name={"test"}
+        agent={card.lotto.lotto_name}
+        lottoId={card.id}
       />
     {/each}
+
+    <CardLotto
+      headerColorClass={'bg-red-500'}
+      headerImageBackground={"https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
+      icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
+      title={"หวยยี่กี่ 01/01/2564"}
+      countDownText={"เหลือเวลาอีก 0 วัน 00:00:00"}
+      details={"ออกผลวันที่ 01/01/2564"}
+      open={false}
+      name={"test"}
+      agent={true}
+      lottoId={`70fbea68-8a14-44c3-bb69-07c12584c277`}
+    />
   {/if}
 </div>
