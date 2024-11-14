@@ -1,36 +1,17 @@
 <script lang="ts">
-  import Announcement from "../common/components/announcement/announcement.svelte";
-  import LottoList from "../common/components/lottoList/lottoList.svelte";
-  import Slide from "../common/components/slide/slide.svelte";
-  import { onMount } from "svelte";
-  import type { announceSetting } from "../interface/setting.type";
-  import { lottoApi } from '$lib/api/endpoint';
+    import { onMount } from 'svelte';
+    import type { PageData } from './$types';
+    import { goto } from '$app/navigation';
 
-  let settings: announceSetting = {
-    announcement: "Loading...",
-  };
-  let isLoading = true;
+    let { data }: { data: PageData } = $props();
+    const redirect = async (): Promise<void> => {
+        let token = localStorage.getItem("token");
 
-  onMount(async () => {
-    try {
-      const response = await fetch("/setting/settings.json"); // ดึงข้อมูลจาก static/settings.json
-      settings = await response.json();
-
-      const lottoData = await lottoApi.getActiveLottos();
-      /* Work in progress */
-      console.log('lotteryData', lottoData);
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-    } finally {
-      isLoading = false;
-    }
-  });
+        // ส่ง token ไปใน URL
+        await goto(`/seamless?token=${token}`, { replaceState: true });
+        location.reload(); // รีเฟรชหน้าหลังจาก redirect
+    };
+    onMount(() => {
+        redirect(); // เรียกใช้ redirect เมื่อโหลดหน้า
+    });
 </script>
-
-<Announcement details={settings.announcement} />
-{#if isLoading}
-  <p>Loading...</p>
-{:else}
-  <Slide />
-{/if}
-<LottoList category="" />

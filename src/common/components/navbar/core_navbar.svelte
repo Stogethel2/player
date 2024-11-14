@@ -3,6 +3,7 @@
     import SquareUserRound from "lucide-svelte/icons/square-user-round";
     import { onMount } from "svelte";
     import type { brandSetting } from "../../../interface/setting.type";
+    import { goto } from "$app/navigation";
 
     let settings: brandSetting = {
         logo: { type: 'text', value: 'Loading...' },
@@ -19,6 +20,13 @@
         return credits.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    const logout = async (): Promise<void> => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        await goto("/seamless?token=null", { replaceState: true }); 
+        location.reload();
+    }
+
 </script>
 <div class="w-full bg-gradient-to-r from-red-700 to-red-900 px-4 py-3 sm:px-6 sm:py-4">
     <div class="flex flex-col sm:flex-row items-center justify-between w-full">
@@ -33,7 +41,9 @@
                 <p class="text-xs truncate">{name}</p>
                 <p class="text-xs truncate">{formatCredits(credits)} THB</p>
             </div>
-            <div class="text-white p-2 bg-red-950 mx-2 rounded-md cursor-pointer hover:bg-white hover:text-red-950 transition duration-300">
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="text-white p-2 bg-red-950 mx-2 rounded-md cursor-pointer hover:bg-white hover:text-red-950 transition duration-300" on:click={async () => await logout()}>
                 <LogOut size={18}/>
             </div>
         </div>
