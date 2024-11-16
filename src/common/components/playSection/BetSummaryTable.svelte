@@ -5,9 +5,10 @@
   import { lotteryTypes } from "./playUtils";
   import { createEventDispatcher } from "svelte";
 
-  export let totalList: TotalList;
+  export let totalList: any;
   let selectedRows = new Set<string>();
   const dispatch = createEventDispatcher();
+  
 
   let isAllSelected = false;
 
@@ -66,7 +67,7 @@
   }
 </script>
 
-{#if totalList.betGroup.length > 0}
+{#if totalList}
   <div class="p-2">
     <div
       class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
@@ -128,7 +129,7 @@
                     on:click|stopPropagation
                   />
                 </td>
-                <td class="px-2 py-4">{bet.amount * 1}</td>
+                <td class="px-2 py-4">{bet.pay}</td>
                 <td class="px-2 py-4">
                   <button
                     on:click|stopPropagation={() => deleteBet(type, bet.betNo)}

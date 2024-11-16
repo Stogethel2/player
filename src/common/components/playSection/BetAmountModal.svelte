@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { derived } from "svelte/store";
   import BetSummary from "./BetSummaryTable.svelte";
   import { LotteryBetStore } from "./LotteryBetStore";
@@ -9,11 +9,13 @@
     BetGroup,
     BetEntryStore,
   } from "./LotteryBetStore";
+  import { betCalculateApi } from "$lib";
 
   export let creditBalance = 30420.19;
   export let usedCredit = 0;
   let selectedRows = new Set<string>();
   let price = 0;
+  let betGroup: BetGroup[];
   $: totalList = derived(LotteryBetStore, calculateTotalList);
 
   const dispatch = createEventDispatcher();
@@ -22,18 +24,15 @@
     let totalBets = 0;
     let totalAmount = 0;
 
-    const betGroup: BetGroup[] = Object.entries($store).map(
-      ([type, entries]) => {
-        const groupEntries: BetEntry[] = entries.map((entry) => {
-          totalBets += 1;
-          totalAmount += entry.amount;
-          return { ...entry, payout: 0 };
-        });
+    betGroup = Object.entries($store).map(([type, entries]) => {
+      const groupEntries: BetEntry[] = entries.map((entry) => {
+        totalBets += 1;
+        totalAmount += entry.amount;
+        return { ...entry, payout: 1 };
+      });
 
-        return { type, entry: groupEntries };
-      }
-    );
-
+      return { type, entry: groupEntries };
+    });
     return {
       betGroup,
       summary: { totalBets, totalAmount },
@@ -44,7 +43,7 @@
     dispatch("cancel");
   }
 
-  function submit() {
+  async function submit() {
     dispatch("submit", { price, usedCredit });
   }
 
@@ -67,6 +66,14 @@
   function handleBetSelectionChange(event: CustomEvent) {
     selectedRows = event.detail.selectedRows;
   }
+
+  let global: any;
+  onMount(async () => {
+    const response = await betCalculateApi.getBetCalculate({ ...$totalList });
+    global = response;
+
+    console.log(global);
+  });
 </script>
 
 <div class="modal">
@@ -78,7 +85,7 @@
 
     <BetSummary
       on:selectionChange={handleBetSelectionChange}
-      totalList={$totalList}
+      totalList={global}
     />
 
     <div class="quick-buttons">

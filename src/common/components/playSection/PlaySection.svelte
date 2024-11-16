@@ -59,8 +59,6 @@
     if (!lottoId) return;
     lottoRoundData = await lottoRoundApi.getLottoRoundById(lottoId);
 
-    console.log(lottoRoundData);
-
     if (lottoRoundData) {
       startCountdown(300); // Start 5 minute countdown
     }

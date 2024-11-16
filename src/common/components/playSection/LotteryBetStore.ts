@@ -13,6 +13,7 @@ export interface BetEntryStore {
 
 export interface BetGroup {
   type: string;
+  betName: string;
   entry: BetEntry[];
 }
 
@@ -37,8 +38,9 @@ function createLotteryBetStore() {
         }
         const betId = `${type}|${betNo}`;
         if (!store[type].some((entry) => entry.betId === betId)) {
-          store[type].push({ betNo, amount: 0, betId });
+          store[type].push({ betNo, amount: 100, betId });
         }
+
         return store;
       }),
       

@@ -53,8 +53,7 @@
   }
 
   function handleNumpadClick(value: (typeof NUMPAD_LAYOUT)[number]): void {
-    const a = LotteryBetStore.getAllBetEntries();
-    console.log(a);
+;
     if (typeof value === "number" || value === "Rand") {
       if (currentIndex < inputLength) {
         const newValue =
@@ -85,7 +84,6 @@
       !LotteryBetStore.checkBetEntryExists(number, lotteryType)
     ) {
       const activeTypes = get(activeLotteryTypesStore);
-
       LotteryBetStore.addBetEntry(activeTypes.id, number);
     }
     resetInputs();
