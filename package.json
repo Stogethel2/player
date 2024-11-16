@@ -25,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-node": "^5.2.9",
 		"axios": "^1.7.7",
 		"lodash": "^4.17.21",
 		"lucide-svelte": "^0.396.0",
