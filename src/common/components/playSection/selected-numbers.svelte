@@ -5,7 +5,7 @@
   import { fade } from "svelte/transition";
   import { getTypeClass, lotteryTypes } from "./playUtils";
 
-  export let lottoBetTypes: any;    
+  export let lottoBetTypes: any;
 
   /* ดึงรายการและยอดรวมจาก store */
   const totalList = derived(LotteryBetStore, ($store) => {
@@ -25,7 +25,8 @@
   }
 
   function getTypeName(typeId: string) {
-    return lottoBetTypes.find((t: { id: string; }) => t.id === typeId)?.bet_type_name;
+    return lottoBetTypes.find((t: { id: string }) => t.id === typeId)
+      ?.bet_type_name;
   }
 </script>
 

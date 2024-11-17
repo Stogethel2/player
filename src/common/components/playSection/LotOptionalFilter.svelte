@@ -27,9 +27,7 @@
 
 <div class="p-2">
   <p class="text-xs font-bold py-2 text-gray-500">ตัวเลขเพิ่มเติม</p>
-  <div
-    class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2"
-  >
+  <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
     {#each tags as tag}
       <button
         class="p-2 bg-gray-200 rounded-lg text-xs sm:text-sm transition-colors duration-200 ease-in-out"

@@ -10,7 +10,7 @@
   let activeTypes = initialActiveTypes;
 
   function toggleLotteryType(lottoBetType: any) {
-    if(!lottoBetType.id) return
+    if (!lottoBetType.id) return;
 
     const isActive = activeTypes.includes(lottoBetType.id);
     const action = isActive ? "deactivate" : "activate";
@@ -39,17 +39,16 @@
 <div class="p-2">
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
     {#each lottoBetTypes as lottoBetType}
-        {#if lottoBetType.id}
+      {#if lottoBetType.id}
         <button
-            class="p-2 rounded-lg text-xs sm:text-sm transition-colors duration-200 ease-in-out"
-            class:active={activeTypes.includes(lottoBetType.id)}
-            on:click={() => toggleLotteryType(lottoBetType)}
-            aria-pressed={activeTypes.includes(lottoBetType.id)}
+          class="p-2 rounded-lg text-xs sm:text-sm transition-colors duration-200 ease-in-out"
+          class:active={activeTypes.includes(lottoBetType.id)}
+          on:click={() => toggleLotteryType(lottoBetType)}
+          aria-pressed={activeTypes.includes(lottoBetType.id)}
         >
-            {lottoBetType.bet_type_name}
+          {lottoBetType.bet_type_name}
         </button>
-        {/if}
-     
+      {/if}
     {/each}
   </div>
 </div>

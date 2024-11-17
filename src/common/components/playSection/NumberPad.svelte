@@ -53,7 +53,6 @@
   }
 
   function handleNumpadClick(value: (typeof NUMPAD_LAYOUT)[number]): void {
-;
     if (typeof value === "number" || value === "Rand") {
       if (currentIndex < inputLength) {
         const newValue =

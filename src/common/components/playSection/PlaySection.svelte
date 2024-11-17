@@ -172,7 +172,7 @@
         {#if activeLotteryTypes}
           <div class="p-2 flex w-full">
             <div class="select-list w-2/6 border-r">
-              <SelectedNumbers lottoBetTypes={lottoRoundData.lottoBetTypes}/>
+              <SelectedNumbers lottoBetTypes={lottoRoundData.lottoBetTypes} />
             </div>
             <div class="numpad w-4/6 flex flex-col items-center">
               <NumberPad

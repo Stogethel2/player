@@ -8,7 +8,6 @@
   export let totalList: any;
   let selectedRows = new Set<string>();
   const dispatch = createEventDispatcher();
-  
 
   let isAllSelected = false;
 
@@ -87,7 +86,7 @@
                 class="form-checkbox h-5 w-5 text-red-600"
               />
             </th>
-            <th scope="col" class="px-2 py-3">ประเภท</th>
+            <!-- <th scope="col" class="px-2 py-3">ประเภท</th> -->
             <th scope="col" class="px-2 py-3">เลข</th>
             <th scope="col" class="px-2 py-3">จำนวนเงิน</th>
             <th scope="col" class="px-2 py-3">อัตราจ่าย</th>
@@ -111,14 +110,14 @@
                     class="form-checkbox h-5 w-5 text-red-600 mt-1"
                   />
                 </td>
-                <th
+                <!-- <th
                   scope="row"
                   class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   {#if index === 0}
                     {getTypeBet(type)}
                   {/if}
-                </th>
+                </th> -->
                 <td class="px-2 py-4">{bet.betNo}</td>
                 <td class="px-2 py-4">
                   <input
