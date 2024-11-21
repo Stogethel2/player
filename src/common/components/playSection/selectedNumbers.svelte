@@ -1,31 +1,29 @@
 <script lang="ts">
-  import { LotteryBetStore } from "./LotteryBetStore";
+  import { LotteryBetStore } from "./BetStore";
   import { derived } from "svelte/store";
-
   import { fade } from "svelte/transition";
-  import { getTypeClass, lotteryTypes } from "./playUtils";
+  import { getTypeClass } from "./playUtils";
 
-  export let lottoBetTypes: any;
+  export let availableBetTypes: any;
 
-  /* ดึงรายการและยอดรวมจาก store */
-  const totalList = derived(LotteryBetStore, ($store) => {
-    const betGroup = Object.entries($store);
-    const entry = betGroup.reduce(
-      (sum, [, betList]) => sum + betList.length,
+  const betListSummary = derived(LotteryBetStore, ($store) => {
+    const betGroups = Object.entries($store);
+    const totalBets = betGroups.reduce(
+      (total, [, bets]) => total + bets.length,
       0
     );
-    return { betGroup, entry };
+    return { betGroups, totalBets };
   });
 
-  $: ({ betGroup, entry } = $totalList);
-  $: shouldScroll = entry > 10;
+  $: ({ betGroups, totalBets } = $betListSummary);
+  $: enableScrolling = totalBets > 10;
 
-  function removeBetEntry(type: string, bet: string) {
-    LotteryBetStore.removeBetEntry(type, bet);
+  function deleteBet(typeId: string, betNumber: string) {
+    LotteryBetStore.removeBet(typeId, betNumber);
   }
 
-  function getTypeName(typeId: string) {
-    return lottoBetTypes.find((t: { id: string }) => t.id === typeId)
+  function getBetTypeName(typeId: string) {
+    return availableBetTypes.find((type: { id: string }) => type.id === typeId)
       ?.bet_type_name;
   }
 </script>
@@ -34,8 +32,8 @@
   <h2 class="text-md font-light text-center">รายการแทง</h2>
 
   <div class="flex-grow overflow-hidden">
-    <div class={`h-full p-1 ${shouldScroll ? "overflow-y-auto" : ""}`}>
-      {#if entry === 0}
+    <div class={`h-full p-1 ${enableScrolling ? "overflow-y-auto" : ""}`}>
+      {#if totalBets === 0}
         <div
           class="flex flex-col items-center justify-center h-full text-gray-500 text-sm mb-4"
           transition:fade={{ duration: 200 }}
@@ -44,22 +42,22 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroup as [type, betList] (type)}
+        {#each betGroups as [typeId, bets] (typeId)}
           <div class="mb-4">
-            <h3 class="font-semibold mb-2">{getTypeName(type)}</h3>
-            {#each betList as bet (bet)}
+            <h3 class="font-semibold mb-2">{getBetTypeName(typeId)}</h3>
+            {#each bets as bet (bet)}
               <div
                 class="mb-2 last:mb-0 relative flex justify-center"
                 transition:fade={{ duration: 200 }}
               >
                 <div
-                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(type)} `}
+                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(typeId)}`}
                 >
-                  <span class="flex-grow text-center mr-4">{bet.betNo}</span>
+                  <span class="flex-grow text-center mr-4">{bet.number}</span>
                   <button
                     class="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center bg-white text-slate-600 bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
-                    on:click={() => removeBetEntry(type, bet.betNo.toString())}
-                    aria-label={`Remove ${bet} from ${getTypeName(type)}`}
+                    on:click={() => deleteBet(typeId, bet.number)}
+                    aria-label={`Remove ${bet.number} from ${getBetTypeName(typeId)}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

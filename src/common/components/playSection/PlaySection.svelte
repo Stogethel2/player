@@ -6,45 +6,48 @@
     CircleHelp,
   } from "lucide-svelte";
   import BetAmountModal from "./BetAmountModal.svelte";
-  import SelectedNumbers from "./selected-numbers.svelte";
+  import SelectedNumbers from "./selectedNumbers.svelte";
   import NumberPad from "./NumberPad.svelte";
   import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-  import { LotteryBetStore } from "./LotteryBetStore";
+  import { LotteryBetStore } from "./BetStore";
   import { goto } from "$app/navigation";
-  import { writable } from "svelte/store";
-  import { handleLotteryTypesChanged, togglePlayMode } from "./playUtils";
+  import { processBetTypeSelection, togglePlayMode } from "./playUtils";
   import { onMount, onDestroy } from "svelte";
   import { lottoRoundApi } from "$lib";
+  import type { LottoRound, BetType } from "./Lotto.types";
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
 
-  // Countdown store and state
-  const countdownStore = writable(0);
-  let countdownInterval: ReturnType<typeof setInterval>;
-  let formattedTime = "";
+  /* Timer store and state */
+  const timeRemaining = writable(0);
+  let timerInterval: ReturnType<typeof setInterval>;
+  let displayTime = "";
 
   $: {
-    const minutes = Math.floor($countdownStore / 60);
-    const seconds = $countdownStore % 60;
-    formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    const remainingMinutes = Math.floor($timeRemaining / 60);
+    const remainingSeconds = $timeRemaining % 60;
+    displayTime = `${remainingMinutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   }
 
-  // Existing state
-  let isCustomPlay = true;
-  let showPriceModal = false;
-  let currentLotteryType = "";
-  let currentInputLength = 3;
-  let activeLotteryTypes: any;
-  let activeLotteryOptions: string[] = [];
-  let lottoRoundData: any;
+  /* Main state */
+  let selectedPlayMode = true;
+  let showBetModal = false;
+  let selectedBetType = "";
+  let digitsCount = 3;
+  let selectedBetTypes: BetType | null = null; // Initialize as null
+  let selectedBetOptions: string[] = [];
+  let lotteryRound: LottoRound | null = null;
 
-  const activeLotteryTypesStore = writable(activeLotteryTypes);
-  function startCountdown(seconds: number) {
-    countdownStore.set(seconds);
-    clearInterval(countdownInterval);
+  const betTypeStore: Writable<BetType | null> = writable(null);
 
-    countdownInterval = setInterval(() => {
-      countdownStore.update((time) => {
+  function startTimer(seconds: number) {
+    timeRemaining.set(seconds);
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+      timeRemaining.update((time) => {
         if (time <= 0) {
-          clearInterval(countdownInterval);
+          clearInterval(timerInterval);
           return 0;
         }
         return time - 1;
@@ -57,53 +60,63 @@
     const lottoId = urlParams.get("lottoId");
 
     if (!lottoId) return;
-    lottoRoundData = await lottoRoundApi.getLottoRoundById(lottoId);
+    lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
 
-    if (lottoRoundData) {
-      startCountdown(300); // Start 5 minute countdown
+    if (lotteryRound) {
+      startTimer(300); // Start 5 minute countdown
     }
   });
 
   onDestroy(() => {
-    clearInterval(countdownInterval);
+    clearInterval(timerInterval);
   });
 
-  // Existing functions
-  function onLotteryTypesChanged(event: CustomEvent) {
-    const result = handleLotteryTypesChanged(event, activeLotteryTypesStore);
-    currentLotteryType = result.currentLotteryType;
-    currentInputLength = result.currentInputLength;
-    activeLotteryTypes = event.detail.activeTypes;
+  function handleBetTypeChange(event: CustomEvent) {
+    const result = processBetTypeSelection(
+      event,
+      betTypeStore as Writable<BetType>
+    );
+
+    console.log(result);
+    if (result) {
+      selectedBetType = result.selectedType;
+      digitsCount = result.digitLength;
+      selectedBetTypes = event.detail.selectedBetType;
+    } else {
+      selectedBetType = "";
+      digitsCount = 3;
+      selectedBetTypes = null;
+    }
   }
 
-  function handleLotteryOptionsChanged(event: CustomEvent) {
-    activeLotteryOptions = event.detail.activeLotteryTypes;
+  function handleBetOptionChange(event: CustomEvent) {
+    selectedBetOptions = event.detail.activeLotteryTypes;
   }
 
-  function togglePlayModeWrapper(mode: "custom" | "selector") {
-    isCustomPlay = togglePlayMode(isCustomPlay, mode);
+  function setPlayMode(mode: "custom" | "selector") {
+    selectedPlayMode = togglePlayMode(selectedPlayMode, mode);
   }
 
-  function openPriceModal() {
-    showPriceModal = true;
+  function openBetModal() {
+    showBetModal = true;
   }
 
-  function closePriceModal() {
-    showPriceModal = false;
+  function closeBetModal() {
+    showBetModal = false;
   }
 
-  function navigateToHome() {
-    goto("/");
+  function navigateBack() {
+    goto("/seamless");
   }
 </script>
 
-{#if lottoRoundData}
+{#if lotteryRound}
   <div class="flex justify-center px-4 sm:px-6 lg:px-8">
     <div class="bg-white shadow-lg rounded-lg my-4 w-full max-w-7xl">
       <!-- Navigation -->
       <button
         class="bg-gradient-to-r from-red-900 to-red-700 rounded-t-md mb-4 p-2 w-full"
-        on:click={navigateToHome}
+        on:click={navigateBack}
       >
         <div class="text-amber-300 font-bold text-sm flex items-center">
           <ChevronLeft size={20} strokeWidth={3} class="mr-2" />
@@ -121,7 +134,7 @@
               class="w-8 h-8"
             />
             <p class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4">
-              {lottoRoundData.lotto.lotto_name}
+              {lotteryRound.lotto.lotto_name}
             </p>
             ออกงวด
             <div
@@ -130,10 +143,10 @@
               <div>
                 <CircleAlert size={16} />
               </div>
-              <div class="mx-1">{lottoRoundData.round_date}</div>
+              <div class="mx-1">{lotteryRound.round_date}</div>
             </div>
             <p class="text-xs sm:text-sm blink">
-              เดิมพันก่อนภายในเวลา {formattedTime}
+              เดิมพันก่อนภายในเวลา {displayTime}
             </p>
           </div>
           <div class="flex items-center text-gray-500 mt-4">
@@ -145,21 +158,21 @@
 
         <!-- Lottery Type Filter -->
         <LotteryTypeFilter
-          initialActiveTypes={activeLotteryTypes}
-          lottoBetTypes={lottoRoundData.lottoBetTypes}
-          on:typesChanged={onLotteryTypesChanged}
+          {selectedBetTypes}
+          availableBetTypes={lotteryRound.lottoBetTypes}
+          on:typesChanged={handleBetTypeChange}
         />
 
         <!-- Play Mode Tabs -->
         <div class="flex border-l relative justify-start mt-4">
           <button
-            class="flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {isCustomPlay
+            class="flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
               ? 'border-b-white'
               : ''}"
-            on:click={() => togglePlayModeWrapper("custom")}
+            on:click={() => setPlayMode("custom")}
           >
             <div
-              class="absolute bg-teal-600 h-1 -top-1 {isCustomPlay
+              class="absolute bg-teal-600 h-1 -top-1 {selectedPlayMode
                 ? 'block'
                 : 'hidden'}"
               style="width: calc(100% + 2px);"
@@ -169,29 +182,29 @@
         </div>
 
         <!-- Play Area -->
-        {#if activeLotteryTypes}
+        {#if selectedBetTypes !== null}
           <div class="p-2 flex w-full">
             <div class="select-list w-2/6 border-r">
-              <SelectedNumbers lottoBetTypes={lottoRoundData.lottoBetTypes} />
+              <SelectedNumbers availableBetTypes={lotteryRound.lottoBetTypes} />
             </div>
             <div class="numpad w-4/6 flex flex-col items-center">
               <NumberPad
-                inputLength={currentInputLength}
-                lotteryType={currentLotteryType}
-                {activeLotteryTypesStore}
+                {digitsCount}
+                {selectedBetType}
+                activeLotteryTypesStore={betTypeStore}
               />
             </div>
           </div>
 
           <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
             <button
-              on:click={LotteryBetStore.clear}
+              on:click={LotteryBetStore.clearAll}
               class="bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
             >
               ลบทั้งหมด
             </button>
             <button
-              on:click={openPriceModal}
+              on:click={openBetModal}
               class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
             >
               ใส่ราคา
@@ -209,8 +222,8 @@
   </div>
 {/if}
 
-{#if showPriceModal}
-  <BetAmountModal on:submit={closePriceModal} on:cancel={closePriceModal} />
+{#if showBetModal}
+  <BetAmountModal on:submit={closeBetModal} on:cancel={closeBetModal} />
 {/if}
 
 <style lang="postcss">

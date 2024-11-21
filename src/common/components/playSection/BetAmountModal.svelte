@@ -1,242 +1,156 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { derived } from "svelte/store";
-  import BetSummary from "./BetSummaryTable.svelte";
-  import { LotteryBetStore } from "./LotteryBetStore";
-  import type {
-    TotalList,
-    BetEntry,
-    BetGroup,
-    BetEntryStore,
-  } from "./LotteryBetStore";
+  import BetSummaryTable from "./BetSummaryTable.svelte";
+  import { LotteryBetStore } from "./BetStore";
+  import type { BetSummary, BetGroupSummary, LotteryBet } from "./BetStore";
   import { betCalculateApi } from "$lib";
 
-  export let creditBalance = 30420.19;
-  export let usedCredit = 0;
-  let selectedRows = new Set<string>();
-  let price = 0;
-  let betGroup: BetGroup[];
-  $: totalList = derived(LotteryBetStore, calculateTotalList);
+  export let accountBalance = 30420.19;
+  export let usedBalance = 0;
+
+  let selectedBetIds = new Set<string>();
+  let currentBetGroups: BetGroupSummary[];
+  $: betSummary = derived(LotteryBetStore, calculateBetSummary);
 
   const dispatch = createEventDispatcher();
 
-  function calculateTotalList($store: BetEntryStore): TotalList {
+  function calculateBetSummary(
+    $store: Record<string, LotteryBet[]>
+  ): BetSummary {
     let totalBets = 0;
     let totalAmount = 0;
 
-    betGroup = Object.entries($store).map(([type, entries]) => {
-      const groupEntries: BetEntry[] = entries.map((entry) => {
+    currentBetGroups = Object.entries($store).map(([typeId, bets]) => {
+      const entries: LotteryBet[] = bets.map((bet) => {
         totalBets += 1;
-        totalAmount += entry.amount;
-        return { ...entry, payout: 1 };
+        totalAmount += bet.amount;
+        return { ...bet, payout: 1 };
       });
 
-      return { type, entry: groupEntries };
+      return {
+        typeId,
+        entries,
+        displayType: bets[0]?.displayType || "",
+        number: "",
+        displayName: "",
+      };
     });
+
     return {
-      betGroup,
-      summary: { totalBets, totalAmount },
+      groups: currentBetGroups,
+      totals: { bets: totalBets, amount: totalAmount },
     };
   }
 
-  function cancel() {
+  async function handleSubmit() {
+    dispatch("submit", { amount: $betSummary.totals.amount, usedBalance });
+  }
+
+  function handleClose() {
     dispatch("cancel");
   }
 
-  async function submit() {
-    dispatch("submit", { price, usedCredit });
-  }
+  function updateSelectedBetsAmount(amount: number): void {
+    const allBets = LotteryBetStore.getAllBets();
 
-  function updateAmountForSelectedBets(amount: number): void {
-    const allEntries = LotteryBetStore.getAllBetEntries();
-
-    allEntries.forEach((group) => {
-      group.entries.forEach((entry) => {
-        if (selectedRows.has(entry.betId)) {
-          LotteryBetStore.updateBetAmount(group.type, entry.betNo, amount);
+    allBets.forEach((group) => {
+      group.entries.forEach((bet) => {
+        if (selectedBetIds.has(bet.id)) {
+          LotteryBetStore.updateAmount(group.typeId, bet.number, amount);
         }
       });
     });
   }
 
-  function clearBetAmounts() {
-    updateAmountForSelectedBets(0);
+  function clearSelectedBets() {
+    updateSelectedBetsAmount(0);
   }
 
-  function handleBetSelectionChange(event: CustomEvent) {
-    selectedRows = event.detail.selectedRows;
+  function handleBetSelection(event: CustomEvent) {
+    selectedBetIds = event.detail.selectedBetIds;
   }
 
-  let global: any;
+  let calculatedBets: any;
   onMount(async () => {
-    const response = await betCalculateApi.getBetCalculate({ ...$totalList });
-    global = response;
-
-    console.log(global);
+    calculatedBets = await betCalculateApi.getBetCalculate({ ...$betSummary });
   });
 </script>
 
-<div class="modal">
-  <div class="modal-content">
-    <header class="modal-header">
-      <h2>ใส่ราคา</h2>
-      <button class="close-button" on:click={cancel}>✕</button>
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center">
+  <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
+    <header
+      class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
+    >
+      <h2 class="text-lg font-medium">ใส่ราคา</h2>
+      <button class="text-2xl" on:click={handleClose}>&times;</button>
     </header>
 
-    <BetSummary
-      on:selectionChange={handleBetSelectionChange}
-      totalList={global}
+    <BetSummaryTable
+      on:selectionChange={handleBetSelection}
+      summary={calculatedBets}
     />
 
-    <div class="quick-buttons">
-      <div class="common-buttons">
-        <button on:click={() => clearBetAmounts()}>เคลียร์จำนวนเงิน</button>
-      </div>
-      <div class="price-buttons">
-        <button on:click={() => updateAmountForSelectedBets(5)}>5฿</button>
-        <button on:click={() => updateAmountForSelectedBets(10)}>10฿</button>
-        <button on:click={() => updateAmountForSelectedBets(20)}>20฿</button>
-        <button on:click={() => updateAmountForSelectedBets(50)}>50฿</button>
-        <button on:click={() => updateAmountForSelectedBets(100)}>100฿</button>
-        <button on:click={() => updateAmountForSelectedBets(100)}>ระบุ</button>
-      </div>
-    </div>
+    <div class="p-4 space-y-4">
+      <div class="space-y-2">
+        <button
+          class="w-full py-2 bg-gray-100 rounded"
+          on:click={clearSelectedBets}
+        >
+          เคลียร์จำนวนเงิน
+        </button>
 
-    <div class="price-input">
-      <label for="price-input">ราคารวม</label>
-      <input
-        id="price-input"
-        disabled
-        type="number"
-        bind:value={$totalList.summary.totalAmount}
-        min="0"
-      />
-    </div>
-
-    <div class="credit-info">
-      <div class="credit-balance">
-        <span>Credit คงเหลือ</span>
-        <span class="amount">{creditBalance.toFixed(2)}</span>
+        <div class="grid grid-cols-3 gap-2">
+          {#each [5, 10, 20, 50, 100] as amount}
+            <button
+              class="py-2 bg-gray-100 rounded hover:bg-gray-200"
+              on:click={() => updateSelectedBetsAmount(amount)}
+            >
+              {amount}฿
+            </button>
+          {/each}
+          <button class="py-2 bg-gray-100 rounded hover:bg-gray-200">
+            ระบุ
+          </button>
+        </div>
       </div>
-      <div class="credit-used">
-        <span>ใช้ Credit ทั้งหมด</span>
-        <span class="amount">{usedCredit.toFixed(2)}</span>
-      </div>
-    </div>
 
-    <div class="action-buttons">
-      <button class="cancel-button" on:click={cancel}>ยกเลิกทั้งหมด</button>
-      <button class="submit-button" on:click={submit}>ส่งไป</button>
+      <div class="space-y-2">
+        <label class="block" for="totalAmount">ราคารวม</label>
+        <input
+          id="totalAmount"
+          type="number"
+          class="w-full p-2 bg-gray-100 rounded text-right"
+          readonly
+          value={$betSummary.totals.amount}
+        />
+      </div>
+
+      <div class="flex justify-between text-sm">
+        <div>
+          <span class="text-green-600">Credit คงเหลือ</span>
+          <span class="block font-bold">{accountBalance.toFixed(2)}</span>
+        </div>
+        <div>
+          <span class="text-red-600">ใช้ Credit ทั้งหมด</span>
+          <span class="block font-bold">{usedBalance.toFixed(2)}</span>
+        </div>
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <button
+          class="flex-1 py-2 bg-gray-100 rounded hover:bg-gray-200"
+          on:click={handleClose}
+        >
+          ยกเลิกทั้งหมด
+        </button>
+        <button
+          class="flex-1 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          on:click={handleSubmit}
+        >
+          ส่งไป
+        </button>
+      </div>
     </div>
   </div>
 </div>
-
-<style>
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    background-color: white;
-    border-radius: 8px;
-    width: 90%;
-    min-width: 400px;
-    overflow: hidden; /* Ensure the header corners stay rounded */
-  }
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0rem 1rem;
-    background-color: red;
-    color: white;
-  }
-
-  .close-button {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: white;
-  }
-
-  .price-input {
-    margin: 1rem;
-  }
-
-  .price-input input {
-    text-align: right;
-    background-color: #f0f0f0;
-    width: 100%;
-    margin: 0.5rem 0rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-  }
-
-  .quick-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin: 1rem;
-  }
-
-  .price-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-  }
-
-  .common-buttons {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 0.5rem;
-  }
-
-  .credit-info {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem;
-  }
-
-  .credit-balance {
-    color: green;
-  }
-
-  .credit-used {
-    color: red;
-  }
-
-  .amount {
-    font-weight: bold;
-    display: block;
-  }
-
-  .action-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem;
-  }
-
-  button {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-
-  .submit-button {
-    background-color: #4caf50;
-    color: white;
-  }
-</style>

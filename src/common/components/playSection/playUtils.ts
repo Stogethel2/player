@@ -1,4 +1,5 @@
 import type { Writable } from "svelte/store";
+import type { BetType } from "./Lotto.types";
 
 export const NUMPAD_LAYOUT = [
     1,
@@ -25,38 +26,38 @@ export const colorClasses: Record<string, string> = {
     "2-bottom": "bg-yellow-600 text-white",
 };
 
-export interface LotteryTypeChangeEvent {
-    activeTypes: string[];
-    inputLength: number;
-    selectedType: string;
-    action: "activate" | "deactivate";
+export interface BetTypeChangeEvent {
+    availableBetTypes: string[];
+    digitCount: number;
+    selectedBetType: BetType;
+    changeType: "activate" | "deactivate";
 }
 
-export function handleLotteryTypesChanged(
-    event: CustomEvent<LotteryTypeChangeEvent>,
-    activeLotteryTypesStore: Writable<string>
-): { currentLotteryType: string; currentInputLength: number } {
-    const { activeTypes, inputLength, selectedType, action } = event.detail;
-    activeLotteryTypesStore.set(selectedType);
+export function processBetTypeSelection(
+    event: CustomEvent<BetTypeChangeEvent>,
+    betTypeStore: Writable<BetType>
+): { selectedType: string; digitLength: number } {
+    const { availableBetTypes, digitCount, selectedBetType, changeType } = event.detail;
+    betTypeStore.set(selectedBetType);
 
-    if (action === "deactivate" && activeTypes.length > 0) {
-        const newCurrentType = activeTypes[0];
+    if (changeType === "deactivate" && availableBetTypes.length > 0) {
+        const newSelectedType = availableBetTypes[0];
         return {
-            currentLotteryType: newCurrentType,
-            currentInputLength: newCurrentType.startsWith("3") ? 3 : 2,
+            selectedType: newSelectedType,
+            digitLength: newSelectedType.startsWith("3") ? 3 : 2,
         };
     }
 
-    if (activeTypes.length > 0) {
+    if (availableBetTypes.length > 0) {
         return {
-            currentLotteryType: selectedType || activeTypes[activeTypes.length - 1],
-            currentInputLength: inputLength,
+            selectedType: selectedBetType?.id || availableBetTypes[availableBetTypes.length - 1],
+            digitLength: digitCount,
         };
     }
 
     return {
-        currentLotteryType: "",
-        currentInputLength: 3 /* Default to 3 when no types are selected */,
+        selectedType: "",
+        digitLength: 3, // Default digit length when no types selected
     };
 }
 

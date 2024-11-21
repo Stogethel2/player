@@ -6,7 +6,7 @@
     "menu": [
         {
             "label": "หน้าแรก",
-            "path": "/"
+            "path": "/seamless"
         },
         {
             "label": "ผลรางวัล",

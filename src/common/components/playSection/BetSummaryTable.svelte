@@ -1,72 +1,66 @@
 <script lang="ts">
-  import { LotteryBetStore } from "./LotteryBetStore";
-  import type { TotalList, BetEntry } from "./LotteryBetStore";
+  import { LotteryBetStore } from "./BetStore";
+  import type { BetSummary, LotteryBet } from "./BetStore";
   import { Trash2 } from "lucide-svelte";
-  import { lotteryTypes } from "./playUtils";
   import { createEventDispatcher } from "svelte";
 
-  export let totalList: any;
-  let selectedRows = new Set<string>();
+  export let summary: BetSummary;
+  let selectedBetIds = new Set<string>();
+  let isAllSelected = false;
   const dispatch = createEventDispatcher();
 
-  let isAllSelected = false;
-
-  function updateBetAmount(type: string, number: string, event: Event) {
+  function handleAmountChange(typeId: string, number: string, event: Event) {
     const amount = parseFloat((event.target as HTMLInputElement).value);
     if (!isNaN(amount)) {
-      LotteryBetStore.updateBetAmount(type, number, amount);
+      LotteryBetStore.updateAmount(typeId, number, amount);
     }
   }
 
-  function deleteBet(type: string, number: string) {
-    LotteryBetStore.removeBetEntry(type, number);
-    selectedRows.delete(`${type}|${number}`);
-    selectedRows = selectedRows;
-    dispatchSelectedRows();
+  function handleBetDelete(typeId: string, number: string) {
+    LotteryBetStore.removeBet(typeId, number);
+    selectedBetIds.delete(`${typeId}|${number}`);
+    selectedBetIds = selectedBetIds;
+    notifySelectionChange();
   }
 
-  function toggleRowSelection(betId: string) {
-    selectedRows.has(betId)
-      ? selectedRows.delete(betId)
-      : selectedRows.add(betId);
-    selectedRows = selectedRows;
-    updateAllSelectedState();
-    dispatchSelectedRows();
+  function toggleBetSelection(betId: string) {
+    selectedBetIds.has(betId)
+      ? selectedBetIds.delete(betId)
+      : selectedBetIds.add(betId);
+    selectedBetIds = selectedBetIds;
+    updateSelectAllState();
+    notifySelectionChange();
   }
 
-  function getTypeBet(type: string): string {
-    return lotteryTypes.find((lt) => lt.id === type)?.label ?? type;
-  }
-
-  function dispatchSelectedRows() {
-    dispatch("selectionChange", { selectedRows });
-  }
-
-  function toggleAllRows() {
+  function toggleSelectAll() {
     isAllSelected = !isAllSelected;
     if (isAllSelected) {
-      totalList.betGroup.forEach((group) => {
-        group.entry.forEach((entry) => {
-          selectedRows.add(entry.betId);
+      summary.groups.forEach((group) => {
+        group.entries.forEach((bet) => {
+          selectedBetIds.add(bet.id);
         });
       });
     } else {
-      selectedRows.clear();
+      selectedBetIds.clear();
     }
-    selectedRows = selectedRows;
-    dispatchSelectedRows();
+    selectedBetIds = selectedBetIds;
+    notifySelectionChange();
   }
 
-  function updateAllSelectedState() {
-    const totalBets = totalList.betGroup.reduce(
-      (sum, group) => sum + group.entry.length,
+  function updateSelectAllState() {
+    const totalBets = summary.groups.reduce(
+      (sum, group) => sum + group.entries.length,
       0
     );
-    isAllSelected = selectedRows.size === totalBets;
+    isAllSelected = selectedBetIds.size === totalBets;
+  }
+
+  function notifySelectionChange() {
+    dispatch("selectionChange", { selectedBetIds });
   }
 </script>
 
-{#if totalList}
+{#if summary}
   <div class="p-2">
     <div
       class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
@@ -82,11 +76,10 @@
               <input
                 type="checkbox"
                 checked={isAllSelected}
-                on:change={toggleAllRows}
+                on:change={toggleSelectAll}
                 class="form-checkbox h-5 w-5 text-red-600"
               />
             </th>
-            <!-- <th scope="col" class="px-2 py-3">ประเภท</th> -->
             <th scope="col" class="px-2 py-3">เลข</th>
             <th scope="col" class="px-2 py-3">จำนวนเงิน</th>
             <th scope="col" class="px-2 py-3">อัตราจ่าย</th>
@@ -94,44 +87,37 @@
           </tr>
         </thead>
         <tbody>
-          {#each totalList.betGroup as { type, entry }}
-            {#each entry as bet, index}
+          {#each summary.groups as { typeId, entries }}
+            {#each entries as bet}
               <tr
                 class="transition-colors duration-150 ease-in-out cursor-pointer"
-                class:bg-gray-200={selectedRows.has(bet.betId)}
-                on:click={() => toggleRowSelection(bet.betId)}
+                class:bg-gray-200={selectedBetIds.has(bet.id)}
+                on:click={() => toggleBetSelection(bet.id)}
               >
                 <td class="px-2 py-4">
                   <input
                     type="checkbox"
-                    checked={selectedRows.has(bet.betId)}
-                    on:change={() => toggleRowSelection(bet.betId)}
+                    checked={selectedBetIds.has(bet.id)}
+                    on:change={() => toggleBetSelection(bet.id)}
                     on:click|stopPropagation
                     class="form-checkbox h-5 w-5 text-red-600 mt-1"
                   />
                 </td>
-                <!-- <th
-                  scope="row"
-                  class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  {#if index === 0}
-                    {getTypeBet(type)}
-                  {/if}
-                </th> -->
-                <td class="px-2 py-4">{bet.betNo}</td>
+                <td class="px-2 py-4">{bet.number}</td>
                 <td class="px-2 py-4">
                   <input
                     type="number"
-                    class="w-20 md:w-40 px-2 py-1 border rounded my-input focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
+                    class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
                     value={bet.amount}
-                    on:input={(e) => updateBetAmount(type, bet.betNo, e)}
+                    on:input={(e) => handleAmountChange(typeId, bet.number, e)}
                     on:click|stopPropagation
                   />
                 </td>
-                <td class="px-2 py-4">{bet.pay}</td>
+                <td class="px-2 py-4">{bet.payout}</td>
                 <td class="px-2 py-4">
                   <button
-                    on:click|stopPropagation={() => deleteBet(type, bet.betNo)}
+                    on:click|stopPropagation={() =>
+                      handleBetDelete(typeId, bet.number)}
                     class="text-red-500 hover:text-red-700"
                   >
                     <Trash2 size={20} />
@@ -152,8 +138,8 @@
   }
 
   .scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .scrollbar-hide:hover::-webkit-scrollbar {

@@ -1,120 +1,119 @@
 <script lang="ts">
   import { onMount, afterUpdate } from "svelte";
-  import { LotteryBetStore } from "./LotteryBetStore";
+  import { LotteryBetStore } from "./BetStore";
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { NUMPAD_LAYOUT } from "./playUtils";
 
-  export let inputLength: number = 3;
-  export let lotteryType: string = "";
+  export let digitsCount: number = 3;
+  export let selectedBetType: string = "";
   export let activeLotteryTypesStore: Writable<any>;
 
-  let inputValues: string[] = [];
-  let currentIndex = 0;
-  let inputRefs: HTMLInputElement[] = [];
+  let digits: string[] = [];
+  let activeDigitIndex = 0;
+  let digitInputRefs: HTMLInputElement[] = [];
 
   $: {
-    /* Reset input values when inputLength changes */
-    inputValues = Array(inputLength).fill("");
-    currentIndex = 0;
-    /* Focus on the first input after a short delay to ensure DOM update */
-    setTimeout(() => focusInput(0), 0);
+    /* Reset input values when digitsCount changes */
+    digits = Array(digitsCount).fill("");
+    activeDigitIndex = 0;
+    setTimeout(() => focusDigitInput(0), 0);
   }
 
-  $: isComplete = inputValues.every(Boolean);
+  $: isNumberComplete = digits.every(Boolean);
 
-  $: if (isComplete) {
-    handleSubmit();
+  $: if (isNumberComplete) {
+    submitNumber();
   }
 
   onMount(() => {
-    focusInput(currentIndex);
+    focusDigitInput(activeDigitIndex);
   });
 
   afterUpdate(() => {
-    /* Ensure currentIndex is within bounds หลังจาก inputLength changes */
-    if (currentIndex >= inputLength) {
-      currentIndex = inputLength - 1;
-      focusInput(currentIndex);
+    /* Ensure currentIndex is within bounds หลังจาก digitsCount changes */
+    if (activeDigitIndex >= digitsCount) {
+      activeDigitIndex = digitsCount - 1;
+      focusDigitInput(activeDigitIndex);
     }
   });
 
-  function handleInput(event: Event, index: number): void {
-    const target = event.target as HTMLInputElement;
-    const value = target.value.slice(-1);
+  function handleDigitInput(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    const digit = input.value.slice(-1);
 
-    if (value && !isNaN(Number(value))) {
-      inputValues[index] = value;
-      currentIndex = Math.min(index + 1, inputLength - 1);
-      focusInput(currentIndex);
+    if (digit && !isNaN(Number(digit))) {
+      digits[index] = digit;
+      activeDigitIndex = Math.min(index + 1, digitsCount - 1);
+      focusDigitInput(activeDigitIndex);
     } else {
-      target.value = inputValues[index];
+      input.value = digits[index];
     }
   }
 
-  function handleNumpadClick(value: (typeof NUMPAD_LAYOUT)[number]): void {
+  function handleKeypadPress(value: (typeof NUMPAD_LAYOUT)[number]): void {
     if (typeof value === "number" || value === "Rand") {
-      if (currentIndex < inputLength) {
-        const newValue =
+      if (activeDigitIndex < digitsCount) {
+        const digit =
           value === "Rand"
             ? Math.floor(Math.random() * 10).toString()
             : value.toString();
-        inputValues[currentIndex] = newValue;
-        currentIndex = Math.min(currentIndex + 1, inputLength - 1);
-        focusInput(currentIndex);
+        digits[activeDigitIndex] = digit;
+        activeDigitIndex = Math.min(activeDigitIndex + 1, digitsCount - 1);
+        focusDigitInput(activeDigitIndex);
       }
     } else if (value === "Del") {
-      clearInput();
+      deleteLastDigit();
     }
   }
 
-  function clearInput(): void {
-    if (currentIndex > 0) {
-      currentIndex--;
-      inputValues[currentIndex] = "";
-      focusInput(currentIndex);
+  function deleteLastDigit(): void {
+    if (activeDigitIndex > 0) {
+      activeDigitIndex--;
+      digits[activeDigitIndex] = "";
+      focusDigitInput(activeDigitIndex);
     }
   }
 
-  function handleSubmit(): void {
-    const number = inputValues.join("");
-    if (
-      lotteryType &&
-      !LotteryBetStore.checkBetEntryExists(number, lotteryType)
-    ) {
-      const activeTypes = get(activeLotteryTypesStore);
-      LotteryBetStore.addBetEntry(activeTypes.id, number);
+  function submitNumber(): void {
+    const betNumber = digits.join("");
+    if (selectedBetType) {
+      const activeBetType = get(activeLotteryTypesStore);
+      LotteryBetStore.addBet(activeBetType.id, betNumber, activeBetType);
+      console.log("All bets:", activeBetType);
     }
-    resetInputs();
+
+    console.log("All bets:", get(LotteryBetStore) , selectedBetType);
+    resetDigits();
   }
 
-  function resetInputs(): void {
-    inputValues = Array(inputLength).fill("");
-    currentIndex = 0;
-    focusInput(currentIndex);
+  function resetDigits(): void {
+    digits = Array(digitsCount).fill("");
+    activeDigitIndex = 0;
+    focusDigitInput(activeDigitIndex);
   }
 
-  function focusInput(index: number): void {
+  function focusDigitInput(index: number): void {
     setTimeout(() => {
-      inputRefs[index]?.focus();
+      digitInputRefs[index]?.focus();
     }, 0);
   }
 </script>
 
 <div class="bg-white w-full p-4 rounded flex flex-col items-center">
   <h2 class="text-lg sm:text-xl font-semibold text-center mb-4">
-    กรุณาระบุตัวเลข ({inputLength} หลัก)
+    กรุณาระบุตัวเลข ({digitsCount} หลัก)
   </h2>
   <div class="flex flex-wrap justify-center space-x-2 mb-4">
-    {#each inputValues as value, index (index)}
+    {#each digits as digit, index (index)}
       <input
         type="text"
         inputmode="numeric"
         maxlength="1"
         class="w-12 h-12 sm:w-14 sm:h-14 border border-gray-300 rounded text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-        bind:value={inputValues[index]}
-        on:input={(event) => handleInput(event, index)}
-        bind:this={inputRefs[index]}
+        bind:value={digits[index]}
+        on:input={(event) => handleDigitInput(event, index)}
+        bind:this={digitInputRefs[index]}
       />
     {/each}
   </div>
@@ -133,7 +132,7 @@
         class:hover:bg-red-600={value === "Del"}
         class:hover:bg-gray-50={typeof value === "number"}
         class:active:bg-gray-100={typeof value === "number"}
-        on:click={() => handleNumpadClick(value)}
+        on:click={() => handleKeypadPress(value)}
       >
         {value}
       </button>
