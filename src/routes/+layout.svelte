@@ -1,11 +1,15 @@
 <script lang="ts">
-    import { onMount, type Snippet } from 'svelte';
-    import type { LayoutData } from './$types';
-    import { goto } from '$app/navigation';
-    
+  let { children } = $props();
+  import Navbar from "../common/components/navbar/navbar.svelte";
+  import "../app.css";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
 
-    let { data, children }: { data: LayoutData, children: Snippet } = $props();
-    
+  onMount(() => {
+    if ($page.url.pathname === "/") goto("/seamless");
+  });
 </script>
 
+<Navbar />
 {@render children()}
