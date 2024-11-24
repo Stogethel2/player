@@ -1,98 +1,99 @@
 <script lang="ts">
-  import { betStore } from "./BetStore";
-  import type { BetSummary, LotteryBet } from "./BetStore";
-  import { Trash2 } from "lucide-svelte";
-  import { createEventDispatcher } from "svelte";
-
-  export let summary: BetSummary | undefined;
-
-  let selectedTempIds = new Set<string>();
-  let isAllSelected = false;
-  const dispatch = createEventDispatcher();
-
-  function handleAmountChange(typeId: string, tempId: string, event: Event) {
-    const amount = parseFloat((event.target as HTMLInputElement).value);
-    if (!isNaN(amount)) {
-      betStore.updateAmount(typeId, tempId, amount);
+    import { betStore } from "./BetStore";
+    import type { BetSummary, LotteryBet } from "./BetStore";
+    import { Trash2 } from "lucide-svelte";
+    import { createEventDispatcher } from "svelte";
+  
+    export let summary: BetSummary | undefined;
+  
+    let selectedTempIds = new Set<string>();
+    let isAllSelected = false;
+    const dispatch = createEventDispatcher();
+  
+    function handleAmountChange(typeId: string, tempId: string, event: Event) {
+      const amount = parseFloat((event.target as HTMLInputElement).value);
+      if (!isNaN(amount)) {
+        betStore.updateAmount(typeId, tempId, amount);
+      }
     }
-  }
-
-  function handleBetDelete(typeId: string, tempId: string) {
-    betStore.removeBet(typeId, tempId);
-    unselectBet(tempId);
-    notifySelectionChange();
-  }
-
-  function toggleBetSelection(tempId: string) {
-    if (selectedTempIds.has(tempId)) {
-      selectedTempIds.delete(tempId);
-    } else {
-      selectedTempIds.add(tempId);
+  
+    function handleBetDelete(typeId: string, tempId: string) {
+      betStore.removeBet(typeId, tempId);
+      unselectBet(tempId);
+      notifySelectionChange();
     }
-
-    selectedTempIds = new Set(selectedTempIds);
-    updateSelectAllState();
-    notifySelectionChange();
-  }
-
-  function unselectBet(tempId: string) {
-    if (selectedTempIds.has(tempId)) {
-      selectedTempIds.delete(tempId);
+  
+    function toggleBetSelection(tempId: string) {
+      if (selectedTempIds.has(tempId)) {
+        selectedTempIds.delete(tempId);
+      } else {
+        selectedTempIds.add(tempId);
+      }
+  
       selectedTempIds = new Set(selectedTempIds);
       updateSelectAllState();
+      notifySelectionChange();
     }
-  }
-
-  function isBetSelected(tempId: string): boolean {
-    return selectedTempIds.has(tempId);
-  }
-
-  function toggleSelectAll() {
-    isAllSelected = !isAllSelected;
-
-    if (isAllSelected && summary) {
-      // Select all bets
-      summary.groups.forEach((group) => {
-        group.entries.forEach((bet) => {
-          selectedTempIds.add(bet.tempId);
+  
+    function unselectBet(tempId: string) {
+      if (selectedTempIds.has(tempId)) {
+        selectedTempIds.delete(tempId);
+        selectedTempIds = new Set(selectedTempIds);
+        updateSelectAllState();
+      }
+    }
+  
+    function isBetSelected(tempId: string): boolean {
+      return selectedTempIds.has(tempId);
+    }
+  
+    function toggleSelectAll() {
+      isAllSelected = !isAllSelected;
+  
+      if (isAllSelected && summary) {
+        // Select all bets
+        summary.groups.forEach((group) => {
+          group.entries.forEach((bet) => {
+            selectedTempIds.add(bet.tempId);
+          });
         });
-      });
-    } else {
-      selectedTempIds.clear();
+      } else {
+        selectedTempIds.clear();
+      }
+  
+      selectedTempIds = new Set(selectedTempIds);
+      notifySelectionChange();
     }
-
-    selectedTempIds = new Set(selectedTempIds);
-    notifySelectionChange();
-  }
-
-  function updateSelectAllState() {
-    const totalBets =
-      summary?.groups.reduce((sum, group) => sum + group.entries.length, 0) ??
-      0;
-    isAllSelected = totalBets > 0 && selectedTempIds.size === totalBets;
-  }
-
-  function notifySelectionChange() {
-    if (!summary) return;
-
-    const selectedBets = Array.from(selectedTempIds)
-      .map((tempId) => {
-        for (const group of summary.groups) {
-          const bet = group.entries.find((entry) => entry.tempId === tempId);
-          if (bet) {
-            return {
-              typeId: group.typeId,
-              tempId: bet.tempId,
-            };
+  
+    function updateSelectAllState() {
+      const totalBets = summary?.groups.reduce(
+        (sum, group) => sum + group.entries.length,
+        0
+      ) ?? 0;
+      isAllSelected = totalBets > 0 && selectedTempIds.size === totalBets;
+    }
+  
+    function notifySelectionChange() {
+      if (!summary) return;
+  
+      const selectedBets = Array.from(selectedTempIds)
+        .map((tempId) => {
+          for (const group of summary.groups) {
+            const bet = group.entries.find((entry) => entry.tempId === tempId);
+            if (bet) {
+              return {
+                typeId: group.typeId,
+                tempId: bet.tempId,
+              };
+            }
           }
-        }
-        return null;
-      })
-      .filter((bet): bet is { typeId: string; tempId: string } => bet !== null);
-
-    dispatch("selectionChange", { selectedBets });
-  }
-</script>
+          return null;
+        })
+        .filter((bet): bet is { typeId: string; tempId: string } => bet !== null);
+  
+      dispatch("selectionChange", { selectedBets });
+    }
+  </script>
 
 {#if summary && summary.groups?.length > 0}
   <div class="p-2">
