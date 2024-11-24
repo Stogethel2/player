@@ -1,30 +1,37 @@
 <script lang="ts">
-  import { LotteryBetStore } from "./BetStore";
+  import { betStore } from "./BetStore";
+  import type { BetTypeGroup, LotteryBet } from "./BetStore";
   import { derived } from "svelte/store";
   import { fade } from "svelte/transition";
   import { getTypeClass } from "./playUtils";
 
-  export let availableBetTypes: any;
+  interface BetType {
+    id: string;
+    bet_type_name: string;
+  }
 
-  const betListSummary = derived(LotteryBetStore, ($store) => {
-    const betGroups = Object.entries($store);
-    const totalBets = betGroups.reduce(
-      (total, [, bets]) => total + bets.length,
-      0
-    );
-    return { betGroups, totalBets };
+  export let availableBetTypes: BetType[];
+
+  const betListSummary = derived(betStore, () => {
+    const summary = betStore.getSummary();
+    return {
+      betGroups: summary.groups,
+      totalBets: summary.totals.bets,
+    };
   });
 
   $: ({ betGroups, totalBets } = $betListSummary);
   $: enableScrolling = totalBets > 10;
 
-  function deleteBet(typeId: string, betNumber: string) {
-    LotteryBetStore.removeBet(typeId, betNumber);
+  function deleteBet(typeId: string, tempId: string) {
+    betStore.removeBet(typeId, tempId);
   }
 
-  function getBetTypeName(typeId: string) {
-    return availableBetTypes.find((type: { id: string }) => type.id === typeId)
-      ?.bet_type_name;
+  function getBetTypeName(typeId: string): string {
+    return (
+      availableBetTypes.find((type) => type.id === typeId)?.bet_type_name ||
+      typeId
+    );
   }
 </script>
 
@@ -42,10 +49,10 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroups as [typeId, bets] (typeId)}
+        {#each betGroups as { typeId, entries, displayType } (typeId)}
           <div class="mb-4">
             <h3 class="font-semibold mb-2">{getBetTypeName(typeId)}</h3>
-            {#each bets as bet (bet)}
+            {#each entries as bet (bet.tempId)}
               <div
                 class="mb-2 last:mb-0 relative flex justify-center"
                 transition:fade={{ duration: 200 }}
@@ -56,7 +63,7 @@
                   <span class="flex-grow text-center mr-4">{bet.number}</span>
                   <button
                     class="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center bg-white text-slate-600 bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
-                    on:click={() => deleteBet(typeId, bet.number)}
+                    on:click={() => deleteBet(typeId, bet.tempId)}
                     aria-label={`Remove ${bet.number} from ${getBetTypeName(typeId)}`}
                   >
                     <svg

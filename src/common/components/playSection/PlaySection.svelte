@@ -9,7 +9,7 @@
   import SelectedNumbers from "./selectedNumbers.svelte";
   import NumberPad from "./NumberPad.svelte";
   import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-  import { LotteryBetStore } from "./BetStore";
+  import { betStore } from "./BetStore";
   import { goto } from "$app/navigation";
   import { processBetTypeSelection, togglePlayMode } from "./playUtils";
   import { onMount, onDestroy } from "svelte";
@@ -99,6 +99,7 @@
 
   function openBetModal() {
     showBetModal = true;
+    console.log('showBetModal', showBetModal);
   }
 
   function closeBetModal() {
@@ -198,7 +199,7 @@
 
           <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
             <button
-              on:click={LotteryBetStore.clearAll}
+              on:click={betStore.clearAll}
               class="bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
             >
               ลบทั้งหมด

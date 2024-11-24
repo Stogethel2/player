@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, afterUpdate } from "svelte";
-  import { LotteryBetStore } from "./BetStore";
+  import { betStore } from "./BetStore";
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { NUMPAD_LAYOUT } from "./playUtils";
@@ -79,11 +79,11 @@
     const betNumber = digits.join("");
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
-      LotteryBetStore.addBet(activeBetType.id, betNumber, activeBetType);
+      betStore.addBet(activeBetType.id, betNumber, activeBetType);
       console.log("All bets:", activeBetType);
     }
 
-    console.log("All bets:", get(LotteryBetStore) , selectedBetType);
+    console.log("All bets:", get(betStore) , selectedBetType);
     resetDigits();
   }
 

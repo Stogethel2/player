@@ -1,66 +1,100 @@
 <script lang="ts">
-  import { LotteryBetStore } from "./BetStore";
+  import { betStore } from "./BetStore";
   import type { BetSummary, LotteryBet } from "./BetStore";
   import { Trash2 } from "lucide-svelte";
   import { createEventDispatcher } from "svelte";
 
-  export let summary: BetSummary;
-  let selectedBetIds = new Set<string>();
+  export let summary: BetSummary | undefined;
+
+  let selectedTempIds = new Set<string>();
   let isAllSelected = false;
   const dispatch = createEventDispatcher();
 
-  function handleAmountChange(typeId: string, number: string, event: Event) {
+  function handleAmountChange(typeId: string, tempId: string, event: Event) {
     const amount = parseFloat((event.target as HTMLInputElement).value);
     if (!isNaN(amount)) {
-      LotteryBetStore.updateAmount(typeId, number, amount);
+      betStore.updateAmount(typeId, tempId, amount);
     }
   }
 
-  function handleBetDelete(typeId: string, number: string) {
-    LotteryBetStore.removeBet(typeId, number);
-    selectedBetIds.delete(`${typeId}|${number}`);
-    selectedBetIds = selectedBetIds;
+  function handleBetDelete(typeId: string, tempId: string) {
+    betStore.removeBet(typeId, tempId);
+    unselectBet(tempId);
     notifySelectionChange();
   }
 
-  function toggleBetSelection(betId: string) {
-    selectedBetIds.has(betId)
-      ? selectedBetIds.delete(betId)
-      : selectedBetIds.add(betId);
-    selectedBetIds = selectedBetIds;
+  function toggleBetSelection(tempId: string) {
+    if (selectedTempIds.has(tempId)) {
+      selectedTempIds.delete(tempId);
+    } else {
+      selectedTempIds.add(tempId);
+    }
+
+    selectedTempIds = new Set(selectedTempIds);
     updateSelectAllState();
     notifySelectionChange();
   }
 
+  function unselectBet(tempId: string) {
+    if (selectedTempIds.has(tempId)) {
+      selectedTempIds.delete(tempId);
+      selectedTempIds = new Set(selectedTempIds);
+      updateSelectAllState();
+    }
+  }
+
+  function isBetSelected(tempId: string): boolean {
+    return selectedTempIds.has(tempId);
+  }
+
   function toggleSelectAll() {
     isAllSelected = !isAllSelected;
-    if (isAllSelected) {
+
+    if (isAllSelected && summary) {
+      // Select all bets
       summary.groups.forEach((group) => {
         group.entries.forEach((bet) => {
-          selectedBetIds.add(bet.id);
+          selectedTempIds.add(bet.tempId);
         });
       });
     } else {
-      selectedBetIds.clear();
+      selectedTempIds.clear();
     }
-    selectedBetIds = selectedBetIds;
+
+    selectedTempIds = new Set(selectedTempIds);
     notifySelectionChange();
   }
 
   function updateSelectAllState() {
-    const totalBets = summary.groups.reduce(
-      (sum, group) => sum + group.entries.length,
-      0
-    );
-    isAllSelected = selectedBetIds.size === totalBets;
+    const totalBets =
+      summary?.groups.reduce((sum, group) => sum + group.entries.length, 0) ??
+      0;
+    isAllSelected = totalBets > 0 && selectedTempIds.size === totalBets;
   }
 
   function notifySelectionChange() {
-    dispatch("selectionChange", { selectedBetIds });
+    if (!summary) return;
+
+    const selectedBets = Array.from(selectedTempIds)
+      .map((tempId) => {
+        for (const group of summary.groups) {
+          const bet = group.entries.find((entry) => entry.tempId === tempId);
+          if (bet) {
+            return {
+              typeId: group.typeId,
+              tempId: bet.tempId,
+            };
+          }
+        }
+        return null;
+      })
+      .filter((bet): bet is { typeId: string; tempId: string } => bet !== null);
+
+    dispatch("selectionChange", { selectedBets });
   }
 </script>
 
-{#if summary}
+{#if summary && summary.groups?.length > 0}
   <div class="p-2">
     <div
       class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
@@ -80,6 +114,7 @@
                 class="form-checkbox h-5 w-5 text-red-600"
               />
             </th>
+            <th scope="col" class="px-2 py-3">ประเภท</th>
             <th scope="col" class="px-2 py-3">เลข</th>
             <th scope="col" class="px-2 py-3">จำนวนเงิน</th>
             <th scope="col" class="px-2 py-3">อัตราจ่าย</th>
@@ -87,21 +122,26 @@
           </tr>
         </thead>
         <tbody>
-          {#each summary.groups as { typeId, entries }}
-            {#each entries as bet}
+          {#each summary.groups as { typeId, displayType, entries }}
+            {#each entries as bet, betIndex}
               <tr
                 class="transition-colors duration-150 ease-in-out cursor-pointer"
-                class:bg-gray-200={selectedBetIds.has(bet.id)}
-                on:click={() => toggleBetSelection(bet.id)}
+                class:bg-gray-200={isBetSelected(bet.tempId)}
+                on:click={() => toggleBetSelection(bet.tempId)}
               >
                 <td class="px-2 py-4">
                   <input
                     type="checkbox"
-                    checked={selectedBetIds.has(bet.id)}
-                    on:change={() => toggleBetSelection(bet.id)}
+                    checked={isBetSelected(bet.tempId)}
+                    on:change={() => toggleBetSelection(bet.tempId)}
                     on:click|stopPropagation
                     class="form-checkbox h-5 w-5 text-red-600 mt-1"
                   />
+                </td>
+                <td class="px-2 py-4">
+                  {#if betIndex === 0}
+                    {displayType.bet_type_name}
+                  {/if}
                 </td>
                 <td class="px-2 py-4">{bet.number}</td>
                 <td class="px-2 py-4">
@@ -109,15 +149,15 @@
                     type="number"
                     class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
                     value={bet.amount}
-                    on:input={(e) => handleAmountChange(typeId, bet.number, e)}
+                    on:input={(e) => handleAmountChange(typeId, bet.tempId, e)}
                     on:click|stopPropagation
                   />
                 </td>
-                <td class="px-2 py-4">{bet.payout}</td>
+                <td class="px-2 py-4">{bet.payout || "-"}</td>
                 <td class="px-2 py-4">
                   <button
                     on:click|stopPropagation={() =>
-                      handleBetDelete(typeId, bet.number)}
+                      handleBetDelete(typeId, bet.tempId)}
                     class="text-red-500 hover:text-red-700"
                   >
                     <Trash2 size={20} />
@@ -129,6 +169,10 @@
         </tbody>
       </table>
     </div>
+  </div>
+{:else}
+  <div class="p-8 text-center text-gray-500">
+    <p class="text-lg">ไม่มีรายการเดิมพัน</p>
   </div>
 {/if}
 

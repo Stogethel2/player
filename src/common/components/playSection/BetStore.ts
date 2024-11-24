@@ -1,103 +1,142 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
+
+export interface BetType {
+  id: string;
+  bet_type_name: string;
+  display_type: string;
+  digit_length: number;
+}
 
 export interface LotteryBet {
-    id: string;
-    number: string;
-    amount: number;
-    payout?: number;
-    displayType: string;
+  tempId: string;
+  number: string;
+  amount: number;
+  payout?: number;
+  displayType: string;
 }
 
 export interface BetTypeGroup {
-    [typeId: string]: LotteryBet[];
+  [typeId: string]: LotteryBet[];
 }
 
 export interface BetGroupSummary {
-    typeId: string;
-    displayType: string;
-    number: string;
-    displayName: string;
-    entries: LotteryBet[];
+  typeId: string;
+  displayType: string;
+  entries: LotteryBet[];
+  totalAmount: number;
+  totalBets: number;
 }
 
 export interface BetSummary {
-    groups: BetGroupSummary[];
-    totals: {
-        bets: number;
-        amount: number;
-    };
+  groups: BetGroupSummary[];
+  totals: {
+    bets: number;
+    amount: number;
+  };
+}
+
+let tempIdCounter = 0;
+
+function generateTempId(): string {
+  return `temp_${Date.now()}_${tempIdCounter++}`;
 }
 
 function createBetStore() {
-    const { subscribe, set, update } = writable<BetTypeGroup>({});
+  const store = writable<BetTypeGroup>({});
+  const { subscribe, set, update } = store;
 
-    return {
-        subscribe,
-        addBet: (typeId: string, number: string, displayType: string) =>
-            update((store) => {
-                if (!store[typeId]) {
-                    store[typeId] = [];
-                }
-                const betId = `${typeId}|${number}`;
-                if (!store[typeId].some((bet) => bet.id === betId)) {
-                    store[typeId].push({ 
-                        id: betId, 
-                        number, 
-                        amount: 100, 
-                        displayType 
-                    });
-                }
-                return store;
-            }),
+  return {
+    subscribe,
+    
+    addBet: (typeId: string, number: string, displayType: string, amount: number = 0) =>
+      update((store) => {
+        const newStore = { ...store };
+        if (!newStore[typeId]) {
+          newStore[typeId] = [];
+        }
+        
+        newStore[typeId] = [...newStore[typeId], {
+          tempId: generateTempId(),
+          number,
+          amount,
+          displayType,
+        }];
+        
+        return newStore;
+      }),
 
-        removeBet: (typeId: string, number: string) =>
-            update((store) => {
-                const betId = `${typeId}|${number}`;
-                if (store[typeId]) {
-                    store[typeId] = store[typeId].filter((bet) => bet.id !== betId);
-                    if (store[typeId].length === 0) {
-                        delete store[typeId];
-                    }
-                }
-                return store;
-            }),
+    removeBet: (typeId: string, tempId: string) =>
+      update((store) => {
+        const newStore = { ...store };
+        if (newStore[typeId]) {
+          newStore[typeId] = newStore[typeId].filter(bet => bet.tempId !== tempId);
+          if (newStore[typeId].length === 0) {
+            delete newStore[typeId];
+          }
+        }
+        return newStore;
+      }),
 
-        updateAmount: (typeId: string, number: string, amount: number) =>
-            update((store) => {
-                const betId = `${typeId}|${number}`;
-                if (store[typeId]) {
-                    store[typeId] = store[typeId].map((bet) =>
-                        bet.id === betId ? { ...bet, amount } : bet
-                    );
-                }
-                return store;
-            }),
+    updateAmount: (typeId: string, tempId: string, amount: number) =>
+      update((store) => {
+        const newStore = { ...store };
+        if (newStore[typeId]) {
+          newStore[typeId] = newStore[typeId].map(bet =>
+            bet.tempId === tempId ? { ...bet, amount } : bet
+          );
+        }
+        return newStore;
+      }),
 
-        clearAll: () => set({}),
+    clearAll: () => set({}),
 
-        exists: (number: string, typeId: string): boolean => {
-            let exists = false;
-            const betId = `${typeId}|${number}`;
-            update((store) => {
-                exists = store[typeId]?.some((bet) => bet.id === betId) ?? false;
-                return store;
-            });
-            return exists;
-        },
+    getSummary: (): BetSummary => {
+      const currentStore = get(store);
+      
+      const groups = Object.entries(currentStore || {}).map(([typeId, bets]) => {
+        const totalAmount = bets.reduce((sum, bet) => sum + (bet.amount || 0), 0);
+        
+        return {
+          typeId,
+          displayType: bets[0]?.displayType || "",
+          entries: [...bets],
+          totalAmount,
+          totalBets: bets.length
+        };
+      });
 
-        getAllBets: () => {
-            let allBets: { typeId: string; displayType: string; entries: LotteryBet[] }[] = [];
-            update((store) => {
-                allBets = Object.entries(store).map(([typeId, bets]) => ({
-                    typeId,
-                    displayType: bets[0]?.displayType || "",
-                    entries: [...bets],
-                }));
-                return store;
-            });
-            return allBets;
-        },
-    };
+      const totals = groups.reduce(
+        (acc, group) => ({
+          bets: acc.bets + group.totalBets,
+          amount: acc.amount + group.totalAmount
+        }),
+        { bets: 0, amount: 0 }
+      );
+
+      return { groups, totals };
+    },
+
+    updateMultipleAmounts: (updates: { typeId: string, tempId: string, amount: number }[]) =>
+      update((store) => {
+        const newStore = { ...store };
+        updates.forEach(({ typeId, tempId, amount }) => {
+          if (newStore[typeId]) {
+            newStore[typeId] = newStore[typeId].map(bet =>
+              bet.tempId === tempId ? { ...bet, amount } : bet
+            );
+          }
+        });
+        return newStore;
+      }),
+
+    getTotalBets: (): number => {
+      const currentStore = get(store);
+      return Object.values(currentStore || {}).reduce(
+        (sum, bets) => sum + bets.length,
+        0
+      );
+    }
+  };
 }
 
-export const LotteryBetStore = createBetStore();
+export const betStore = createBetStore();

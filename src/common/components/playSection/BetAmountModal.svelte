@@ -2,16 +2,17 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { derived } from "svelte/store";
   import BetSummaryTable from "./BetSummaryTable.svelte";
-  import { LotteryBetStore } from "./BetStore";
+  import { betStore } from "./BetStore";
   import type { BetSummary, BetGroupSummary, LotteryBet } from "./BetStore";
   import { betCalculateApi } from "$lib";
 
   export let accountBalance = 30420.19;
   export let usedBalance = 0;
 
-  let selectedBetIds = new Set<string>();
+  let selectedTempIds = new Set<string>();
   let currentBetGroups: BetGroupSummary[];
-  $: betSummary = derived(LotteryBetStore, calculateBetSummary);
+
+  $: betSummary = derived(betStore, calculateBetSummary);
 
   const dispatch = createEventDispatcher();
 
@@ -32,8 +33,8 @@
         typeId,
         entries,
         displayType: bets[0]?.displayType || "",
-        number: "",
-        displayName: "",
+        totalAmount: entries.reduce((sum, bet) => sum + bet.amount, 0),
+        totalBets: entries.length,
       };
     });
 
@@ -52,12 +53,12 @@
   }
 
   function updateSelectedBetsAmount(amount: number): void {
-    const allBets = LotteryBetStore.getAllBets();
+    const summary = betStore.getSummary();
 
-    allBets.forEach((group) => {
+    summary.groups.forEach((group) => {
       group.entries.forEach((bet) => {
-        if (selectedBetIds.has(bet.id)) {
-          LotteryBetStore.updateAmount(group.typeId, bet.number, amount);
+        if (selectedTempIds.has(bet.tempId)) {
+          betStore.updateAmount(group.typeId, bet.tempId, amount);
         }
       });
     });
@@ -67,13 +68,23 @@
     updateSelectedBetsAmount(0);
   }
 
-  function handleBetSelection(event: CustomEvent) {
-    selectedBetIds = event.detail.selectedBetIds;
+  function handleBetSelection(
+    event: CustomEvent<{ selectedTempIds: Set<string> }>
+  ) {
+    selectedTempIds = event.detail.selectedTempIds;
   }
 
-  let calculatedBets: any;
+  let calculatedBets: BetSummary;
+
   onMount(async () => {
-    calculatedBets = await betCalculateApi.getBetCalculate({ ...$betSummary });
+    try {
+      calculatedBets = await betCalculateApi.getBetCalculate({
+        ...$betSummary,
+      });
+    } catch (error) {
+      console.error("Failed to fetch bet calculations:", error);
+      calculatedBets = $betSummary;
+    }
   });
 </script>
 
