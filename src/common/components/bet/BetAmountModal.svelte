@@ -32,9 +32,10 @@
       return {
         typeId,
         entries,
-        displayType: bets[0]?.displayType || "",
+        displayType: bets[0]?.betType.bet_type ?? "",
         totalAmount: entries.reduce((sum, bet) => sum + bet.amount, 0),
         totalBets: entries.length,
+        betType: bets[0]?.betType ?? null,
       };
     });
 

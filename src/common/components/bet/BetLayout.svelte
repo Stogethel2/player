@@ -6,17 +6,16 @@
     CircleHelp,
   } from "lucide-svelte";
   import BetAmountModal from "./BetAmountModal.svelte";
-  import SelectedNumbers from "./selectedNumbers.svelte";
+  import SelectedNumbers from "./SelectedNumbers.svelte";
   import NumberPad from "./NumberPad.svelte";
   import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
   import { betStore } from "./BetStore";
   import { goto } from "$app/navigation";
-  import { processBetTypeSelection, togglePlayMode } from "./playUtils";
+  import { togglePlayMode } from "./PlayUtils";
   import { onMount, onDestroy } from "svelte";
   import { lottoRoundApi } from "$lib";
-  import type { LottoRound, BetType } from "./Lotto.types";
-  import type { Writable } from "svelte/store";
-  import { writable } from "svelte/store";
+  import type { LottoRound, LottoBetType } from "./Lotto.types";
+  import { writable, derived } from "svelte/store";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -32,13 +31,18 @@
   /* Main state */
   let selectedPlayMode = true;
   let showBetModal = false;
-  let selectedBetType = "";
-  let digitsCount = 3;
-  let selectedBetTypes: BetType | null = null; // Initialize as null
   let selectedBetOptions: string[] = [];
   let lotteryRound: LottoRound | null = null;
 
-  const betTypeStore: Writable<BetType | null> = writable(null);
+  const selectedBetTypeStore = writable<LottoBetType | null>(null);
+  const selectedBetType = derived(
+    selectedBetTypeStore,
+    ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_type || ""
+  );
+  const selectedDigitsCount = derived(
+    selectedBetTypeStore,
+    ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_digit || 3
+  );
 
   function startTimer(seconds: number) {
     timeRemaining.set(seconds);
@@ -72,21 +76,8 @@
   });
 
   function handleBetTypeChange(event: CustomEvent) {
-    const result = processBetTypeSelection(
-      event,
-      betTypeStore as Writable<BetType>
-    );
-
-    console.log(result);
-    if (result) {
-      selectedBetType = result.selectedType;
-      digitsCount = result.digitLength;
-      selectedBetTypes = event.detail.selectedBetType;
-    } else {
-      selectedBetType = "";
-      digitsCount = 3;
-      selectedBetTypes = null;
-    }
+    const selectedBetType = event.detail.selectedBetType as LottoBetType | null;
+    selectedBetTypeStore.set(selectedBetType);
   }
 
   function handleBetOptionChange(event: CustomEvent) {
@@ -99,7 +90,7 @@
 
   function openBetModal() {
     showBetModal = true;
-    console.log('showBetModal', showBetModal);
+    console.log("showBetModal", showBetModal);
   }
 
   function closeBetModal() {
@@ -159,7 +150,7 @@
 
         <!-- Lottery Type Filter -->
         <LotteryTypeFilter
-          {selectedBetTypes}
+          selectedBetType={$selectedBetTypeStore}
           availableBetTypes={lotteryRound.lottoBetTypes}
           on:typesChanged={handleBetTypeChange}
         />
@@ -183,16 +174,16 @@
         </div>
 
         <!-- Play Area -->
-        {#if selectedBetTypes !== null}
+        {#if selectedBetTypeStore !== null}
           <div class="p-2 flex w-full">
             <div class="select-list w-2/6 border-r">
               <SelectedNumbers availableBetTypes={lotteryRound.lottoBetTypes} />
             </div>
             <div class="numpad w-4/6 flex flex-col items-center">
               <NumberPad
-                {digitsCount}
-                {selectedBetType}
-                activeLotteryTypesStore={betTypeStore}
+                digitsCount={$selectedDigitsCount}
+                selectedBetType={$selectedBetType}
+                activeLotteryTypesStore={selectedBetTypeStore}
               />
             </div>
           </div>

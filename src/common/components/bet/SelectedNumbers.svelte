@@ -1,16 +1,11 @@
 <script lang="ts">
   import { betStore } from "./BetStore";
-  import type { BetTypeGroup, LotteryBet } from "./BetStore";
   import { derived } from "svelte/store";
   import { fade } from "svelte/transition";
   import { getTypeClass } from "./playUtils";
+  import type { LottoBetType } from "./Lotto.types";
 
-  interface BetType {
-    id: string;
-    bet_type_name: string;
-  }
-
-  export let availableBetTypes: BetType[];
+  export let availableBetTypes: LottoBetType[] = [];
 
   const betListSummary = derived(betStore, () => {
     const summary = betStore.getSummary();
@@ -29,8 +24,7 @@
 
   function getBetTypeName(typeId: string): string {
     return (
-      availableBetTypes.find((type) => type.id === typeId)?.bet_type_name ||
-      typeId
+      availableBetTypes.find((type) => type.id === typeId)?.bet_type || typeId
     );
   }
 </script>
@@ -49,7 +43,7 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroups as { typeId, entries, displayType } (typeId)}
+        {#each betGroups as { typeId, entries } (typeId)}
           <div class="mb-4">
             <h3 class="font-semibold mb-2">{getBetTypeName(typeId)}</h3>
             {#each entries as bet (bet.tempId)}

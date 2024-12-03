@@ -1,5 +1,5 @@
 import type { Writable } from "svelte/store";
-import type { BetType } from "./Lotto.types";
+import type { LottoBetType } from "./Lotto.types";
 
 export const NUMPAD_LAYOUT = [
     1,
@@ -29,13 +29,13 @@ export const colorClasses: Record<string, string> = {
 export interface BetTypeChangeEvent {
     availableBetTypes: string[];
     digitCount: number;
-    selectedBetType: BetType;
+    selectedBetType: LottoBetType;
     changeType: "activate" | "deactivate";
 }
 
 export function processBetTypeSelection(
     event: CustomEvent<BetTypeChangeEvent>,
-    betTypeStore: Writable<BetType>
+    betTypeStore: Writable<LottoBetType>
 ): { selectedType: string; digitLength: number } {
     const { availableBetTypes, digitCount, selectedBetType, changeType } = event.detail;
     betTypeStore.set(selectedBetType);

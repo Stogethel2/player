@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import type { BetType } from "./Lotto.types";
+import type { LottoBetType } from "./Lotto.types";
 
 /* Interface representing a single bet with unique temporary ID and details */
 export interface LotteryBet {
@@ -7,7 +7,7 @@ export interface LotteryBet {
     number: string;
     amount: number;
     payout?: number;
-    displayType: BetType;
+    betType: LottoBetType;
 }
 
 /* Groups of bets organized by type ID */
@@ -18,7 +18,7 @@ export interface BetTypeGroup {
 /* Summary information for a group of bets of the same type */
 export interface BetGroupSummary {
     typeId: string;
-    displayType: BetType;
+    betType: LottoBetType;
     entries: LotteryBet[];
     totalAmount: number;
     totalBets: number;
@@ -50,7 +50,7 @@ function createBetStore() {
         subscribe,
 
         /* Adds a new bet to the store under specified type ID */
-        addBet: (typeId: string, number: string, displayType: BetType, amount: number = 0) =>
+        addBet: (typeId: string, number: string, betType: LottoBetType, amount: number = 0) =>
             update((store) => {
                 const newStore = { ...store };
                 if (!newStore[typeId]) {
@@ -61,7 +61,7 @@ function createBetStore() {
                     tempId: generateTempId(),
                     number,
                     amount,
-                    displayType,
+                    betType,
                 }];
 
                 return newStore;
@@ -105,7 +105,7 @@ function createBetStore() {
 
                 return {
                     typeId,
-                    displayType: bets[0]?.displayType || "",
+                    betType: bets[0]?.betType || "",
                     entries: [...bets],
                     totalAmount,
                     totalBets: bets.length

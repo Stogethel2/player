@@ -1,21 +1,20 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import { lotteryTypes } from "./playUtils";
-  import type { BetType } from "./Lotto.types";
+  import type { LottoBetType } from "./Lotto.types";
 
   const dispatch = createEventDispatcher();
 
-  export let selectedBetTypes: BetType | null = null;
-  export let availableBetTypes: BetType[] = [];
+  export let selectedBetType: LottoBetType | null = null;
+  export let availableBetTypes: LottoBetType[] = [];
 
+  console.log(availableBetTypes);
+  console.log(selectedBetType);
 
   function handleBetTypeClick(betType: any) {
     if (!betType.id) return;
 
-    const isSelected = selectedBetTypes?.id === betType.id;
+    const isSelected = selectedBetType?.id === betType.id;
     const changeType = isSelected ? "deactivate" : "activate";
-
-    console.log(availableBetTypes)
 
     /* Check exist toggle */
     availableBetTypes = isSelected
@@ -34,7 +33,7 @@
   }
 
   function isBetTypeSelected(betTypeId: string): boolean {
-    return selectedBetTypes?.id === betTypeId;
+    return selectedBetType?.id === betTypeId;
   }
 </script>
 
@@ -48,7 +47,7 @@
           on:click={() => handleBetTypeClick(betType)}
           aria-pressed={isBetTypeSelected(betType.id)}
         >
-          {betType.bet_type_name}
+          {betType.bet_type}
         </button>
       {/if}
     {/each}

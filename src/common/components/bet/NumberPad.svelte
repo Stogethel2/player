@@ -3,7 +3,7 @@
   import { betStore } from "./BetStore";
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
-  import { NUMPAD_LAYOUT } from "./playUtils";
+  import { NUMPAD_LAYOUT } from "./PlayUtils";
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
