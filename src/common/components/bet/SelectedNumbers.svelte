@@ -2,7 +2,7 @@
   import { betStore } from "./BetStore";
   import { derived } from "svelte/store";
   import { fade } from "svelte/transition";
-  import { getTypeClass } from "./playUtils";
+  import { getTypeClass } from "./PlayUtils";
   import type { LottoBetType } from "./Lotto.types";
 
   export let availableBetTypes: LottoBetType[] = [];
