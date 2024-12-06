@@ -1,14 +1,13 @@
 <script lang="ts">
     import { betStore } from "./BetStore";
-    import type { BetSummary, LotteryBet } from "./BetStore";
     import { Trash2 } from "lucide-svelte";
-    import { createEventDispatcher } from "svelte";
+    import type { BetSummary } from "./BetStore";
   
     export let summary: BetSummary | undefined;
   
     let selectedTempIds = new Set<string>();
     let isAllSelected = false;
-    const dispatch = createEventDispatcher();
+    let dispatch: (event: string, detail?: any) => void;
   
     function handleAmountChange(typeId: string, tempId: string, event: Event) {
       const amount = parseFloat((event.target as HTMLInputElement).value);

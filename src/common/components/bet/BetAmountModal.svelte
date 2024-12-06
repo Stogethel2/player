@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { derived } from "svelte/store";
   import BetSummaryTable from "./BetSummaryTable.svelte";
   import { betStore } from "./BetStore";
@@ -10,9 +10,8 @@
   export let usedBalance = 0;
 
   let selectedTempIds = new Set<string>();
+  let dispatch: (event: string, detail?: any) => void;
   $: betSummary = derived(betStore, calculateBetSummary);
-
-  const dispatch = createEventDispatcher();
 
   function calculateBetSummary(
     $store: Record<string, LotteryBet[]>
@@ -45,7 +44,10 @@
   }
 
   async function handleSubmit() {
-    dispatch("submit", { totalAmount: $betSummary.totals.totalAmount, usedBalance });
+    dispatch("submit", {
+      totalAmount: $betSummary.totals.totalAmount,
+      usedBalance,
+    });
   }
 
   function handleClose() {
