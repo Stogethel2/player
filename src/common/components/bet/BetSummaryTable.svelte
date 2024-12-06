@@ -51,9 +51,9 @@
       isAllSelected = !isAllSelected;
   
       if (isAllSelected && summary) {
-        // Select all bets
-        summary.groups.forEach((group) => {
-          group.entries.forEach((bet) => {
+        /* Select all bets */
+        summary.betGroups.forEach((group) => {
+          group.betList.forEach((bet) => {
             selectedTempIds.add(bet.tempId);
           });
         });
@@ -66,8 +66,8 @@
     }
   
     function updateSelectAllState() {
-      const totalBets = summary?.groups.reduce(
-        (sum, group) => sum + group.entries.length,
+      const totalBets = summary?.betGroups.reduce(
+        (sum, group) => sum + group.betList.length,
         0
       ) ?? 0;
       isAllSelected = totalBets > 0 && selectedTempIds.size === totalBets;
@@ -78,8 +78,8 @@
   
       const selectedBets = Array.from(selectedTempIds)
         .map((tempId) => {
-          for (const group of summary.groups) {
-            const bet = group.entries.find((entry) => entry.tempId === tempId);
+          for (const group of summary.betGroups) {
+            const bet = group.betList.find((entry) => entry.tempId === tempId);
             if (bet) {
               return {
                 typeId: group.typeId,
@@ -95,7 +95,7 @@
     }
   </script>
 
-{#if summary && summary.groups?.length > 0}
+{#if summary && summary.betGroups?.length > 0}
   <div class="p-2">
     <div
       class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
@@ -123,8 +123,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each summary.groups as { typeId, displayType, entries }}
-            {#each entries as bet, betIndex}
+          {#each summary.betGroups as { typeId, lottoBetType, betList }}
+            {#each betList as bet, betIndex}
               <tr
                 class="transition-colors duration-150 ease-in-out cursor-pointer"
                 class:bg-gray-200={isBetSelected(bet.tempId)}
@@ -141,7 +141,7 @@
                 </td>
                 <td class="px-2 py-4">
                   {#if betIndex === 0}
-                    {displayType.bet_type_name}
+                    {lottoBetType.bet_type_name}
                   {/if}
                 </td>
                 <td class="px-2 py-4">{bet.number}</td>

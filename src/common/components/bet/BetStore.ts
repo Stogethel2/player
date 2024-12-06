@@ -7,7 +7,7 @@ export interface LotteryBet {
     number: string;
     amount: number;
     payout?: number;
-    betType: LottoBetType;
+    lottoBetType: LottoBetType;
 }
 
 /* Groups of bets organized by type ID */
@@ -18,18 +18,18 @@ export interface BetTypeGroup {
 /* Summary information for a group of bets of the same type */
 export interface BetGroupSummary {
     typeId: string;
-    betType: LottoBetType;
-    entries: LotteryBet[];
+    lottoBetType: LottoBetType;
+    betList: LotteryBet[];
     totalAmount: number;
     totalBets: number;
 }
 
 /* Complete summary of all bets and totals */
 export interface BetSummary {
-    groups: BetGroupSummary[];
+    betGroups: BetGroupSummary[];
     totals: {
-        bets: number;
-        amount: number;
+        totalBet: number;
+        totalAmount: number;
     };
 }
 
@@ -50,7 +50,7 @@ function createBetStore() {
         subscribe,
 
         /* Adds a new bet to the store under specified type ID */
-        addBet: (typeId: string, number: string, betType: LottoBetType, amount: number = 0) =>
+        addBet: (typeId: string, number: string, lottoBetType: LottoBetType, amount: number = 0) =>
             update((store) => {
                 const newStore = { ...store };
                 if (!newStore[typeId]) {
@@ -61,7 +61,7 @@ function createBetStore() {
                     tempId: generateTempId(),
                     number,
                     amount,
-                    betType,
+                    lottoBetType,
                 }];
 
                 return newStore;
@@ -100,28 +100,28 @@ function createBetStore() {
             const currentStore = get(store);
 
             /* Create summaries for each bet type group */
-            const groups = Object.entries(currentStore || {}).map(([typeId, bets]) => {
-                const totalAmount = bets.reduce((sum, bet) => sum + (bet.amount || 0), 0);
+            const betGroups = Object.entries(currentStore || {}).map(([typeId, bets]) => {
+                const totalAmount = bets.reduce((sum: number, bet: LotteryBet) => sum + (bet.amount || 0), 0);
 
                 return {
                     typeId,
-                    betType: bets[0]?.betType || "",
-                    entries: [...bets],
+                    lottoBetType: bets[0]?.lottoBetType,
+                    betList: [...bets],
                     totalAmount,
                     totalBets: bets.length
                 };
             });
 
             /* Calculate overall totals across all groups */
-            const totals = groups.reduce(
+            const totals = betGroups.reduce(
                 (acc, group) => ({
-                    bets: acc.bets + group.totalBets,
-                    amount: acc.amount + group.totalAmount
+                    totalBet: acc.totalBet + group.totalBets,
+                    totalAmount: acc.totalAmount + group.totalAmount
                 }),
-                { bets: 0, amount: 0 }
+                { totalBet: 0, totalAmount: 0 }
             );
 
-            return { groups, totals };
+            return { betGroups, totals };
         },
 
         /* Updates amounts for multiple bets at once */

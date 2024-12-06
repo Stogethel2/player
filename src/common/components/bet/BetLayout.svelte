@@ -66,6 +66,8 @@
     if (!lottoId) return;
     lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
 
+    console.log(lotteryRound);
+
     if (lotteryRound) {
       startTimer(300); // Start 5 minute countdown
     }
@@ -90,7 +92,6 @@
 
   function openBetModal() {
     showBetModal = true;
-    console.log("showBetModal", showBetModal);
   }
 
   function closeBetModal() {
@@ -148,7 +149,7 @@
           </div>
         </div>
 
-        <!-- Lottery Type Filter -->
+        <!-- Lotto Bet Type Filter -->
         <LotteryTypeFilter
           selectedBetType={$selectedBetTypeStore}
           availableBetTypes={lotteryRound.lottoBetTypes}

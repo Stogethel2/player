@@ -34,6 +34,7 @@ export interface LottoBetType {
   id: string;
   lotto_round_id: string;
   bet_type: BetType;
+  bet_type_name: string;
   bet_digit: number;
   min_bet: number;
   max_bet: number;

@@ -7,8 +7,6 @@
   export let selectedBetType: LottoBetType | null = null;
   export let availableBetTypes: LottoBetType[] = [];
 
-  console.log(availableBetTypes);
-  console.log(selectedBetType);
 
   function handleBetTypeClick(betType: any) {
     if (!betType.id) return;
@@ -47,7 +45,7 @@
           on:click={() => handleBetTypeClick(betType)}
           aria-pressed={isBetTypeSelected(betType.id)}
         >
-          {betType.bet_type}
+          {betType.bet_type_name}
         </button>
       {/if}
     {/each}

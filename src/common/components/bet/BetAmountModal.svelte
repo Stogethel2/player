@@ -10,8 +10,6 @@
   export let usedBalance = 0;
 
   let selectedTempIds = new Set<string>();
-  let currentBetGroups: BetGroupSummary[];
-
   $: betSummary = derived(betStore, calculateBetSummary);
 
   const dispatch = createEventDispatcher();
@@ -19,34 +17,35 @@
   function calculateBetSummary(
     $store: Record<string, LotteryBet[]>
   ): BetSummary {
-    let totalBets = 0;
+    let totalBet = 0;
     let totalAmount = 0;
 
-    currentBetGroups = Object.entries($store).map(([typeId, bets]) => {
-      const entries: LotteryBet[] = bets.map((bet) => {
-        totalBets += 1;
-        totalAmount += bet.amount;
-        return { ...bet, payout: 1 };
-      });
+    const currentBetGroups: BetGroupSummary[] = Object.entries($store).map(
+      ([typeId, bets]) => {
+        const betList: LotteryBet[] = bets.map((bet) => {
+          totalBet += 1;
+          totalAmount += bet.amount;
+          return { ...bet, payout: 1 };
+        });
 
-      return {
-        typeId,
-        entries,
-        displayType: bets[0]?.betType.bet_type ?? "",
-        totalAmount: entries.reduce((sum, bet) => sum + bet.amount, 0),
-        totalBets: entries.length,
-        betType: bets[0]?.betType ?? null,
-      };
-    });
+        return {
+          typeId,
+          lottoBetType: bets[0]?.lottoBetType || "",
+          betList,
+          totalAmount: betList.reduce((sum, bet) => sum + bet.amount, 0),
+          totalBets: betList.length,
+        };
+      }
+    );
 
     return {
-      groups: currentBetGroups,
-      totals: { bets: totalBets, amount: totalAmount },
+      betGroups: currentBetGroups,
+      totals: { totalBet, totalAmount },
     };
   }
 
   async function handleSubmit() {
-    dispatch("submit", { amount: $betSummary.totals.amount, usedBalance });
+    dispatch("submit", { totalAmount: $betSummary.totals.totalAmount, usedBalance });
   }
 
   function handleClose() {
@@ -56,8 +55,8 @@
   function updateSelectedBetsAmount(amount: number): void {
     const summary = betStore.getSummary();
 
-    summary.groups.forEach((group) => {
-      group.entries.forEach((bet) => {
+    summary.betGroups.forEach((group) => {
+      group.betList.forEach((bet) => {
         if (selectedTempIds.has(bet.tempId)) {
           betStore.updateAmount(group.typeId, bet.tempId, amount);
         }
@@ -134,7 +133,7 @@
           type="number"
           class="w-full p-2 bg-gray-100 rounded text-right"
           readonly
-          value={$betSummary.totals.amount}
+          value={$betSummary.totals.totalAmount}
         />
       </div>
 

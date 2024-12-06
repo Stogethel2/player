@@ -10,22 +10,20 @@
   const betListSummary = derived(betStore, () => {
     const summary = betStore.getSummary();
     return {
-      betGroups: summary.groups,
-      totalBets: summary.totals.bets,
+      betGroups: summary.betGroups,
+      totalBet: summary.totals.totalBet,
     };
   });
 
-  $: ({ betGroups, totalBets } = $betListSummary);
-  $: enableScrolling = totalBets > 10;
+  $: ({ betGroups, totalBet } = $betListSummary);
+  $: enableScrolling = totalBet > 10;
 
   function deleteBet(typeId: string, tempId: string) {
     betStore.removeBet(typeId, tempId);
   }
 
   function getBetTypeName(typeId: string): string {
-    return (
-      availableBetTypes.find((type) => type.id === typeId)?.bet_type || typeId
-    );
+    return availableBetTypes.find((type) => type.id === typeId)?.bet_type_name || typeId;
   }
 </script>
 
@@ -34,7 +32,7 @@
 
   <div class="flex-grow overflow-hidden">
     <div class={`h-full p-1 ${enableScrolling ? "overflow-y-auto" : ""}`}>
-      {#if totalBets === 0}
+      {#if totalBet === 0}
         <div
           class="flex flex-col items-center justify-center h-full text-gray-500 text-sm mb-4"
           transition:fade={{ duration: 200 }}
@@ -43,10 +41,10 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroups as { typeId, entries } (typeId)}
+        {#each betGroups as { typeId, betList } (typeId)}
           <div class="mb-4">
             <h3 class="font-semibold mb-2">{getBetTypeName(typeId)}</h3>
-            {#each entries as bet (bet.tempId)}
+            {#each betList as bet (bet.tempId)}
               <div
                 class="mb-2 last:mb-0 relative flex justify-center"
                 transition:fade={{ duration: 200 }}
