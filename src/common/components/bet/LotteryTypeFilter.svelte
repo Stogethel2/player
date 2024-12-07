@@ -1,32 +1,28 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { LottoBetType } from "./Lotto.types";
+  import type { LottoBetType } from "$lib/interface/Lotto.types";
 
   const dispatch = createEventDispatcher();
 
   export let selectedBetType: LottoBetType | null = null;
   export let availableBetTypes: LottoBetType[] = [];
 
-
-  function handleBetTypeClick(betType: any) {
+  function handleBetTypeClick(betType: LottoBetType) {
     if (!betType.id) return;
 
-    const isSelected = selectedBetType?.id === betType.id;
-    const changeType = isSelected ? "deactivate" : "activate";
+    const isCurrentlySelected = selectedBetType?.id === betType.id;
 
-    /* Check exist toggle */
-    availableBetTypes = isSelected
-      ? availableBetTypes.filter((id) => id !== betType.id)
-      : [...availableBetTypes, betType.id];
+    selectedBetType = isCurrentlySelected 
+      ? null 
+      : betType;
 
-    const digitCount = betType.bet_digit;
     dispatch("typesChanged", {
       availableBetTypes,
-      digitCount,
+      digitCount: betType.bet_digit,
       selectedBetType: betType,
-      changeType,
-      isActive: !isSelected,
-      activeTypesCount: availableBetTypes.length,
+      changeType: isCurrentlySelected ? "deactivate" : "activate", 
+      isActive: !isCurrentlySelected,
+      activeTypesCount: availableBetTypes.length
     });
   }
 

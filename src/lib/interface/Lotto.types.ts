@@ -58,4 +58,8 @@ export interface LottoRound {
   deleted_at: string | null;
   lotto: Lotto;
   lottoBetTypes: LottoBetType[];
+
+  /* Optional */
+  headerColorClass?: string;
 }
+

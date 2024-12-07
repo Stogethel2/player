@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { betStore } from "./BetStore";
+  import { betStore } from "$lib/stores/BetStore";
   import { derived } from "svelte/store";
   import { fade } from "svelte/transition";
-  import { getTypeClass } from "./PlayUtils";
-  import type { LottoBetType } from "./Lotto.types";
+  import { getTypeClass } from "$lib/util/Play";
+  import type { LottoBetType } from "$lib/interface/Lotto.types";
 
   export let availableBetTypes: LottoBetType[] = [];
 
@@ -23,7 +23,10 @@
   }
 
   function getBetTypeName(typeId: string): string {
-    return availableBetTypes.find((type) => type.id === typeId)?.bet_type_name || typeId;
+    return (
+      availableBetTypes.find((type) => type.id === typeId)?.bet_type_name ||
+      typeId
+    );
   }
 </script>
 

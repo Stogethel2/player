@@ -1,21 +1,23 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
+  import { writable, derived } from "svelte/store";
+
+  import BetAmountModal from "./BetAmountModal.svelte";
+  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
+  import NumberPad from "./NumberPad.svelte";
+  import SelectedNumbers from "./SelectedNumbers.svelte";
   import {
-    ChevronRight,
     ChevronLeft,
+    ChevronRight,
     CircleAlert,
     CircleHelp,
   } from "lucide-svelte";
-  import BetAmountModal from "./BetAmountModal.svelte";
-  import SelectedNumbers from "./SelectedNumbers.svelte";
-  import NumberPad from "./NumberPad.svelte";
-  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-  import { betStore } from "./BetStore";
+
+  import { betStore } from "$lib/stores/BetStore";
   import { goto } from "$app/navigation";
-  import { togglePlayMode } from "./PlayUtils";
-  import { onMount, onDestroy } from "svelte";
+  import { togglePlayMode } from "$lib/util/Play";
   import { lottoRoundApi } from "$lib";
-  import type { LottoRound, LottoBetType } from "./Lotto.types";
-  import { writable, derived } from "svelte/store";
+  import type { LottoRound, LottoBetType } from "$lib/interface/Lotto.types";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -34,7 +36,7 @@
   let selectedBetOptions: string[] = [];
   let lotteryRound: LottoRound | null = null;
 
-  const selectedBetTypeStore = writable<LottoBetType | null>(null);
+  const selectedBetTypeStore = writable<LottoBetType>();
   const selectedBetType = derived(
     selectedBetTypeStore,
     ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_type || ""
@@ -78,7 +80,7 @@
   });
 
   function handleBetTypeChange(event: CustomEvent) {
-    const selectedBetType = event.detail.selectedBetType as LottoBetType | null;
+    const selectedBetType = event.detail.selectedBetType as LottoBetType;
     selectedBetTypeStore.set(selectedBetType);
   }
 
@@ -178,7 +180,9 @@
         {#if selectedBetTypeStore !== null}
           <div class="p-2 flex w-full">
             <div class="select-list w-2/6 border-r">
-              <SelectedNumbers availableBetTypes={lotteryRound.lottoBetTypes} />
+              <SelectedNumbers
+                availableBetTypes={lotteryRound.lottoBetTypes}
+              />
             </div>
             <div class="numpad w-4/6 flex flex-col items-center">
               <NumberPad

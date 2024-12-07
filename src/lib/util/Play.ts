@@ -1,5 +1,5 @@
 import type { Writable } from "svelte/store";
-import type { LottoBetType } from "./Lotto.types";
+import type { LottoBetType } from "$lib/interface/Lotto.types";
 
 export const NUMPAD_LAYOUT = [
     1,
@@ -67,14 +67,7 @@ export function getTypeClass(tag: string): string {
     }
     return "bg-red-600 text-white";
 }
-export const lotteryTypes = [
-    { id: "3-top", label: "3 ตัวบน" },
-    { id: "3-bottom", label: "3 ตัวล่าง" },
-    { id: "3-tod", label: "3 ตัวโต๊ด" },
-    { id: "3-reverse", label: "3 ตัวกลับ" },
-    { id: "2-top", label: "2 ตัวบน" },
-    { id: "2-bottom", label: "2 ตัวล่าง" },
-];
+
 
 export function togglePlayMode(
     currentMode: boolean,

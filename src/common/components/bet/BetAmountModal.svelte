@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { derived } from "svelte/store";
-  import BetSummaryTable from "./BetSummaryTable.svelte";
-  import { betStore } from "./BetStore";
-  import type { BetSummary, BetGroupSummary, LotteryBet } from "./BetStore";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { betStore } from "$lib/stores/BetStore";
   import { betCalculateApi } from "$lib";
+  import BetSummaryTable from "./BetSummaryTable.svelte";
+  import type { BetSummary, BetGroupSummary, LotteryBet } from "$lib/stores/BetStore";
 
   export let accountBalance = 30420.19;
   export let usedBalance = 0;
 
   let selectedTempIds = new Set<string>();
-  let dispatch: (event: string, detail?: any) => void;
+ const dispatch = createEventDispatcher();
   $: betSummary = derived(betStore, calculateBetSummary);
 
   function calculateBetSummary(
@@ -80,9 +80,9 @@
 
   onMount(async () => {
     try {
-      calculatedBets = await betCalculateApi.getBetCalculate({
-        ...$betSummary,
-      });
+      calculatedBets = await betCalculateApi.getBetCalculate(
+        $betSummary,
+      );
     } catch (error) {
       console.error("Failed to fetch bet calculations:", error);
       calculatedBets = $betSummary;

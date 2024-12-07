@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { onMount, afterUpdate } from "svelte";
-  import { betStore } from "./BetStore";
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
-  import { NUMPAD_LAYOUT } from "./PlayUtils";
+  import { onMount } from "svelte";
+  import { betStore } from "$lib/stores/BetStore";
+  import { NUMPAD_LAYOUT } from "$lib/util/Play";
+  import type { LottoBetType } from "$lib/interface/Lotto.types";
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
-  export let activeLotteryTypesStore: Writable<any>;
+  export let activeLotteryTypesStore: Writable<LottoBetType>;
 
   let digits: string[] = [];
   let activeDigitIndex = 0;
@@ -19,23 +20,13 @@
     activeDigitIndex = 0;
     setTimeout(() => focusDigitInput(0), 0);
   }
-
   $: isNumberComplete = digits.every(Boolean);
-
   $: if (isNumberComplete) {
     submitNumber();
   }
 
   onMount(() => {
     focusDigitInput(activeDigitIndex);
-  });
-
-  afterUpdate(() => {
-    /* Ensure currentIndex is within bounds หลังจาก digitsCount changes */
-    if (activeDigitIndex >= digitsCount) {
-      activeDigitIndex = digitsCount - 1;
-      focusDigitInput(activeDigitIndex);
-    }
   });
 
   function handleDigitInput(event: Event, index: number): void {
@@ -83,7 +74,7 @@
       console.log("All bets:", activeBetType);
     }
 
-    console.log("All bets:", get(betStore) , selectedBetType);
+    console.log("All bets:", get(betStore), selectedBetType);
     resetDigits();
   }
 

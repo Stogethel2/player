@@ -153,7 +153,6 @@
 </div>
 
 <style lang="postcss">
-  /* Add any additional styles here if needed */
   :global(body) {
     @apply antialiased;
   }

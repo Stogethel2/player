@@ -1,22 +1,22 @@
 <script lang="ts">
   import { lottoRoundApi } from "$lib";
   import { lottoApi } from "$lib/api/endpoint/lotto";
+  import type { LottoRound } from "$lib/interface/Lotto.types";
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
-  let playlist: any;
+  let playlist: LottoRound[];
   let isLoading = true;
 
   export let category: string;
 
   onMount(async () => {
     try {
-      let lottoData;
       if (category === "yeekee") {
-        lottoData = await fetch("/setting/yeekeelist.json"); // ดึงข้อมูลจาก static/settings.json
+        playlist = await lottoRoundApi.getActiveLottoRounds();
+        // lottoData = await fetch("/setting/yeekeelist.json"); // ดึงข้อมูลจาก static/settings.json
       } else {
-        lottoData = await lottoRoundApi.getActiveLottoRounds();
+        playlist = await lottoRoundApi.getActiveLottoRounds();
       }
-      playlist = lottoData;
       const colors = [
         "bg-red-500",
         "bg-gray-500",
@@ -24,8 +24,8 @@
         "bg-green-500",
         "bg-blue-500",
       ];
-      playlist = playlist.map((card: any) => {
-        card.header_color_class =
+      playlist = playlist.map((card: LottoRound) => {
+        card.headerColorClass =
           colors[Math.floor(Math.random() * colors.length)];
         return card;
       });
@@ -45,7 +45,7 @@
   {:else}
     {#each playlist as card}
       <CardLotto
-        headerColorClass={card.header_color_class}
+        headerColorClass={card.headerColorClass}
         headerImageBackground={"https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
         icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
         title={card.lotto.lotto_name}
@@ -53,13 +53,13 @@
         details={card.round_date}
         open={true}
         name={"test"}
-        agent={card.lotto.lotto_name}
+        agent={false}
         lottoId={card.id}
       />
     {/each}
 
     <CardLotto
-      headerColorClass={'bg-red-500'}
+      headerColorClass={"bg-red-500"}
       headerImageBackground={"https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
       icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
       title={"หวยยี่กี่ 01/01/2564"}

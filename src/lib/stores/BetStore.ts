@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import type { LottoBetType } from "./Lotto.types";
+import type { LottoBetType } from "../interface/Lotto.types";
 
 /* Interface representing a single bet with unique temporary ID and details */
 export interface LotteryBet {
