@@ -3,7 +3,7 @@
   import { Trash2 } from "lucide-svelte";
   import type { BetSummary } from "$lib/stores/BetStore";
 
-  export let summary: BetSummary | undefined;
+  export let summary: BetSummary;
 
   let selectedTempIds = new Set<string>();
   let isAllSelected = false;
@@ -95,87 +95,79 @@
   }
 </script>
 
-{#if summary && summary.betGroups?.length > 0}
-  <div class="p-2">
-    <div
-      class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
-    >
-      <table
-        class="w-full text-sm text-left text-gray-500 border-red-500 border"
+<div class="p-2">
+  <div
+    class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
+  >
+    <table class="w-full text-sm text-left text-gray-500 border-red-500 border">
+      <thead
+        class="text-xs text-gray-700 uppercase bg-red-100 border-red-500 border-b sticky top-0 z-10"
       >
-        <thead
-          class="text-xs text-gray-700 uppercase bg-red-100 border-red-500 border-b sticky top-0 z-10"
-        >
-          <tr>
-            <th scope="col" class="px-2 py-3">
-              <input
-                type="checkbox"
-                checked={isAllSelected}
-                on:change={toggleSelectAll}
-                class="form-checkbox h-5 w-5 text-red-600"
-              />
-            </th>
-            <th scope="col" class="px-2 py-3">ประเภท</th>
-            <th scope="col" class="px-2 py-3">เลข</th>
-            <th scope="col" class="px-2 py-3">จำนวนเงิน</th>
-            <th scope="col" class="px-2 py-3">อัตราจ่าย</th>
-            <th scope="col" class="px-2 py-3"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each summary.betGroups as { typeId, lottoBetType, betList }}
-            {#each betList as bet, betIndex}
-              <tr
-                class="transition-colors duration-150 ease-in-out cursor-pointer"
-                class:bg-gray-200={isBetSelected(bet.tempId)}
-                on:click={() => toggleBetSelection(bet.tempId)}
-              >
-                <td class="px-2 py-4">
-                  <input
-                    type="checkbox"
-                    checked={isBetSelected(bet.tempId)}
-                    on:change={() => toggleBetSelection(bet.tempId)}
-                    on:click|stopPropagation
-                    class="form-checkbox h-5 w-5 text-red-600 mt-1"
-                  />
-                </td>
-                <td class="px-2 py-4">
-                  {#if betIndex === 0}
-                    {lottoBetType.bet_type_name}
-                  {/if}
-                </td>
-                <td class="px-2 py-4">{bet.number}</td>
-                <td class="px-2 py-4">
-                  <input
-                    type="number"
-                    class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
-                    value={bet.amount}
-                    on:input={(e) => handleAmountChange(typeId, bet.tempId, e)}
-                    on:click|stopPropagation
-                  />
-                </td>
-                <td class="px-2 py-4">{bet.payout || "-"}</td>
-                <td class="px-2 py-4">
-                  <button
-                    on:click|stopPropagation={() =>
-                      handleBetDelete(typeId, bet.tempId)}
-                    class="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </td>
-              </tr>
-            {/each}
+        <tr>
+          <th scope="col" class="px-2 py-3">
+            <input
+              type="checkbox"
+              checked={isAllSelected}
+              on:change={toggleSelectAll}
+              class="form-checkbox h-5 w-5 text-red-600"
+            />
+          </th>
+          <th scope="col" class="px-2 py-3">ประเภท</th>
+          <th scope="col" class="px-2 py-3">เลข</th>
+          <th scope="col" class="px-2 py-3">จำนวนเงิน</th>
+          <th scope="col" class="px-2 py-3">อัตราจ่าย</th>
+          <th scope="col" class="px-2 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each summary.betGroups as { typeId, lottoBetType, betList }}
+          {#each betList as bet, betIndex}
+            <tr
+              class="transition-colors duration-150 ease-in-out cursor-pointer"
+              class:bg-gray-200={isBetSelected(bet.tempId)}
+              on:click={() => toggleBetSelection(bet.tempId)}
+            >
+              <td class="px-2 py-4">
+                <input
+                  type="checkbox"
+                  checked={isBetSelected(bet.tempId)}
+                  on:change={() => toggleBetSelection(bet.tempId)}
+                  on:click|stopPropagation
+                  class="form-checkbox h-5 w-5 text-red-600 mt-1"
+                />
+              </td>
+              <td class="px-2 py-4">
+                {#if betIndex === 0}
+                  {lottoBetType.bet_type_name}
+                {/if}
+              </td>
+              <td class="px-2 py-4">{bet.number}</td>
+              <td class="px-2 py-4">
+                <input
+                  type="number"
+                  class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
+                  value={bet.amount}
+                  on:input={(e) => handleAmountChange(typeId, bet.tempId, e)}
+                  on:click|stopPropagation
+                />
+              </td>
+              <td class="px-2 py-4">{lottoBetType.current_payout_rate || lottoBetType.default_payout}</td>
+              <td class="px-2 py-4">
+                <button
+                  on:click|stopPropagation={() =>
+                    handleBetDelete(typeId, bet.tempId)}
+                  class="text-red-500 hover:text-red-700"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </td>
+            </tr>
           {/each}
-        </tbody>
-      </table>
-    </div>
+        {/each}
+      </tbody>
+    </table>
   </div>
-{:else}
-  <div class="p-8 text-center text-gray-500">
-    <p class="text-lg">ไม่มีรายการเดิมพัน</p>
-  </div>
-{/if}
+</div>
 
 <style>
   .scrollbar-hide::-webkit-scrollbar {

@@ -6,7 +6,6 @@ export interface LotteryBet {
     tempId: string;
     number: string;
     amount: number;
-    payout?: number;
     lottoBetType: LottoBetType;
 }
 
@@ -50,7 +49,7 @@ function createBetStore() {
         subscribe,
 
         /* Adds a new bet to the store under specified type ID */
-        addBet: (typeId: string, number: string, lottoBetType: LottoBetType, amount: number = 0) =>
+        addBet: (typeId: string, number: string, lottoBetType: LottoBetType, amount: number = 10) =>
             update((store) => {
                 const newStore = { ...store };
                 if (!newStore[typeId]) {

@@ -4,13 +4,19 @@
   import { betStore } from "$lib/stores/BetStore";
   import { betCalculateApi } from "$lib";
   import BetSummaryTable from "./BetSummaryTable.svelte";
-  import type { BetSummary, BetGroupSummary, LotteryBet } from "$lib/stores/BetStore";
+  import type {
+    BetSummary,
+    BetGroupSummary,
+    LotteryBet,
+  } from "$lib/stores/BetStore";
 
   export let accountBalance = 30420.19;
   export let usedBalance = 0;
 
   let selectedTempIds = new Set<string>();
- const dispatch = createEventDispatcher();
+  let calculatedBets: BetSummary;
+
+  const dispatch = createEventDispatcher();
   $: betSummary = derived(betStore, calculateBetSummary);
 
   function calculateBetSummary(
@@ -76,13 +82,10 @@
     selectedTempIds = event.detail.selectedTempIds;
   }
 
-  let calculatedBets: BetSummary;
-
   onMount(async () => {
     try {
-      calculatedBets = await betCalculateApi.getBetCalculate(
-        $betSummary,
-      );
+      calculatedBets = await betCalculateApi.getBetCalculate($betSummary);
+      console.log("calculatedBets", calculatedBets);
     } catch (error) {
       console.error("Failed to fetch bet calculations:", error);
       calculatedBets = $betSummary;
@@ -99,10 +102,18 @@
       <button class="text-2xl" on:click={handleClose}>&times;</button>
     </header>
 
-    <BetSummaryTable
-      on:selectionChange={handleBetSelection}
-      summary={calculatedBets}
-    />
+    {#if calculatedBets === undefined}
+      <div class="flex justify-center items-center h-32">
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"
+        ></div>
+      </div>
+    {:else}
+      <BetSummaryTable
+        on:selectionChange={handleBetSelection}
+        summary={calculatedBets}
+      />
+    {/if}
 
     <div class="p-4 space-y-4">
       <div class="space-y-2">
