@@ -3,56 +3,88 @@
   import { createEventDispatcher } from "svelte";
   import { betStore } from "$lib/stores/betStore";
   import type { LotteryBet } from "$lib/interface/bet.types";
+  import { onMount, onDestroy } from "svelte";
 
   export let bet: LotteryBet;
   export let betTypeId: string;
   export let betTypeName: string;
-  export let betIndex: boolean;
+  export let showTypeName: boolean;
 
   const dispatch = createEventDispatcher();
 
-  /* Get current bet from store and recalculate when store updates */
-  $: currentBet =
-    $betStore[betTypeId]?.find((b: LotteryBet) => b.tempId === bet.tempId) ||
-    bet;
+  let unsubscribe: () => void;
+  let currentAmount = bet.amount;
+  let currentPayout = bet.payout;
+
+  onMount(() => {
+    unsubscribe = betStore.subscribe(($store) => {
+      const updatedBet = $store[betTypeId]?.find(
+        (b) => b.tempId === bet.tempId
+      );
+      if (updatedBet) {
+        currentAmount = updatedBet.amount;
+        currentPayout = updatedBet.payout;
+      }
+    });
+  });
+
+  onDestroy(() => {
+    if (unsubscribe) unsubscribe();
+  });
 
   function handleDelete() {
-    dispatch("delete", { betTypeId, tempId: bet.tempId });
+    dispatch("delete", {
+      betTypeId,
+      tempId: bet.tempId,
+    });
   }
 
-  function handleAmount(event: Event) {
-    const newAmount: number = parseInt(
-      (event.target as HTMLInputElement).value
-    );
+  function handleAmountChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const newAmount = Math.max(1, parseInt(input.value) || 0);
 
-    betStore.updateAmount(betTypeId, bet.tempId, newAmount);
-    dispatch("onAmountChange", {
+    /* Update the input value to ensure it's at least 1 */
+    if (newAmount !== parseInt(input.value)) {
+      input.value = newAmount.toString();
+    }
+
+    dispatch("amountChange", {
       betTypeId,
       tempId: bet.tempId,
       amount: newAmount,
     });
   }
+
+  $: winningAmount = currentAmount * currentPayout;
 </script>
 
-<tr class="transition-colors duration-150 ease-in-out">
+<tr
+  class="transition-colors duration-150 ease-in-out hover:bg-gray-50"
+  class:bg-red-50={currentAmount < 1}
+>
   <td class="px-2 py-4">
-    {#if betIndex}
-      {betTypeName}
+    {#if showTypeName}
+      <span class="font-medium">{betTypeName}</span>
     {/if}
   </td>
-  <td class="px-2 py-4">{currentBet.number}</td>
+  <td class="px-2 py-4">{bet.number}</td>
   <td class="px-2 py-4">
     <input
       type="number"
       class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
-      value={currentBet.amount}
+      value={currentAmount}
       min="1"
-      on:input={handleAmount}
+      on:input={handleAmountChange}
     />
   </td>
-  <td class="px-2 py-4">{currentBet.amount * currentBet.payout}</td>
+  <td class="px-2 py-4">{currentPayout}</td>
+  <td class="px-2 py-4">{winningAmount}</td>
   <td class="px-2 py-4">
-    <button on:click={handleDelete} class="text-red-500 hover:text-red-700">
+    <button
+      on:click={handleDelete}
+      class="text-red-500 hover:text-red-700 transition-colors duration-150"
+      title="Delete bet"
+    >
       <Trash2 size={20} />
     </button>
   </td>

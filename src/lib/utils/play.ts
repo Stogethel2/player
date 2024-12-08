@@ -1,6 +1,3 @@
-import type { Writable } from "svelte/store";
-import type { LottoBetType } from "$lib/interface/lotto.types";
-
 export const NUMPAD_LAYOUT = [
     1,
     2,
@@ -26,40 +23,6 @@ export const colorClasses: Record<string, string> = {
     "2-bottom": "bg-yellow-600 text-white",
 };
 
-export interface BetTypeChangeEvent {
-    availableBetTypes: string[];
-    digitCount: number;
-    selectedBetType: LottoBetType;
-    changeType: "activate" | "deactivate";
-}
-
-export function processBetTypeSelection(
-    event: CustomEvent<BetTypeChangeEvent>,
-    betTypeStore: Writable<LottoBetType>
-): { selectedType: string; digitLength: number } {
-    const { availableBetTypes, digitCount, selectedBetType, changeType } = event.detail;
-    betTypeStore.set(selectedBetType);
-
-    if (changeType === "deactivate" && availableBetTypes.length > 0) {
-        const newSelectedType = availableBetTypes[0];
-        return {
-            selectedType: newSelectedType,
-            digitLength: newSelectedType.startsWith("3") ? 3 : 2,
-        };
-    }
-
-    if (availableBetTypes.length > 0) {
-        return {
-            selectedType: selectedBetType?.id || availableBetTypes[availableBetTypes.length - 1],
-            digitLength: digitCount,
-        };
-    }
-
-    return {
-        selectedType: "",
-        digitLength: 3, // Default digit length when no types selected
-    };
-}
 
 export function getTypeClass(tag: string): string {
     if (tag.startsWith("2-")) {

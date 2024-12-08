@@ -1,60 +1,47 @@
 <script lang="ts">
-  
   import type { BetSummary } from "$lib/interface/bet.types";
   import { betStore } from "$lib/stores/betStore";
+  import { syncBetSummaryWithStore } from "$lib/utils/betCalculations";
   import BetRow from "./BetRow.svelte";
   import TableHeader from "./TableHeader.svelte";
   import { createEventDispatcher } from "svelte";
+  import { derived } from "svelte/store";
 
   export let betSummary: BetSummary;
-  let selectedTempIds = new Set<string>();
   const dispatch = createEventDispatcher();
 
-  $: betGroups = betSummary?.betGroups || [];
+  const currentBetGroups = derived([betStore], ([$betStore]) =>
+    syncBetSummaryWithStore(betSummary, $betStore)
+  );
 
-  function updateSelectedBets() {
-    if (!betSummary) return;
-    const selectedBets = collectSelectedBets();
-    dispatch("selectionChange", { selectedBets });
-  }
-
-  function collectSelectedBets() {
-    return Array.from(selectedTempIds)
-      .map(findBetInGroups)
-      .filter(checkValidBet);
-  }
-
-  function findBetInGroups(tempId: string) {
-    let result = null;
-    betGroups.forEach((group) => {
-      /* Find bet with tempId */
-      const bet = group.betList.find((bet) => bet.tempId === tempId);
-      if (bet) {
-        result = {
-          betTypeId: group.betTypeId,
-          tempId: bet.tempId,
-        };
-      }
-    });
-    return result;
-  }
-
-  function checkValidBet(
-    bet: any
-  ): bet is { betTypeId: string; tempId: string } {
-    return bet !== null;
-  }
-
-  function handleBetDelete(event: CustomEvent) {
+  function handleBetDelete(
+    event: CustomEvent<{ betTypeId: string; tempId: string }>
+  ) {
     const { betTypeId, tempId } = event.detail;
     betStore.removeBet(betTypeId, tempId);
-    updateSelectedBets();
+    dispatch("selectionChange", {
+      selectedBets: getBetsByTypeId(betTypeId).filter(
+        (bet) => bet.tempId !== tempId
+      ),
+    });
   }
 
-  function handleAmount(event: CustomEvent) {
-    const { betTypeId, tempId, amount, payout } = event.detail;
+  function handleAmountChange(
+    event: CustomEvent<{
+      betTypeId: string;
+      tempId: string;
+      amount: number;
+    }>
+  ) {
+    const { betTypeId, tempId, amount } = event.detail;
     betStore.updateAmount(betTypeId, tempId, amount);
-    updateSelectedBets();
+    dispatch("selectionChange", {
+      selectedBets: getBetsByTypeId(betTypeId),
+    });
+  }
+
+  function getBetsByTypeId(betTypeId: string) {
+    return $betStore[betTypeId] || [];
   }
 </script>
 
@@ -64,17 +51,16 @@
   >
     <table class="w-full text-sm text-left text-gray-500 border-red-500 border">
       <TableHeader />
-
       <tbody>
-        {#each betGroups as group}
-          {#each group.betList as bet, betIndex}
+        {#each $currentBetGroups as group (group.betTypeId)}
+          {#each group.betList as bet (bet.tempId)}
             <BetRow
               {bet}
               betTypeId={group.betTypeId}
               betTypeName={group.lottoBetType.bet_type_name}
-              betIndex={betIndex === 0}
+              showTypeName={group.betList[0]?.tempId === bet.tempId}
               on:delete={handleBetDelete}
-              on:onAmountChange={handleAmount}
+              on:amountChange={handleAmountChange}
             />
           {/each}
         {/each}
