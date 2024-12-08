@@ -42,19 +42,30 @@
     }
   }
 
+  function generateRandomDigit(): string {
+    return Math.floor(Math.random() * 10).toString();
+  }
+
+  function handleDigitEntry(digit: string): void {
+    if (activeDigitIndex < digitsCount) {
+      digits[activeDigitIndex] = digit;
+      activeDigitIndex = Math.min(activeDigitIndex + 1, digitsCount - 1);
+      focusDigitInput(activeDigitIndex);
+    }
+  }
+
   function handleKeypadPress(value: (typeof NUMPAD_LAYOUT)[number]): void {
-    if (typeof value === "number" || value === "Rand") {
-      if (activeDigitIndex < digitsCount) {
-        const digit =
-          value === "Rand"
-            ? Math.floor(Math.random() * 10).toString()
-            : value.toString();
-        digits[activeDigitIndex] = digit;
-        activeDigitIndex = Math.min(activeDigitIndex + 1, digitsCount - 1);
-        focusDigitInput(activeDigitIndex);
-      }
-    } else if (value === "Del") {
-      deleteLastDigit();
+    switch (value) {
+      case 'Rand':
+        handleDigitEntry(generateRandomDigit());
+        break;
+      case 'Del':
+        deleteLastDigit();
+        break;
+      default:
+        if (typeof value === 'number') {
+          handleDigitEntry(value.toString());
+        }
     }
   }
 

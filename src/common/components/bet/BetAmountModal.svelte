@@ -19,7 +19,6 @@
   } as const;
   export let availableBalance = 30420.19;
 
-
   let betCalculationResult: BetSummary;
   let isLoading = true;
 
@@ -29,10 +28,7 @@
   $: currentBetSummary = derived(betStore, calculateBetSummary);
 
   function handleSubmitBet() {
-    dispatch("submit", {
-      totalAmount: $currentBetSummary.totals.totalAmount,
-      currentUsedBalance,
-    });
+    console.log('Current Bet Summary:', $currentBetSummary);
   }
 
   function handleCloseModal() {
@@ -40,8 +36,7 @@
   }
 
   function handleQuickBetAmount(amount: number): void {
-    const summary = betStore.getSummary();
-    updateBetsInStore(summary.betGroups, amount);
+    updateBetsInStore($currentBetSummary.betGroups, amount);
   }
 
   function handleClearBetAmounts(): void {
