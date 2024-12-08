@@ -18,7 +18,7 @@
     MAX_BET: 2000,
   } as const;
   export let availableBalance = 30420.19;
-  export let currentUsedBalance = 0;
+
 
   let betCalculationResult: BetSummary;
   let isLoading = true;
@@ -53,9 +53,11 @@
     betGroups: BetGroupSummary[],
     amount: number
   ): void {
-    betGroups.forEach((group) => {
-      group.betList.forEach((bet) => {
-        betStore.updateAmount(group.betTypeId, bet.tempId, amount);
+    betGroups.forEach((betGroup) => {
+      betGroup.betList.forEach((betItem) => {
+        if (betItem.tempId !== undefined) {
+          betStore.updateAmount(betGroup.betTypeId, betItem.tempId, amount);
+        }
       });
     });
   }
@@ -75,10 +77,10 @@
 
   function syncCalculationsWithStore(calculations: BetSummary): void {
     const betTypeGroup: BetTypeGroup = {};
-    calculations.betGroups.forEach((group) => {
-      betTypeGroup[group.betTypeId] = group.betList.map((bet) => ({
+    calculations.betGroups.forEach((betGroup) => {
+      betTypeGroup[betGroup.betTypeId] = betGroup.betList.map((bet) => ({
         ...bet,
-        lottoBetType: group.lottoBetType,
+        lottoBetType: betGroup.lottoBetType,
       }));
     });
     betStore.syncBetData(betTypeGroup);
@@ -156,11 +158,11 @@
       <div class="flex justify-between text-sm">
         <div>
           <span class="text-green-600">Credit คงเหลือ</span>
-          <span class="block font-bold">{availableBalance.toFixed(2)}</span>
+          <span class="block font-bold">{availableBalance}</span>
         </div>
         <div>
           <span class="text-red-600">ใช้ Credit ทั้งหมด</span>
-          <span class="block font-bold">{currentUsedBalance.toFixed(2)}</span>
+          <span class="block font-bold text-right">{$currentBetSummary.totals.totalAmount.toFixed(2)}</span>
         </div>
       </div>
 

@@ -12,16 +12,21 @@
 
   const dispatch = createEventDispatcher();
 
-  let unsubscribe: () => void;
-  let currentAmount = bet.amount;
-  let currentPayout = bet.payout;
+  /* Holds the unsubscribe function returned by a subscription. */
+  let unsubscribe: (() => void) | null = null;
+  let currentAmount = bet.amount ?? 1;
+  let currentPayout = bet.payout ?? 0;
 
   onMount(() => {
     unsubscribe = betStore.subscribe(($store) => {
       const updatedBet = $store[betTypeId]?.find(
         (b) => b.tempId === bet.tempId
       );
-      if (updatedBet) {
+      if (
+        updatedBet &&
+        (updatedBet.amount !== currentAmount ||
+          updatedBet.payout !== currentPayout)
+      ) {
         currentAmount = updatedBet.amount;
         currentPayout = updatedBet.payout;
       }
@@ -29,7 +34,8 @@
   });
 
   onDestroy(() => {
-    if (unsubscribe) unsubscribe();
+    /* Unsubscribe from the store when the component is destroyed. */
+    unsubscribe?.();
   });
 
   function handleDelete() {
