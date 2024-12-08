@@ -1,5 +1,5 @@
 import type { Writable } from "svelte/store";
-import type { LottoBetType } from "$lib/interface/Lotto.types";
+import type { LottoBetType } from "$lib/interface/lotto.types";
 
 export const NUMPAD_LAYOUT = [
     1,

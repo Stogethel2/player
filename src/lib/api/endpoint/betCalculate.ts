@@ -1,7 +1,7 @@
 import type { ApiResponse } from '$lib';
 import type { AxiosResponse } from 'axios';
 import apiClient from '../apiClient';
-import type { BetSummary } from '$lib/stores/BetStore';
+import type { BetSummary } from '$lib/stores/betStore';
 
 export const betCalculateApi = {
     getBetCalculate: async (betGroup: BetSummary): Promise<BetSummary> => {

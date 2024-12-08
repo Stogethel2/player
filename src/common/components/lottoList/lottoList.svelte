@@ -1,7 +1,7 @@
 <script lang="ts">
   import { lottoRoundApi } from "$lib";
   import { lottoApi } from "$lib/api/endpoint/lotto";
-  import type { LottoRound } from "$lib/interface/Lotto.types";
+  import type { LottoRound } from "$lib/interface/lotto.types";
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
   let playlist: LottoRound[];

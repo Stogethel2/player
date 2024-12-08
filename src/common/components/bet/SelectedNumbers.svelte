@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { betStore } from "$lib/stores/BetStore";
+  import { betStore } from "$lib/stores/betStore";
   import { derived } from "svelte/store";
   import { fade } from "svelte/transition";
-  import { getTypeClass } from "$lib/util/Play";
-  import type { LottoBetType } from "$lib/interface/Lotto.types";
+  import { getTypeClass } from "$lib/utils/play";
+  import type { LottoBetType } from "$lib/interface/lotto.types";
 
   export let availableBetTypes: LottoBetType[] = [];
 
@@ -18,14 +18,14 @@
   $: ({ betGroups, totalBet } = $betListSummary);
   $: enableScrolling = totalBet > 10;
 
-  function deleteBet(typeId: string, tempId: string) {
-    betStore.removeBet(typeId, tempId);
+  function deleteBet(betTypeId: string, tempId: string) {
+    betStore.removeBet(betTypeId, tempId);
   }
 
-  function getBetTypeName(typeId: string): string {
+  function getBetTypeName(betTypeId: string): string {
     return (
-      availableBetTypes.find((type) => type.id === typeId)?.bet_type_name ||
-      typeId
+      availableBetTypes.find((type) => type.id === betTypeId)?.bet_type_name ||
+      betTypeId
     );
   }
 </script>
@@ -44,22 +44,22 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroups as { typeId, betList } (typeId)}
+        {#each betGroups as { betTypeId, betList } (betTypeId)}
           <div class="mb-4">
-            <h3 class="font-semibold mb-2">{getBetTypeName(typeId)}</h3>
+            <h3 class="font-semibold mb-2">{getBetTypeName(betTypeId)}</h3>
             {#each betList as bet (bet.tempId)}
               <div
                 class="mb-2 last:mb-0 relative flex justify-center"
                 transition:fade={{ duration: 200 }}
               >
                 <div
-                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(typeId)}`}
+                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(betTypeId)}`}
                 >
                   <span class="flex-grow text-center mr-4">{bet.number}</span>
                   <button
                     class="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center bg-white text-slate-600 bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
-                    on:click={() => deleteBet(typeId, bet.tempId)}
-                    aria-label={`Remove ${bet.number} from ${getBetTypeName(typeId)}`}
+                    on:click={() => deleteBet(betTypeId, bet.tempId)}
+                    aria-label={`Remove ${bet.number} from ${getBetTypeName(betTypeId)}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

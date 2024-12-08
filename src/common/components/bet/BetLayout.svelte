@@ -13,11 +13,11 @@
     CircleHelp,
   } from "lucide-svelte";
 
-  import { betStore } from "$lib/stores/BetStore";
+  import { betStore } from "$lib/stores/betStore";
   import { goto } from "$app/navigation";
-  import { togglePlayMode } from "$lib/util/Play";
+  import { togglePlayMode } from "$lib/utils/play";
   import { lottoRoundApi } from "$lib";
-  import type { LottoRound, LottoBetType } from "$lib/interface/Lotto.types";
+  import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
 
   /* Timer store and state */
   const timeRemaining = writable(0);

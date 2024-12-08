@@ -2,9 +2,9 @@
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { onMount } from "svelte";
-  import { betStore } from "$lib/stores/BetStore";
-  import { NUMPAD_LAYOUT } from "$lib/util/Play";
-  import type { LottoBetType } from "$lib/interface/Lotto.types";
+  import { betStore } from "$lib/stores/betStore";
+  import { NUMPAD_LAYOUT } from "$lib/utils/play";
+  import type { LottoBetType } from "$lib/interface/lotto.types";
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
@@ -70,11 +70,9 @@
     const betNumber = digits.join("");
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
-      betStore.addBet(activeBetType.id, betNumber, activeBetType);
-      console.log("All bets:", activeBetType);
+      betStore.addBet(activeBetType.id, betNumber, activeBetType, 5);
     }
 
-    console.log("All bets:", get(betStore), selectedBetType);
     resetDigits();
   }
 
