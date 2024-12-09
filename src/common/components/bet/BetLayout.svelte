@@ -18,6 +18,7 @@
   import { togglePlayMode } from "$lib/utils/play";
   import { lottoRoundApi } from "$lib";
   import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
+  import { formatDateTime } from "$lib/utils/dateTime";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -123,26 +124,39 @@
       <div class="p-2">
         <div class="flex flex-col sm:flex-row justify-between border-b pb-4">
           <div class="flex flex-wrap items-center mb-2 sm:mb-0">
-            <img
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADkSURBVHgB7ditDQJBEIbhbyb82JOAQpOQ3FksGDBoJBRAIKEECqCDU/ijAuiAKwGJPAEJIG7YtdgRjJingje72U1mCEHeSfttolwIKQQJ/oxAxVvq7fJe3ijGtZiuFsJ+VB+RjJtEB4NxURJvlQmYwygBUoZtifVANHrTMSyjx/MlMMz8FXuglgdq0Wa9N/2KaTiY+Tej4YFaHqjlgVoeqOWBWo3xZATLfCbR8kAtD9Si82pneyY5djP/ZjQ4LIQrGMYkKGGWnEKgLE2eYmhiwYYXYdXPtWShtoAFISwc2iU2xbYvg0pBsBYLLg4AAAAASUVORK5CYII="
-              alt=""
-              class="w-8 h-8"
-            />
-            <p class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4">
-              {lotteryRound.lotto.lotto_name}
-            </p>
-            ออกงวด
             <div
-              class="flex items-center bg-amber-300 p-1 sm:p-1.5 text-xs sm:text-sm rounded-full mx-1 sm:mx-2"
+              class="flex flex-row items-center justify-between md:justify-start"
             >
-              <div>
-                <CircleAlert size={16} />
+              <div class="flex flex-row items-center">
+                <img
+                  src={lotteryRound.lotto.lotto_image}
+                  alt=""
+                  class="w-8 h-8"
+                />
+
+                <p class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4">
+                  {lotteryRound.lotto.lotto_name}
+                </p>
               </div>
-              <div class="mx-1">{lotteryRound.round_date}</div>
+
+              <div
+                class="flex items-center justify-center bg-amber-300 p-1 sm:p-1.5 text-xs sm:text-sm rounded-full"
+              >
+                <div>
+                  <CircleAlert size={16} />
+                </div>
+                <div class="mx-1">
+                  {formatDateTime(lotteryRound.round_date)}
+                </div>
+              </div>
             </div>
-            <p class="text-xs sm:text-sm blink">
-              เดิมพันก่อนภายในเวลา {displayTime}
-            </p>
+            <div class="flex flex-row justify-end">
+              <p
+                class="text-xs sm:text-sm blink mt-2 md:mt-0 md:ml-2 text-right"
+              >
+                เดิมพันก่อนภายในเวลา {displayTime}
+              </p>
+            </div>
           </div>
           <div class="flex items-center text-gray-500 mt-4">
             <CircleHelp size={16} />
@@ -158,61 +172,63 @@
           on:typesChanged={handleBetTypeChange}
         />
 
-        <!-- Play Mode Tabs -->
-        <div class="flex border-l relative justify-start mt-4">
-          <button
-            class="flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
-              ? 'border-b-white'
-              : ''}"
-            on:click={() => setPlayMode("custom")}
-          >
-            <div
-              class="absolute bg-teal-600 h-1 -top-1 {selectedPlayMode
-                ? 'block'
-                : 'hidden'}"
-              style="width: calc(100% + 2px);"
-            ></div>
-            <p>กดเลขเอง</p>
-          </button>
-        </div>
-
-        <!-- Play Area -->
-        {#if selectedBetTypeStore !== null}
-          <div class="p-2 flex w-full">
-            <div class="select-list w-2/6 border-r">
-              <SelectedNumbers
-                availableBetTypes={lotteryRound.lottoBetTypes}
-              />
-            </div>
-            <div class="numpad w-4/6 flex flex-col items-center">
-              <NumberPad
-                digitsCount={$selectedDigitsCount}
-                selectedBetType={$selectedBetType}
-                activeLotteryTypesStore={selectedBetTypeStore}
-              />
-            </div>
-          </div>
-
-          <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
+        {#if $selectedBetType}
+          <!-- Play Mode Tabs -->
+          <div class="flex border-l relative justify-start mt-4">
             <button
-              on:click={betStore.clearAll}
-              class="bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+              class="flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
+                ? 'border-b-white'
+                : ''}"
+              on:click={() => setPlayMode("custom")}
             >
-              ลบทั้งหมด
-            </button>
-            <button
-              on:click={openBetModal}
-              class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-            >
-              ใส่ราคา
+              <div
+                class="absolute bg-teal-600 h-1 -top-1 {selectedPlayMode
+                  ? 'block'
+                  : 'hidden'}"
+                style="width: calc(100% + 2px);"
+              ></div>
+              <p>กดเลขเอง</p>
             </button>
           </div>
-        {:else}
-          <div class="p-8 text-center text-xs sm:text-sm text-gray-500">
-            <p class="text-xl font-semibold mb-2">เงื่อนไขการแทง</p>
-            <p class="text-lg">แทงขั้นต่ำ : 1.00</p>
-            <p class="text-lg">แทงสูงสุดต่อครั้ง : 2000 / โพย</p>
-          </div>
+
+          <!-- Play Area -->
+          {#if selectedBetTypeStore !== null}
+            <div class="p-2 flex w-full">
+              <div class="select-list w-2/6 border-r">
+                <SelectedNumbers
+                  availableBetTypes={lotteryRound.lottoBetTypes}
+                />
+              </div>
+              <div class="numpad w-4/6 flex flex-col items-center">
+                <NumberPad
+                  digitsCount={$selectedDigitsCount}
+                  selectedBetType={$selectedBetType}
+                  activeLotteryTypesStore={selectedBetTypeStore}
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
+              <button
+                on:click={betStore.clearAll}
+                class="bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+              >
+                ลบทั้งหมด
+              </button>
+              <button
+                on:click={openBetModal}
+                class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+              >
+                ใส่ราคา
+              </button>
+            </div>
+          {:else}
+            <div class="p-8 text-center text-xs sm:text-sm text-gray-500">
+              <p class="text-xl font-semibold mb-2">เงื่อนไขการแทง</p>
+              <p class="text-lg">แทงขั้นต่ำ : 1.00</p>
+              <p class="text-lg">แทงสูงสุดต่อครั้ง : 2000 / โพย</p>
+            </div>
+          {/if}
         {/if}
       </div>
     </div>
