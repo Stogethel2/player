@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { LottoBetType } from "$lib/interface/Lotto.types";
+  import type { LottoBetType } from "$lib/interface/lotto.types";
 
   const dispatch = createEventDispatcher();
 

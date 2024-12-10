@@ -10,7 +10,8 @@
     BetSummary,
     BetTypeGroup,
   } from "$lib/interface/bet.types";
-  import { betStore } from "$lib/stores/BetStore";
+  import { betStore } from "$lib/stores/betStore";
+  import type { Order } from "$lib/interface/order.types";
 
   export const QUICK_BET_AMOUNTS = [5, 10, 20, 50, 100] as const;
   export const BET_CONFIG = {
@@ -27,9 +28,9 @@
   /* Get bet summary from store */
   $: currentBetSummary = derived(betStore, calculateBetSummary);
 
-  function handleSubmitBet() {
-    console.log('Current Bet Summary:', $currentBetSummary);
-    createOrder();
+  async function handleSubmitBet() {
+    const order: Order = await createOrder();
+    dispatch("orderCreated", order);
   }
 
   function handleCloseModal() {
@@ -82,9 +83,8 @@
     betStore.syncBetData(betTypeGroup);
   }
 
-  async function createOrder(): Promise<void> {
-    const result = await betCalculateApi.createOrder($currentBetSummary);
-    console.log('Order created:', result);
+  async function createOrder(): Promise<Order> {
+    return await betCalculateApi.createOrder($currentBetSummary);
   }
 
   onMount(fetchBetCalculations);

@@ -8,6 +8,7 @@
   import { derived } from "svelte/store";
 
   export let betSummary: BetSummary;
+  console.log(betSummary);
   const dispatch = createEventDispatcher();
 
   const currentBetGroups = derived([betStore], ([$betStore]) =>

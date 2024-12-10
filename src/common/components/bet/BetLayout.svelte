@@ -19,6 +19,8 @@
   import { lottoRoundApi } from "$lib";
   import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
   import { formatDateTime } from "$lib/utils/dateTime";
+  import type { Order } from "$lib/interface/order.types";
+  import PaymentSummary from "./ConfirmPayment.svelte";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -34,6 +36,8 @@
   /* Main state */
   let selectedPlayMode = true;
   let showBetModal = false;
+  let showPaymentSummary = false;
+  let order: Order | null = null;
   let selectedBetOptions: string[] = [];
   let lotteryRound: LottoRound | null = null;
 
@@ -76,6 +80,7 @@
     }
   });
 
+ 
   onDestroy(() => {
     clearInterval(timerInterval);
   });
@@ -85,9 +90,10 @@
     selectedBetTypeStore.set(selectedBetType);
   }
 
-  function handleBetOptionChange(event: CustomEvent) {
-    selectedBetOptions = event.detail.activeLotteryTypes;
+  function handlePaymentCancel() {
+    showPaymentSummary = false;
   }
+
 
   function setPlayMode(mode: "custom" | "selector") {
     selectedPlayMode = togglePlayMode(selectedPlayMode, mode);
@@ -97,8 +103,10 @@
     showBetModal = true;
   }
 
-  function closeBetModal() {
+  function closeBetModal(event: CustomEvent) {
     showBetModal = false;
+    showPaymentSummary = true;
+    order = event.detail;
   }
 
   function navigateBack() {
@@ -235,8 +243,12 @@
   </div>
 {/if}
 
-{#if showBetModal}
-  <BetAmountModal on:submit={closeBetModal} on:cancel={closeBetModal} />
+{#if showBetModal }
+  <BetAmountModal on:orderCreated={closeBetModal} on:cancel={closeBetModal} />
+{/if}
+
+{#if showPaymentSummary && order}
+  <PaymentSummary {order} on:cancel={handlePaymentCancel}/>
 {/if}
 
 <style lang="postcss">

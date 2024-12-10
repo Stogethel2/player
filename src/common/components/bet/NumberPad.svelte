@@ -2,7 +2,7 @@
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { onMount } from "svelte";
-  import { betStore } from "$lib/stores/BetStore";
+  import { betStore } from "$lib/stores/betStore";
   import { NUMPAD_LAYOUT } from "$lib/utils/play";
   import type { LottoBetType } from "$lib/interface/lotto.types";
 
@@ -12,6 +12,7 @@
 
   let digits: string[] = [];
   let activeDigitIndex = 0;
+  const defaultAmount = 5;
   let digitInputRefs: HTMLInputElement[] = [];
 
   $: {
@@ -81,7 +82,7 @@
     const betNumber = digits.join("");
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
-      betStore.addBet(activeBetType.id, betNumber, activeBetType, 5);
+      betStore.addBet(activeBetType.id, betNumber, activeBetType, defaultAmount);
     }
 
     resetDigits();
