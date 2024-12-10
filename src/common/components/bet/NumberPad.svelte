@@ -2,7 +2,7 @@
   import type { Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { onMount } from "svelte";
-  import { betStore } from "$lib/stores/betStore";
+  import { betStore } from "$lib/stores/BetStore";
   import { NUMPAD_LAYOUT } from "$lib/utils/play";
   import type { LottoBetType } from "$lib/interface/lotto.types";
 

@@ -23,7 +23,6 @@ function createBetStore() {
                     number,
                     amount,
                     payout: lottoBetType.current_payout_rate,
-                    lottoBetType,
                 }];
 
                 return newStore;

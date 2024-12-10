@@ -5,7 +5,7 @@ export interface LotteryBet {
     number: string;
     amount: number;
     payout: number;
-    lottoBetType: LottoBetType;
+    lottoBetType?: LottoBetType;
 }
 
 export interface BetTypeGroup {
@@ -14,7 +14,7 @@ export interface BetTypeGroup {
 
 export interface BetGroupSummary {
     betTypeId: string;
-    lottoBetType: LottoBetType;
+    lottoBetType?: LottoBetType;
     betList: LotteryBet[];
     totalGroupAmount: number;
     totalGroupBets: number;
