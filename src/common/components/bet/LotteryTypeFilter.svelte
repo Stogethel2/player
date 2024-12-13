@@ -26,8 +26,8 @@
     });
   }
 
-  function isBetTypeSelected(betTypeId: string): boolean {
-    return selectedBetType?.id === betTypeId;
+  function isBetTypeSelected(bet_type_id: string): boolean {
+    return selectedBetType?.id === bet_type_id;
   }
 </script>
 

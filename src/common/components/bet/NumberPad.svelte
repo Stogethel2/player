@@ -80,6 +80,7 @@
 
   function submitNumber(): void {
     const betNumber = digits.join("");
+    console.log(betNumber);
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
       betStore.addBet(activeBetType.id, betNumber, activeBetType, defaultAmount);

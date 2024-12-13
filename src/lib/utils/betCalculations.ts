@@ -7,11 +7,11 @@ import type { BetSummary, BetGroupSummary, LotteryBet, BetTypeGroup } from "$lib
  * @returns New BetSummary Object
  */
 export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSummary {
-    const { totalBet, totalAmount, betGroups } = calculateBetTotals($store);
+    const { total_bet, total_amount, betGroups } = calculateBetTotals($store);
 
     return {
         betGroups,
-        totals: { totalBet, totalAmount }
+        totals: { total_bet, total_amount }
     };
 }
 
@@ -21,26 +21,30 @@ export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSu
  * @param $store - Bet store
  * @returns Calculated bet totals
  */
-function calculateBetTotals($store: Record<string, LotteryBet[]>) {
-    let totalBet = 0;
-    let totalAmount = 0;
+function calculateBetTotals($store: Record<string, LotteryBet[]>): {
+    total_bet: number;
+    total_amount: number;
+    betGroups: BetGroupSummary[];
+} {
+    let total_bet = 0;
+    let total_amount = 0;
 
-    const betGroups: BetGroupSummary[] = Object.entries($store).map(([betTypeId, bets]) => {
-        const betList = calculateBetList(bets, (bet) => {
-            totalBet += 1;
-            totalAmount += bet.amount;
+    const betGroups: BetGroupSummary[] = Object.entries($store).map(([bet_type_id, bets]) => {
+        const betList = calculateBetList(bets, (bet: LotteryBet): void => {
+            total_bet += 1;
+            total_amount += bet.amount;
         });
 
+
         return {
-            betTypeId,
+            bet_type_id,
             betList,
-            lottoBetType: bets[0]?.lottoBetType,
-            totalGroupAmount: calculateGroupAmount(betList),
-            totalGroupBets: betList.length,
+            total_ground_amount: calculateGroupAmount(betList),
+            total_ground_bets: betList.length,
         };
     });
 
-    return { totalBet, totalAmount, betGroups };
+    return { total_bet, total_amount, betGroups };
 }
 
 /**
@@ -84,8 +88,8 @@ export function syncBetSummaryWithStore(
         .map(group => ({
             ...group,
             betList: group.betList.filter(bet =>
-                storeState[group.betTypeId]?.some(storeBet =>
-                    storeBet.tempId === bet.tempId
+                storeState[group.bet_type_id]?.some(storeBet =>
+                    storeBet.temp_id === bet.temp_id
                 )
             )
         }))

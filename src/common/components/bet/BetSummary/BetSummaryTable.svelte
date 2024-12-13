@@ -8,7 +8,6 @@
   import { derived } from "svelte/store";
 
   export let betSummary: BetSummary;
-  console.log(betSummary);
   const dispatch = createEventDispatcher();
 
   const currentBetGroups = derived([betStore], ([$betStore]) =>
@@ -16,33 +15,33 @@
   );
 
   function handleBetDelete(
-    event: CustomEvent<{ betTypeId: string; tempId: string }>
+    event: CustomEvent<{ bet_type_id: string; temp_id: string }>
   ) {
-    const { betTypeId, tempId } = event.detail;
-    betStore.removeBet(betTypeId, tempId);
+    const { bet_type_id, temp_id } = event.detail;
+    betStore.removeBet(bet_type_id, temp_id);
     dispatch("selectionChange", {
-      selectedBets: getBetsByTypeId(betTypeId).filter(
-        (bet) => bet.tempId !== tempId
+      selectedBets: getBetsByTypeId(bet_type_id).filter(
+        (bet) => bet.temp_id !== temp_id
       ),
     });
   }
 
   function handleAmountChange(
     event: CustomEvent<{
-      betTypeId: string;
-      tempId: string;
+      bet_type_id: string;
+      temp_id: string;
       amount: number;
     }>
   ) {
-    const { betTypeId, tempId, amount } = event.detail;
-    betStore.updateAmount(betTypeId, tempId, amount);
+    const { bet_type_id, temp_id, amount } = event.detail;
+    betStore.updateAmount(bet_type_id, temp_id, amount);
     dispatch("selectionChange", {
-      selectedBets: getBetsByTypeId(betTypeId),
+      selectedBets: getBetsByTypeId(bet_type_id),
     });
   }
 
-  function getBetsByTypeId(betTypeId: string) {
-    return $betStore[betTypeId] || [];
+  function getBetsByTypeId(bet_type_id: string) {
+    return $betStore[bet_type_id] || [];
   }
 </script>
 
@@ -53,17 +52,19 @@
     <table class="w-full text-sm text-left text-gray-500 border-red-500 border">
       <TableHeader />
       <tbody>
-        {#each $currentBetGroups as group (group.betTypeId)}
-          {#each group.betList as bet (bet.tempId)}
-            <BetRow
-              {bet}
-              betTypeId={group.betTypeId}
-              betTypeName={group.lottoBetType.bet_type_name}
-              showTypeName={group.betList[0]?.tempId === bet.tempId}
-              on:delete={handleBetDelete}
-              on:amountChange={handleAmountChange}
-            />
-          {/each}
+        {#each $currentBetGroups as group (group.bet_type_id)}
+          {#if group.lottoBetType}
+            {#each group.betList as bet (bet.temp_id)}
+              <BetRow
+                {bet}
+                bet_type_id={group.bet_type_id}
+                betTypeName={group.lottoBetType.bet_type_name}
+                showTypeName={group.betList[0]?.temp_id === bet.temp_id}
+                on:delete={handleBetDelete}
+                on:amountChange={handleAmountChange}
+              />
+            {/each}
+          {/if}
         {/each}
       </tbody>
     </table>

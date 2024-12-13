@@ -1,7 +1,7 @@
 import type { LottoBetType } from "./lotto.types";
 
 export interface LotteryBet {
-    tempId: string;
+    temp_id: string;
     number: string;
     amount: number;
     payout: number;
@@ -9,21 +9,20 @@ export interface LotteryBet {
 }
 
 export interface BetTypeGroup {
-    [betTypeId: string]: LotteryBet[];
+    [bet_type_id: string]: LotteryBet[];
 }
 
 export interface BetGroupSummary {
-    betTypeId: string;
-    lottoBetType: LottoBetType;
+    bet_type_id: string;
     betList: LotteryBet[];
-    totalGroupAmount: number;
-    totalGroupBets: number;
+    total_ground_amount: number;
+    total_ground_bets: number;
 }
 
 export interface BetSummary {
     betGroups: BetGroupSummary[];
     totals: {
-        totalBet: number;
-        totalAmount: number;
+        total_bet: number;
+        total_amount: number;
     };
 }

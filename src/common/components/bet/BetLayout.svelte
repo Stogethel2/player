@@ -38,7 +38,6 @@
   let showBetModal = false;
   let showPaymentSummary = false;
   let order: Order | null = null;
-  let selectedBetOptions: string[] = [];
   let lotteryRound: LottoRound | null = null;
 
   const selectedBetTypeStore = writable<LottoBetType>();
@@ -73,14 +72,11 @@
     if (!lottoId) return;
     lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
 
-    console.log(lotteryRound);
-
     if (lotteryRound) {
       startTimer(300); // Start 5 minute countdown
     }
   });
 
- 
   onDestroy(() => {
     clearInterval(timerInterval);
   });
@@ -93,7 +89,6 @@
   function handlePaymentCancel() {
     showPaymentSummary = false;
   }
-
 
   function setPlayMode(mode: "custom" | "selector") {
     selectedPlayMode = togglePlayMode(selectedPlayMode, mode);
@@ -243,12 +238,12 @@
   </div>
 {/if}
 
-{#if showBetModal }
+{#if showBetModal}
   <BetAmountModal on:orderCreated={closeBetModal} on:cancel={closeBetModal} />
 {/if}
 
 {#if showPaymentSummary && order}
-  <PaymentSummary {order} on:cancel={handlePaymentCancel}/>
+  <PaymentSummary {order} on:cancel={handlePaymentCancel} />
 {/if}
 
 <style lang="postcss">

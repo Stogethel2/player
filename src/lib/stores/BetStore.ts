@@ -11,15 +11,15 @@ function createBetStore() {
     return {
         subscribe,
 
-        addBet(betTypeId: string, number: string, lottoBetType: LottoBetType, amount: number = 10) {
+        addBet(bet_type_id: string, number: string, lottoBetType: LottoBetType, amount: number = 10) {
             update((store) => {
                 const newStore = { ...store };
-                if (!newStore[betTypeId]) {
-                    newStore[betTypeId] = [];
+                if (!newStore[bet_type_id]) {
+                    newStore[bet_type_id] = [];
                 }
 
-                newStore[betTypeId] = [...newStore[betTypeId], {
-                    tempId: betUtils.generateTempId(),
+                newStore[bet_type_id] = [...newStore[bet_type_id], {
+                    temp_id: betUtils.generateTempId(),
                     number,
                     amount,
                     payout: lottoBetType.current_payout_rate,
@@ -29,13 +29,13 @@ function createBetStore() {
             });
         },
 
-        removeBet(betTypeId: string, tempId: string) {
+        removeBet(bet_type_id: string, temp_id: string) {
             update((store) => {
                 const newStore = { ...store };
-                if (newStore[betTypeId]) {
-                    newStore[betTypeId] = newStore[betTypeId].filter(bet => bet.tempId !== tempId);
-                    if (newStore[betTypeId].length === 0) {
-                        delete newStore[betTypeId];
+                if (newStore[bet_type_id]) {
+                    newStore[bet_type_id] = newStore[bet_type_id].filter(bet => bet.temp_id !== temp_id);
+                    if (newStore[bet_type_id].length === 0) {
+                        delete newStore[bet_type_id];
                     }
                 }
                 return newStore;
@@ -46,12 +46,12 @@ function createBetStore() {
             update((store) => ({ ...store, ...betTypeGroup }));
         },
 
-        updateAmount(betTypeId: string, tempId: string, amount: number) {
+        updateAmount(bet_type_id: string, temp_id: string, amount: number) {
             update((store) => {
                 const newStore = { ...store };
-                if (newStore[betTypeId]) {
-                    newStore[betTypeId] = newStore[betTypeId].map(bet =>
-                        bet.tempId === tempId ? { ...bet, amount } : bet
+                if (newStore[bet_type_id]) {
+                    newStore[bet_type_id] = newStore[bet_type_id].map(bet =>
+                        bet.temp_id === temp_id ? { ...bet, amount } : bet
                     );
                 }
                 return newStore;

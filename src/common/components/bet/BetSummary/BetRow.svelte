@@ -6,7 +6,7 @@
   import { onMount, onDestroy } from "svelte";
 
   export let bet: LotteryBet;
-  export let betTypeId: string;
+  export let bet_type_id: string;
   export let betTypeName: string;
   export let showTypeName: boolean;
 
@@ -19,8 +19,8 @@
 
   onMount(() => {
     unsubscribe = betStore.subscribe(($store) => {
-      const updatedBet = $store[betTypeId]?.find(
-        (b) => b.tempId === bet.tempId
+      const updatedBet = $store[bet_type_id]?.find(
+        (b) => b.temp_id === bet.temp_id
       );
       if (
         updatedBet &&
@@ -40,8 +40,8 @@
 
   function handleDelete() {
     dispatch("delete", {
-      betTypeId,
-      tempId: bet.tempId,
+      bet_type_id,
+      temp_id: bet.temp_id,
     });
   }
 
@@ -55,8 +55,8 @@
     }
 
     dispatch("amountChange", {
-      betTypeId,
-      tempId: bet.tempId,
+      bet_type_id,
+      temp_id: bet.temp_id,
       amount: newAmount,
     });
   }

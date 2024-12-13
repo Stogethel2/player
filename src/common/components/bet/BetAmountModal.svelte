@@ -52,8 +52,8 @@
   ): void {
     betGroups.forEach((betGroup) => {
       betGroup.betList.forEach((betItem) => {
-        if (betItem.tempId !== undefined) {
-          betStore.updateAmount(betGroup.betTypeId, betItem.tempId, amount);
+        if (betItem.temp_id !== undefined) {
+          betStore.updateAmount(betGroup.bet_type_id, betItem.temp_id, amount);
         }
       });
     });
@@ -76,7 +76,7 @@
     const betTypeGroup: BetTypeGroup = {};
     calculations.betGroups.forEach((betGroup) => {
         
-      betTypeGroup[betGroup.betTypeId] = betGroup.betList.map((bet) => ({
+      betTypeGroup[betGroup.bet_type_id] = betGroup.betList.map((bet) => ({
         ...bet,
       }));
     });
@@ -151,7 +151,7 @@
           type="number"
           class="w-full p-2 bg-gray-100 rounded text-right"
           readonly
-          value={$currentBetSummary.totals.totalAmount}
+          value={$currentBetSummary.totals.total_amount}
         />
       </div>
 
@@ -163,7 +163,7 @@
         </div>
         <div>
           <span class="text-red-600">ใช้ Credit ทั้งหมด</span>
-          <span class="block font-bold text-right">{$currentBetSummary.totals.totalAmount.toFixed(2)}</span>
+          <span class="block font-bold text-right">{$currentBetSummary.totals.total_amount.toFixed(2)}</span>
         </div>
       </div>
 

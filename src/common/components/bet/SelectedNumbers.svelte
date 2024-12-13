@@ -18,14 +18,14 @@
   $: ({ betGroups, totalBet } = $betListSummary);
   $: enableScrolling = totalBet > 10;
 
-  function deleteBet(betTypeId: string, tempId: string) {
-    betStore.removeBet(betTypeId, tempId);
+  function deleteBet(bet_type_id: string, temp_id: string) {
+    betStore.removeBet(bet_type_id, temp_id);
   }
 
-  function getBetTypeName(betTypeId: string): string {
+  function getBetTypeName(bet_type_id: string): string {
     return (
-      availableBetTypes.find((type) => type.id === betTypeId)?.bet_type_name ||
-      betTypeId
+      availableBetTypes.find((type) => type.id === bet_type_id)?.bet_type_name ||
+      bet_type_id
     );
   }
 </script>
@@ -44,22 +44,22 @@
           <p>ที่เลือก</p>
         </div>
       {:else}
-        {#each betGroups as { betTypeId, betList } (betTypeId)}
+        {#each betGroups as { bet_type_id, betList } (bet_type_id)}
           <div class="mb-4">
-            <h3 class="font-semibold mb-2">{getBetTypeName(betTypeId)}</h3>
-            {#each betList as bet (bet.tempId)}
+            <h3 class="font-semibold mb-2">{getBetTypeName(bet_type_id)}</h3>
+            {#each betList as bet (bet.temp_id)}
               <div
                 class="mb-2 last:mb-0 relative flex justify-center"
                 transition:fade={{ duration: 200 }}
               >
                 <div
-                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(betTypeId)}`}
+                  class={`p-1 text-sm w-full md:w-2/5 flex items-center justify-center rounded-full relative ${getTypeClass(bet_type_id)}`}
                 >
                   <span class="flex-grow text-center mr-4">{bet.number}</span>
                   <button
                     class="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center bg-white text-slate-600 bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
-                    on:click={() => deleteBet(betTypeId, bet.tempId)}
-                    aria-label={`Remove ${bet.number} from ${getBetTypeName(betTypeId)}`}
+                    on:click={() => deleteBet(bet_type_id, bet.temp_id)}
+                    aria-label={`Remove ${bet.number} from ${getBetTypeName(bet_type_id)}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
