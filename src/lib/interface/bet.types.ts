@@ -17,10 +17,11 @@ export interface BetGroupSummary {
     betList: LotteryBet[];
     total_ground_amount: number;
     total_ground_bets: number;
+    lottoBetType?: LottoBetType;
 }
 
 export interface BetSummary {
-    betGroups: BetGroupSummary[];
+    betGroups: BetGroupSummary[]
     totals: {
         total_bet: number;
         total_amount: number;

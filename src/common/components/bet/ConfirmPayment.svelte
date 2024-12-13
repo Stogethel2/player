@@ -33,10 +33,7 @@
   }
   async function handleConfirm() {
     try {
-      const response = await paymentApi.createPayment({
-        order_id: order.order_id,
-        paymentStatus: "paid",
-      });
+      await paymentApi.createPayment(order.order_id, "COMPLETED");
       isSuccess = true;
       dispatch("confirm");
     } catch (error) {
@@ -55,13 +52,21 @@
   >
     <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
       <!-- Header -->
-      <div class="bg-red-600 px-4 py-4 sm:px-6">
-        <div class="flex flex-col items-center">
-          <div class="mt-2 text-center">
+      <div
+        class={`${isSuccess ? "bg-green-600" : "bg-red-600"} px-4 py-4 sm:px-6`}
+      >
+        <div class="flex justify-between items-center">
+          <div class="text-center flex-1">
             <h3 class="text-lg font-medium leading-6 text-white">
               {isSuccess ? "ตัดเงินสำเร็จ" : "ยืนยันการเดิมพัน"}
             </h3>
           </div>
+          <button
+            class="text-white text-2xl hover:opacity-80 transition-opacity"
+            on:click={handleCancel}
+          >
+            &times;
+          </button>
         </div>
       </div>
 
@@ -114,7 +119,29 @@
       {#if isSuccess}
         <!-- Success Message -->
         <div class="px-4 py-5 sm:p-6 text-center">
-          <p class="text-lg font-medium text-green-600">ตัดเงินสำเร็จ</p>
+          <div class="flex flex-col items-center">
+            <!-- Icon -->
+            <div class="icon-success mb-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 w-10 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4M7 12a5 5 0 1010 0 5 5 0 00-10 0z"
+                />
+              </svg>
+            </div>
+            <!-- Success Message Text -->
+            <p class="text-lg font-medium text-green-600">
+              ตัดเงินสำเร็จ ยอดเงินที่จ่ายคือ ฿{totalBetAmount.toFixed(2)} บาท
+            </p>
+          </div>
         </div>
       {/if}
 
@@ -141,3 +168,16 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Styling for the success icon */
+  .icon-success {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(16, 185, 129, 0.1); /* Light green background */
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+</style>

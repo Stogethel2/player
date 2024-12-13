@@ -3,13 +3,13 @@ import type { AxiosResponse } from 'axios';
 import apiClient from '../apiClient';
 
 export const paymentApi = {
-    createPayment: async (orderId: {
-        order_id: string;
-        paymentStatus: string;
-    }): Promise<unknown> => {
+    createPayment: async (
+        order_id: string,
+        payment_status: string
+    ): Promise<unknown> => {
         const response: AxiosResponse<ApiResponse<unknown>> = await apiClient.post('/public/bet/payment', {
-            orderId: orderId.order_id,
-            paymentStatus: orderId.paymentStatus
+            order_id: order_id,
+            payment_status: payment_status
         });
         return response.data.data;
     }

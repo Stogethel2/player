@@ -75,7 +75,6 @@
   function syncCalculationsWithStore(calculations: BetSummary): void {
     const betTypeGroup: BetTypeGroup = {};
     calculations.betGroups.forEach((betGroup) => {
-        
       betTypeGroup[betGroup.bet_type_id] = betGroup.betList.map((bet) => ({
         ...bet,
       }));
@@ -163,7 +162,9 @@
         </div>
         <div>
           <span class="text-red-600">ใช้ Credit ทั้งหมด</span>
-          <span class="block font-bold text-right">{$currentBetSummary.totals.total_amount.toFixed(2)}</span>
+          <span class="block font-bold text-right"
+            >{$currentBetSummary.totals.total_amount.toFixed(2)}</span
+          >
         </div>
       </div>
 
