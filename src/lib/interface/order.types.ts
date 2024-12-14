@@ -1,6 +1,19 @@
 export type Order = {
     order_id: string;
     orderBets: OrderBet[];
+
+}
+
+export type Response = {
+    orders: OrderResponse[];
+}
+
+export type OrderResponse = {
+    id: string;
+    status: string;
+    total_amount: number;
+    created_at: string;
+    orderBets: OrderBet[];
 }
 
 export type OrderBet = {

@@ -72,7 +72,9 @@
       </button>
     </div>
 
-    <h1 class="text-amber-300 font-bold text-2xl mb-4 sm:mb-0 items-center">LOGO NAME</h1>
+    <h1 class="text-amber-300 font-bold text-2xl mb-4 items-center">
+      LOGO NAME
+    </h1>
 
     <div class="flex justify-center w-full pb-8">
       <nav
