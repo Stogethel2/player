@@ -2,13 +2,23 @@
   import { createEventDispatcher } from "svelte";
   import type { Order } from "$lib/interface/order.types";
   import { paymentApi } from "$lib/api/endpoint/payment";
+  import type {
+    PaymentResult,
+    PaymentStatus,
+  } from "$lib/interface/payment.types";
+  import { fade, fly } from "svelte/transition";
+  import { XCircle, CheckCircle2, AlertCircle } from "lucide-svelte";
 
   export let order: Order;
-  console.log("order", order);
+  const dispatch = createEventDispatcher<{
+    confirm: void;
+    cancel: void;
+  }>();
 
-  const dispatch = createEventDispatcher();
-
-  let isSuccess = false;
+  let paymentStatus: PaymentStatus = "PENDING";
+  let paymentResult: PaymentResult | null = null;
+  let isProcessing = false;
+  let error: string | null = null;
 
   $: orderDetails = order;
   $: totalBetAmount = orderDetails.orderBets.reduce(
@@ -21,56 +31,108 @@
   );
 
   function getBetKey(bet: Order["orderBets"][0], index: number): string {
-    const uniqueKey = [
-      bet.order_id,
-      bet.bet_number,
-      bet.lotto_bet_type_id,
-      index,
-      bet.bet_amount,
-    ].join("-");
-
-    return uniqueKey;
+    return `${bet.order_id}-${bet.bet_number}-${bet.lotto_bet_type_id}-${index}-${bet.bet_amount}`;
   }
+
   async function handleConfirm() {
+    if (isProcessing) return;
+
     try {
-      await paymentApi.createPayment(order.order_id, "COMPLETED");
-      isSuccess = true;
+      isProcessing = true;
+      error = null;
+      paymentResult = await paymentApi.createPayment(
+        order.order_id,
+        "COMPLETED"
+      );
+      paymentStatus = paymentResult.status;
       dispatch("confirm");
-    } catch (error) {
-      console.error("Payment failed", error);
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Payment failed";
+      console.error("Payment failed", err);
+    } finally {
+      isProcessing = false;
     }
   }
 
-  function handleCancel() {
-    dispatch("cancel");
+  async function handleCancel() {
+    if (isProcessing) return;
+
+    try {
+      isProcessing = true;
+      error = null;
+      paymentResult = await paymentApi.createPaymentFail(order.order_id);
+      paymentStatus = paymentResult.status;
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Cancellation failed";
+      console.error("Payment cancellation failed", err);
+    } finally {
+      isProcessing = false;
+    }
   }
 </script>
 
-<div class="fixed inset-0 z-50 overflow-y-auto bg-black/50">
+<div
+  class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+  role="dialog"
+  aria-modal="true"
+>
   <div
     class="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
   >
-    <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
+    <div
+      class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden"
+      in:fly={{ y: 20, duration: 200 }}
+      out:fade
+    >
       <!-- Header -->
       <div
-        class={`${isSuccess ? "bg-green-600" : "bg-red-600"} px-4 py-4 sm:px-6`}
+        class={`${(() => {
+          switch (paymentStatus) {
+            case "COMPLETED":
+              return "bg-green-600";
+            case "FAILED":
+              return "bg-red-600";
+            default:
+              return "bg-red-600";
+          }
+        })()} px-4 py-4 sm:px-6`}
       >
         <div class="flex justify-between items-center">
           <div class="text-center flex-1">
             <h3 class="text-lg font-medium leading-6 text-white">
-              {isSuccess ? "ตัดเงินสำเร็จ" : "ยืนยันการเดิมพัน"}
+              {(() => {
+                switch (paymentStatus) {
+                  case "COMPLETED":
+                    return "ตัดเงินสำเร็จ";
+                  case "FAILED":
+                    return "การชำระเงินล้มเหลว";
+                  default:
+                    return "ยืนยันการเดิมพัน";
+                }
+              })()}
             </h3>
           </div>
           <button
             class="text-white text-2xl hover:opacity-80 transition-opacity"
-            on:click={handleCancel}
+            aria-label="Close modal"
+            on:click={() => dispatch("cancel")}
           >
             &times;
           </button>
         </div>
       </div>
 
-      {#if !isSuccess}
+      <!-- Error Message -->
+      {#if error}
+        <div class="px-4 py-3 bg-red-50" transition:fade>
+          <div class="flex items-center">
+            <AlertCircle class="text-red-500 mr-2" size={20} />
+            <p class="text-red-700">{error}</p>
+          </div>
+        </div>
+      {/if}
+
+      {#if paymentStatus === "PENDING"}
         <!-- Summary Cards -->
         <div class="px-4 py-5 sm:p-6">
           <div class="grid grid-cols-2 gap-4">
@@ -116,28 +178,13 @@
         </div>
       {/if}
 
-      {#if isSuccess}
-        <!-- Success Message -->
+      <!-- Success Message -->
+      {#if paymentStatus === "COMPLETED"}
         <div class="px-4 py-5 sm:p-6 text-center">
           <div class="flex flex-col items-center">
-            <!-- Icon -->
             <div class="icon-success mb-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 12l2 2 4-4M7 12a5 5 0 1010 0 5 5 0 00-10 0z"
-                />
-              </svg>
+              <CheckCircle2 class="h-10 w-10 text-green-600" />
             </div>
-            <!-- Success Message Text -->
             <p class="text-lg font-medium text-green-600">
               ตัดเงินสำเร็จ ยอดเงินที่จ่ายคือ ฿{totalBetAmount.toFixed(2)} บาท
             </p>
@@ -145,21 +192,51 @@
         </div>
       {/if}
 
-      {#if !isSuccess}
+      <!-- Failed Message -->
+      {#if paymentStatus === "FAILED"}
+        <div class="px-4 py-5 sm:p-6 text-center">
+          <div class="flex flex-col items-center">
+            <div class="icon-failed mb-3">
+              <XCircle class="h-10 w-10 text-red-600" />
+            </div>
+            <p class="text-lg font-medium text-red-600 mb-2">
+              การชำระเงินล้มเหลว
+            </p>
+            <p class="text-gray-600">
+              เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองใหม่อีกครั้ง
+            </p>
+            {#if error}
+              <p class="text-sm text-red-500 mt-2">
+                สาเหตุ: {error}
+              </p>
+            {/if}
+          </div>
+        </div>
+      {/if}
+
+      <!-- Pending Message -->
+      {#if paymentStatus === "PENDING"}
         <div
           class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 space-x-reverse space-x-3"
         >
           <button
             type="button"
-            class="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:w-auto sm:text-sm"
+            class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto sm:text-sm"
             on:click={handleConfirm}
+            disabled={isProcessing}
           >
+            {#if isProcessing}
+              <span
+                class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
+              ></span>
+            {/if}
             ยืนยัน
           </button>
           <button
             type="button"
-            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:mt-0 sm:w-auto sm:text-sm"
             on:click={handleCancel}
+            disabled={isProcessing}
           >
             ยกเลิก
           </button>
@@ -175,9 +252,37 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(16, 185, 129, 0.1); /* Light green background */
     border-radius: 50%;
     height: 50px;
     width: 50px;
+  }
+
+  /* Styling for the failed icon */
+  .icon-failed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+
+  /* Custom scrollbar for bet details */
+  .overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 20px;
   }
 </style>
