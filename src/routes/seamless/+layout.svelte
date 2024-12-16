@@ -5,7 +5,7 @@
   import { onMount } from "svelte";
   import { loginApi } from "$lib/api/login";
   import { token, username } from "./auth.store";
-  import { balanceRoundApi } from "$lib/api/endpoint/balance";
+  import { walletApi } from "$lib/api/endpoint/balance";
   import Navbar from "../../common/components/navbar/navbar.svelte";
 
   let isLoginPage = $state(false);
@@ -24,7 +24,7 @@
         const responseGetUsers = await loginApi.getUsers(tokenValue);
         username.set(responseGetUsers.username);
 
-        const responseGetBalance = await balanceRoundApi.getBalance(responseGetUsers.username);
+        const responseGetBalance = await walletApi.getBalance(responseGetUsers.username);
         name = responseGetBalance.username;
         credits = responseGetBalance.balance;
 

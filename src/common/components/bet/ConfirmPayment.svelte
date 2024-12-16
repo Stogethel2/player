@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import type { Order } from "$lib/interface/order.types";
   import { paymentApi } from "$lib/api/endpoint/payment";
+  import { walletApi } from "$lib/api/endpoint/balance";
   import type {
     PaymentResult,
     PaymentStatus,
@@ -37,8 +38,12 @@
   async function handleConfirm() {
     if (isProcessing) return;
 
-    // TODO: call another api to bet
-
+    if (!order.orderBets || order.orderBets.length === 0) {
+      throw new Error('No bets found in order');
+    }
+    const roundId = order.orderBets[0].lotto_round_id;
+    const betResult = await walletApi.createBet(order.order_id, roundId, totalBetAmount);
+   
     try {
       isProcessing = true;
       error = null;

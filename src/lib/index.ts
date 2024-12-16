@@ -9,5 +9,6 @@ export interface ApiResponse<T> {
 export interface ApiResponseBalance<T> {
     message: string;
     code: number;
-    Data: T;
+    data: T;
+    status: string;
 }

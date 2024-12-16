@@ -20,7 +20,7 @@ export const loginApi = {
     /* Get all active lottos */
     seamlesslogin: async (): Promise<LoginData> => {
         const response: AxiosResponse<LoginData> = await apiClient.post('/users/seamlesslogin', {
-            username: "test001",
+            username: "test01",
             isMobileLogin: true
         });
         return response.data;

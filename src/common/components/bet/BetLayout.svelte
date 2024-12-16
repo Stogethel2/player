@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { writable, derived } from "svelte/store";
   import { goto } from "$app/navigation";
-  import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
+  import type { LottoRound, LottoBetType } from "$lib/interface/Lotto.types";
   import type { Order } from "$lib/interface/order.types";
   import { betStore } from "$lib/stores/BetStore";
 
