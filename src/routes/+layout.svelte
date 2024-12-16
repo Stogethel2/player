@@ -1,6 +1,5 @@
 <script lang="ts">
   let { children } = $props();
-  import Navbar from "../common/components/navbar/navbar.svelte";
   import "../app.css";
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
@@ -11,5 +10,4 @@
   });
 </script>
 
-<Navbar />
 {@render children()}

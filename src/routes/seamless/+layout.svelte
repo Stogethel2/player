@@ -5,9 +5,14 @@
   import { onMount } from "svelte";
   import { loginApi } from "$lib/api/login";
   import { token, username } from "./auth.store";
+  import { balanceRoundApi } from "$lib/api/endpoint/balance";
+  import CoreNavbar from "../../common/components/navbar/core_navbar.svelte";
+  import Navbar from "../../common/components/navbar/navbar.svelte";
 
   let isLoginPage = $state(false);
   let isLoaded = $state(false);
+  let name = $state('');
+  let credits = $state(0);
 
   const login = async (): Promise<void> => {
     try {
@@ -18,6 +23,9 @@
         token.set(tokenValue);
         const responseGetUsers = await loginApi.getUsers(tokenValue);
         username.set(responseGetUsers.username);
+        let responseGetBalance = await balanceRoundApi.getBalanceRounds(responseGetUsers.username);
+        name = responseGetBalance.username;
+        credits = responseGetBalance.balance;
 
         if ($username) {
           isLoginPage = true;
@@ -46,6 +54,7 @@
 </script>
 
 {#if isLoginPage && isLoaded}
+  <Navbar {name} {credits} />
   {@render children()}
 {:else}
   <h1>Token doesn't work</h1>

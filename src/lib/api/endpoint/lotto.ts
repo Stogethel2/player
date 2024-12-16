@@ -1,7 +1,7 @@
 import type { ApiResponse } from '$lib';
 import type { AxiosResponse } from 'axios';
 import apiClient from '../apiClient';
-import type { Lotto } from '$lib/interface/lotto.types';
+import type { Lotto } from '$lib/interface/Lotto.types';
 
 export const lottoApi = {
     /* Get all active lottos */

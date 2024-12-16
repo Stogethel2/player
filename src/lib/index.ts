@@ -5,3 +5,9 @@ export interface ApiResponse<T> {
     code: number;
     data: T;
 }
+
+export interface ApiResponseBalance<T> {
+    message: string;
+    code: number;
+    Data: T;
+}

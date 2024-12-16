@@ -2,7 +2,7 @@
   import OptionNavbar from "./option_navbar.svelte";
   import CoreNavbar from "./core_navbar.svelte";
   export let name = "088-888-8888";
-  let credits = 10;
+  export let credits = 10;
 </script>
 
 <div class="sticky w-full navbar">
