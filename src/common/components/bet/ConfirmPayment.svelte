@@ -37,6 +37,8 @@
   async function handleConfirm() {
     if (isProcessing) return;
 
+    // TODO: call another api to bet
+
     try {
       isProcessing = true;
       error = null;

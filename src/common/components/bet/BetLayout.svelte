@@ -1,11 +1,16 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import { writable, derived } from "svelte/store";
+  import { goto } from "$app/navigation";
+  import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
+  import type { Order } from "$lib/interface/order.types";
+  import { betStore } from "$lib/stores/BetStore";
 
-  import BetAmountModal from "./BetAmountModal.svelte";
-  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-  import NumberPad from "./NumberPad.svelte";
-  import SelectedNumbers from "./SelectedNumbers.svelte";
+  /* Utils */
+  import { togglePlayMode } from "$lib/utils/play";
+  import { formatDateTime } from "$lib/utils/dateTime";
+  import { lottoRoundApi } from "$lib";
+
   import {
     ChevronLeft,
     ChevronRight,
@@ -13,14 +18,12 @@
     CircleHelp,
   } from "lucide-svelte";
 
-  import { betStore } from "$lib/stores/betStore";
-  import { goto } from "$app/navigation";
-  import { togglePlayMode } from "$lib/utils/play";
-  import { lottoRoundApi } from "$lib";
-  import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
-  import { formatDateTime } from "$lib/utils/dateTime";
-  import type { Order } from "$lib/interface/order.types";
+  /* Components */
+  import BetAmountModal from "./BetAmountModal.svelte";
+  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
+  import NumberPad from "./NumberPad.svelte";
   import PaymentSummary from "./ConfirmPayment.svelte";
+  import SelectedNumbers from "./SelectedNumbers.svelte";
 
   /* Timer store and state */
   const timeRemaining = writable(0);

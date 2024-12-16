@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Trash2 } from "lucide-svelte";
   import { createEventDispatcher } from "svelte";
-  import { betStore } from "$lib/stores/betStore";
+  import { betStore } from "$lib/stores/BetStore";
   import type { LotteryBet } from "$lib/interface/bet.types";
   import { onMount, onDestroy } from "svelte";
 

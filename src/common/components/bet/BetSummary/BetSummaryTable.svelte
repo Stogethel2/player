@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BetSummary } from "$lib/interface/bet.types";
-  import { betStore } from "$lib/stores/betStore";
+  import { betStore } from "$lib/stores/BetStore";
   import { syncBetSummaryWithStore } from "$lib/utils/betCalculations";
   import BetRow from "./BetRow.svelte";
   import TableHeader from "./TableHeader.svelte";

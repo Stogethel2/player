@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { derived } from "svelte/store";
-  import { createEventDispatcher, onMount } from "svelte";
   import { betCalculateApi } from "$lib/api/endpoint/betCalculate";
-  import BetSummaryTable from "./BetSummary/BetSummaryTable.svelte";
-
+  import { betStore } from "$lib/stores/BetStore";
   import { calculateBetSummary } from "$lib/utils/betCalculations";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { derived } from "svelte/store";
+  import BetSummaryTable from "./BetSummary/BetSummaryTable.svelte";
   import type {
     BetGroupSummary,
     BetSummary,
     BetTypeGroup,
   } from "$lib/interface/bet.types";
-  import { betStore } from "$lib/stores/betStore";
   import type { Order } from "$lib/interface/order.types";
 
   export const QUICK_BET_AMOUNTS = [5, 10, 20, 50, 100] as const;
