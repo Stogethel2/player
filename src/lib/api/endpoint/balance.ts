@@ -7,7 +7,7 @@ import { env } from '../config';
 
 export const balanceRoundApi = {
     /* Get balance */
-    getBalanceRounds: async (username: string): Promise<balance> => {
+    getBalance: async (username: string): Promise<balance> => {
         const response: AxiosResponse<ApiResponseBalance<balance>> = await apiClientWallet.post('/getBalance', {
             token: 'd7ba9db3-af05-4dd7-b051-b15c475c3986',
             username: username

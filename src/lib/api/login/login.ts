@@ -32,10 +32,5 @@ export const loginApi = {
         });
         return response.data;
     },
-    // /* Get lotto by ID */
-    // getLottoById: async (id: number): Promise<Response> => {
-    //     const response: AxiosResponse<Response> = await apiClient.get(`/public/lotto/${id}`);
-    //     return response.data;
-    // },
 };
 

@@ -6,7 +6,6 @@
   import { loginApi } from "$lib/api/login";
   import { token, username } from "./auth.store";
   import { balanceRoundApi } from "$lib/api/endpoint/balance";
-  import CoreNavbar from "../../common/components/navbar/core_navbar.svelte";
   import Navbar from "../../common/components/navbar/navbar.svelte";
 
   let isLoginPage = $state(false);
@@ -21,9 +20,11 @@
 
       if (tokenValue) {
         token.set(tokenValue);
+
         const responseGetUsers = await loginApi.getUsers(tokenValue);
         username.set(responseGetUsers.username);
-        let responseGetBalance = await balanceRoundApi.getBalanceRounds(responseGetUsers.username);
+
+        const responseGetBalance = await balanceRoundApi.getBalance(responseGetUsers.username);
         name = responseGetBalance.username;
         credits = responseGetBalance.balance;
 
