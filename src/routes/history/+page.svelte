@@ -4,6 +4,7 @@
   import { orderApi } from "$lib/api/endpoint/order";
   import { CheckCircle2, XCircle, ChevronDown } from "lucide-svelte";
   import type { OrderResponse } from "$lib/interface/order.types";
+  import Loading from "../../common/components/loading/loading.svelte";
 
   let orders: OrderResponse[];
   let selectedOrderId: string | null = null;
@@ -35,18 +36,14 @@
 </script>
 
 {#if isLoading}
-  <div class="flex justify-center items-center min-h-screen">
-    <div
-      class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-teal-500"
-    ></div>
-  </div>
+  <Loading />
 {:else if error}
   <div class="p-4 text-center text-red-600">
     <p>{error}</p>
   </div>
 {:else}
   <div class="max-w-4xl mx-auto p-4">
-    <h1 class="text-lg font-bold my-2 text-gray-800 ">ประวัติการเดิมพัน</h1>
+    <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการเดิมพัน</h1>
 
     <div class="space-y-4">
       {#each orders as order}
@@ -103,7 +100,9 @@
                     </div>
                     <div>
                       <p class="text-gray-600">อัตราจ่าย</p>
-                      <p class={`font-bold ${order.status === 'SUCCESS' ? 'text-green-600' : 'text-red-600'}`}>
+                      <p
+                        class={`font-bold ${order.status === "SUCCESS" ? "text-green-600" : "text-red-600"}`}
+                      >
                         ฿{bet.payout.toFixed(2)}
                       </p>
                     </div>

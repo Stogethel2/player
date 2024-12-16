@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { CircleDollarSign, CopyCheck } from "lucide-svelte";
+  import Loading from "../../common/components/loading/loading.svelte";
 
   interface BankAccount {
     bankName: string;
@@ -59,11 +60,7 @@
 
       <div class="p-6">
         {#if isLoading}
-          <div class="flex justify-center items-center h-32">
-            <div
-              class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"
-            ></div>
-          </div>
+          <Loading />
         {:else if error}
           <p class="text-center text-red-500 py-4">{error}</p>
         {:else if bankAccount}

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { fly, fade } from "svelte/transition";
   import { CircleDollarSign, CopyCheck, CheckCircle2 } from "lucide-svelte";
+  import Loading from "../../common/components/loading/loading.svelte";
 
   interface BankAccount {
     bankName: string;
@@ -69,11 +70,7 @@
 
       <div class="p-4">
         {#if isLoading}
-          <div class="flex justify-center items-center h-32">
-            <div
-              class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"
-            ></div>
-          </div>
+          <Loading />
         {:else if error}
           <p class="text-center text-red-500 py-4" in:fade>
             เกิดข้อผิดพลาด: {error}
@@ -102,7 +99,6 @@
               <p class="text-center text-gray-500 py-4">
                 {bankAccount.accountNumber}
               </p>
-            
             </div>
           </div>
         {:else}

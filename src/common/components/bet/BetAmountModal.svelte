@@ -11,6 +11,8 @@
     BetTypeGroup,
   } from "$lib/interface/bet.types";
   import type { Order } from "$lib/interface/order.types";
+  import Loading from "../loading/loading.svelte";
+  import ButtonLoading from "../loading/buttonLoading.svelte";
 
   export const QUICK_BET_AMOUNTS = [5, 10, 20, 50, 100] as const;
   export const BET_CONFIG = {
@@ -26,6 +28,8 @@
 
   /* Get bet summary from store */
   $: currentBetSummary = derived(betStore, calculateBetSummary);
+
+  $: console.log($currentBetSummary);
 
   async function handleSubmitBet() {
     const order: Order = await createOrder();
@@ -105,11 +109,7 @@
 
     <!-- Table -->
     {#if isLoading}
-      <div class="flex justify-center items-center h-32">
-        <div
-          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"
-        ></div>
-      </div>
+      <Loading />
     {:else}
       <BetSummaryTable betSummary={betCalculationResult} />
     {/if}
@@ -177,9 +177,14 @@
         </button>
         <button
           class="flex-1 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+          disabled={isLoading}
           on:click={handleSubmitBet}
         >
-          ส่งไป
+          {#if isLoading}
+            <ButtonLoading />
+          {:else}
+            ส่งไป
+          {/if}
         </button>
       </div>
     </div>
