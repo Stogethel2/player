@@ -73,7 +73,7 @@
     </div>
 
     <h1 class="text-amber-300 font-bold text-2xl mb-4 items-center">
-      LOGO NAME
+      <!-- LOGO NAME -->
     </h1>
 
     <div class="flex justify-center w-full pb-8">

@@ -6,6 +6,7 @@ export type BalanceResponse = {
     currency: string;
     timestamp: number;
     message: string;
+    status: string;
 }
 
 export type PlaceBetResponse = {

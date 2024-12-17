@@ -12,6 +12,7 @@
   let isLoaded = $state(false);
   let name = $state('');
   let credits = $state(0);
+  let currency = $state('');
 
   const login = async (): Promise<void> => {
     try {
@@ -27,6 +28,7 @@
         const responseGetBalance = await walletApi.getBalance(responseGetUsers.username);
         name = responseGetBalance.username;
         credits = responseGetBalance.balance;
+        currency = responseGetBalance.currency;
 
         if ($username) {
           isLoginPage = true;
@@ -55,7 +57,7 @@
 </script>
 
 {#if isLoginPage && isLoaded}
-  <Navbar {name} {credits} />
+  <Navbar {name} {credits} {currency} />
   {@render children()}
 {:else}
   <h1>Token doesn't work</h1>

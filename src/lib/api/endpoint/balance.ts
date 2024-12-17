@@ -14,6 +14,10 @@ export const walletApi = {
             token: TOKEN,
             username: username
         });
+        if (response.data.status !== 'OK') {
+            throw new Error(`Get balance failed: ${response.data.data.status}`);
+        }
+
         return response.data.data;
     },
 
