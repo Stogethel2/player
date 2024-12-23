@@ -5,7 +5,10 @@ interface LoginData {
     status: boolean;
     data: string;
 }
-
+interface Agent {
+    agent_id: string;
+    name: string;
+}
 interface User {
     user_id: string;
     username: string;
@@ -13,7 +16,7 @@ interface User {
     last_active_date: string | null;
     created_at: string;
     updated_at: string;
-    agent: string | null;
+    agent: Agent;
 }
 
 export const loginApi = {

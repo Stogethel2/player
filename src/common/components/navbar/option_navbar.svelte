@@ -44,13 +44,13 @@
           class="w-8 rounded border hover:border-2"
         />
       </div>
-      <!-- <button
+      <button
         on:click={toggleMenu}
         class="menu text-white hover:text-red-800 border-white border-2 rounded p-1 transition duration-300 ease-in-out transform hover:scale-110"
         aria-label="Toggle menu"
       >
         <Menu size={28} />
-      </button> -->
+      </button>
     </div>
   </div>
 </div>
@@ -76,7 +76,7 @@
       <!-- LOGO NAME -->
     </h1>
 
-    <div class="flex justify-center w-full pb-8">
+    <!-- <div class="flex justify-center w-full pb-8">
       <nav
         class="flex flex-row items-center text-sm font-normal leading-relaxed antialiased bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md"
       >
@@ -98,7 +98,7 @@
           <p class="text-base mt-2">ฝากเงิน</p>
         </a>
       </nav>
-    </div>
+    </div> -->
 
     {#if isLoading}
       <p class="text-center text-xl font-semibold p-2">Loading...</p>

@@ -1,17 +1,15 @@
-import { getUsername, username } from './../../../routes/seamless/auth.store';
+import { getUsername, username, getAgentName } from './../../../routes/seamless/auth.store';
 import type { ApiResponseBalance } from '$lib';
 import type { AxiosResponse } from 'axios';
 import apiClientWallet from '../apiClientWallet';
 import type { BalanceResponse, PlaceBetResponse } from '$lib/interface/balance.types';
-
-const agent_name = 'vmb';
 
 
 export const walletApi = {
     /* Get balance */
     getBalance: async (username: string): Promise<BalanceResponse> => {
         const response: AxiosResponse<ApiResponseBalance<BalanceResponse>> = await apiClientWallet.post('/getBalance', {
-            agent_name: agent_name,
+            agent_name: getAgentName(),
             username: username
         });
         if (response.data.status !== 'OK') {
@@ -23,7 +21,7 @@ export const walletApi = {
 
     createBet: async (ticketId: string, roundId: string, amount: number): Promise<PlaceBetResponse> => {
         const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClientWallet.post('/placeBet', {
-            agent_name: agent_name,
+            agent_name: getAgentName(),
             username: getUsername(),    
             betAmount: amount,
             tiketId: ticketId,
