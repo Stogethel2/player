@@ -9,7 +9,6 @@
   } from "$lib/interface/payment.types";
   import { fade, fly } from "svelte/transition";
   import { XCircle, CheckCircle2, AlertCircle } from "lucide-svelte";
-  import { goto } from "$app/navigation";
   import { betStore } from "$lib/stores/BetStore";
 
   export let order: Order;
@@ -25,33 +24,22 @@
   let paymentStatusReturn = "";
 
   $: orderDetails = order;
-  $: totalBetAmount = orderDetails.orderBets.reduce(
-    (sum, bet) => sum + bet.bet_amount,
-    0
-  );
-  $: totalPayout = orderDetails.orderBets.reduce(
-    (sum, bet) => sum + bet.payout,
-    0
-  );
+  $: totalBetAmount = calculateTotalAmount(orderDetails.orderBets);
+  $: totalPayout = calculateTotalPayout(orderDetails.orderBets);
+
+  function calculateTotalAmount(bets: Order["orderBets"]) {
+    return bets.reduce((sum, bet) => sum + bet.bet_amount, 0);
+  }
+
+  function calculateTotalPayout(bets: Order["orderBets"]) {
+    return bets.reduce((sum, bet) => sum + bet.payout, 0);
+  }
 
   function getBetKey(bet: Order["orderBets"][0], index: number): string {
     return `${bet.order_id}-${bet.bet_number}-${bet.lotto_bet_type_id}-${index}-${bet.bet_amount}`;
   }
 
-  async function handleConfirm() {
-    if (isProcessing || !validateOrder()) return;
-
-    try {
-      await processPayment();
-      await handlePaymentSuccess();
-    } catch (err) {
-        error = err instanceof Error ? err.message : "Payment failed";
-        console.error("Payment failed", err);
-    } finally {
-      isProcessing = false;
-    }
-  }
-
+  /* Validation */
   function validateOrder() {
     if (!order.orderBets?.length) {
       throw new Error("No bets found in order");
@@ -59,6 +47,7 @@
     return true;
   }
 
+  /* Payment processing */
   async function processPayment() {
     const roundId = order.orderBets[0].lotto_round_id;
     isProcessing = true;
@@ -70,6 +59,7 @@
     paymentStatusReturn = paymentResult.status;
   }
 
+  /* Success handling */
   async function handlePaymentSuccess() {
     if (paymentStatusReturn === "COMPLETED") {
       betStore.clearAll;
@@ -78,6 +68,21 @@
       }, 3000);
     }
     dispatch("confirm");
+  }
+
+  /* Main action handlers */
+  async function handleConfirm() {
+    if (isProcessing || !validateOrder()) return;
+
+    try {
+      await processPayment();
+      await handlePaymentSuccess();
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Payment failed";
+      console.error("Payment failed", err);
+    } finally {
+      isProcessing = false;
+    }
   }
 
   async function handleCancel() {

@@ -155,5 +155,8 @@
 {/if}
 
 {#if showPaymentSummary}
-  <ConfirmPayment order={reorderedBet} on:cancel={() => showPaymentSummary = false}/>
+  <ConfirmPayment
+    order={reorderedBet}
+    on:cancel={() => (showPaymentSummary = false)}
+  />
 {/if}
