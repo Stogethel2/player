@@ -24,11 +24,13 @@
   import NumberPad from "./NumberPad.svelte";
   import PaymentSummary from "./ConfirmPayment.svelte";
   import SelectedNumbers from "./SelectedNumbers.svelte";
+  import { identity } from "lodash";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
   let timerInterval: ReturnType<typeof setInterval>;
   let displayTime = "";
+  let timerIntervalTarget: ReturnType<typeof setInterval>;
 
   $: {
     const remainingMinutes = Math.floor($timeRemaining / 60);
@@ -68,6 +70,44 @@
     }, 1000);
   }
 
+  let dateRun: string = "";
+
+  // ตัวแปรสำหรับเวลา
+  let days,hours,minutes,seconds = 0;
+
+  let hoursToStr,minutesToStr,secondsToStr = '';
+
+  // คำนวณเวลาที่เหลือ
+  function calculateTimeLeft1(targetDate: string): string {
+    let now = new Date();
+    let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
+    let difference = Number(date) - Number(now);
+
+    if (difference > 0) {
+      days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      minutes = Math.floor((difference / (1000 * 60)) % 60);
+      seconds = Math.floor((difference / 1000) % 60);
+      hoursToStr = hours.toString();
+      minutesToStr = minutes.toString();
+      secondsToStr = seconds.toString();
+      if(hoursToStr.length == 1) {
+        hoursToStr = "0"+hoursToStr;
+      }
+      if(minutesToStr.length == 1) {
+        minutesToStr = "0"+minutesToStr;
+      }
+      if(secondsToStr.length == 1) {
+        secondsToStr = "0"+secondsToStr;
+      }
+    } else {
+      // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
+      days = 0;
+      hoursToStr = minutesToStr = secondsToStr = '00';
+    }
+    return `${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
+  }
+
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const lottoId = urlParams.get("lottoId");
@@ -75,13 +115,22 @@
     if (!lottoId) return;
     lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
 
+    let targetDate = lotteryRound.round_date
+
     if (lotteryRound) {
       startTimer(300); // Start 5 minute countdown
+      timerIntervalTarget = setInterval(() => {
+        dateRun = calculateTimeLeft1(targetDate);
+      }, 1000);
     }
   });
 
   onDestroy(() => {
     clearInterval(timerInterval);
+    if (timerIntervalTarget) {
+      clearInterval(timerIntervalTarget);
+      // console.log('Timer cleared on component destroy');
+    }
   });
 
   function handleBetTypeChange(event: CustomEvent) {
@@ -160,7 +209,7 @@
               <p
                 class="text-xs sm:text-sm blink mt-2 md:mt-0 md:ml-2 text-right"
               >
-                เดิมพันก่อนภายในเวลา {displayTime}
+                เวลาเดิมพันเหลือ {dateRun}
               </p>
             </div>
           </div>

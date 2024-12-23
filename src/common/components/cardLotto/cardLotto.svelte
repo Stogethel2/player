@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
   import AlarmClock from "lucide-svelte/icons/alarm-clock";
   import ButtonCardLotto from "./buttonCardLotto.svelte";
   import { goto } from "$app/navigation";
@@ -13,6 +14,8 @@
   export let name: string;
   export let lottoId: string;
 
+  let timerIntervalTarget: ReturnType<typeof setInterval>;
+
   function handleButtonClick() {
     console.log("Button clicked for:", name);
     if (name === "yeekee") {
@@ -21,6 +24,61 @@
       goto("/play?lottoId=" + lottoId);
     }
   }
+
+  let dateRun: string = "";
+
+  // ตัวแปรสำหรับเวลา
+  let days,hours,minutes,seconds = 0;
+
+  let hoursToStr,minutesToStr,secondsToStr = '';
+
+  // คำนวณเวลาที่เหลือ
+  function calculateTimeLeft1(targetDate: string): string {
+    let now = new Date();
+    let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
+    let difference = Number(date) - Number(now);
+
+    if (difference > 0) {
+      days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      minutes = Math.floor((difference / (1000 * 60)) % 60);
+      seconds = Math.floor((difference / 1000) % 60);
+      hoursToStr = hours.toString();
+      minutesToStr = minutes.toString();
+      secondsToStr = seconds.toString();
+      if(hoursToStr.length == 1) {
+        hoursToStr = "0"+hoursToStr;
+      }
+      if(minutesToStr.length == 1) {
+        minutesToStr = "0"+minutesToStr;
+      }
+      if(secondsToStr.length == 1) {
+        secondsToStr = "0"+secondsToStr;
+      }
+    } else {
+      // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
+      days = 0;
+      hoursToStr = minutesToStr = secondsToStr = '00';
+    }
+    return `เวลาเดิมพันเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
+  }
+
+  onMount(() => {
+    let targetDate = countDownText;
+
+    if (targetDate) {
+      timerIntervalTarget = setInterval(() => {
+        dateRun = calculateTimeLeft1(targetDate);
+      }, 1000);
+    }
+  });
+
+  onDestroy(() => {
+    if (timerIntervalTarget) {
+      clearInterval(timerIntervalTarget);
+      // console.log('Timer cleared on component destroy seamless');
+    }
+  });
 
 </script>
 
@@ -45,7 +103,7 @@
     </div>
     {#if open}
       <p class="blink text-sm sm:text-base text-white font-semibold mb-2">
-        {countDownText}
+        {dateRun}
       </p>
       <div
         class="flex items-center text-xs sm:text-sm text-white bg-black bg-opacity-20 rounded-full px-3 py-1"

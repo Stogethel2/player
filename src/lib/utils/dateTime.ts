@@ -1,6 +1,6 @@
 export function formatDateTime(dateString: string): string {
   try {
-    const date = new Date(dateString);
+    const date = new Date(dateString.replace('T', ' ').split('.')[0])
     
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
