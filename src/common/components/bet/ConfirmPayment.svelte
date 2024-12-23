@@ -10,6 +10,7 @@
   import { fade, fly } from "svelte/transition";
   import { XCircle, CheckCircle2, AlertCircle } from "lucide-svelte";
   import { goto } from "$app/navigation";
+  import { betStore } from "$lib/stores/BetStore";
 
   export let order: Order;
   const dispatch = createEventDispatcher<{
@@ -57,8 +58,9 @@
       paymentStatusReturn = paymentResult.status;
       console.log('paymentStatusReturn:',paymentStatusReturn);
       if(paymentStatusReturn == 'COMPLETED'){
+        betStore.clearAll;
         setTimeout(() => {
-          goto("/seamless");
+          window.location.reload();
         }, 3000);
       }
       dispatch("confirm");

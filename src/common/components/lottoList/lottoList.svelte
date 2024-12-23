@@ -4,6 +4,9 @@
   import type { LottoRound } from "$lib/interface/lotto.types";
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
+
+  import { formatDateTime } from "$lib/utils/dateTime";
+
   let playlist: LottoRound[];
   let isLoading = true;
 
@@ -50,7 +53,7 @@
         icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
         title={card.lotto.lotto_name}
         countDownText={"เหลือเวลาอีก 0 วัน 00:00:00"}
-        details={card.round_date}
+        details={formatDateTime(card.round_date)}
         open={true}
         name={"test"}
         agent={false}

@@ -4,7 +4,7 @@ const browser = typeof window !== 'undefined';
 
 export const token = writable(browser ? localStorage.getItem('token') ?? '' : '');
 export const username = writable(browser ? localStorage.getItem('username') ?? '' : '');
-export const agent_name = writable('');
+export const agent_name = writable(browser ? localStorage.getItem('agent_name') ?? '' : '');
 
 let tokenValue = '';
 let usernameValue = '';
@@ -23,6 +23,7 @@ if (browser) {
 
     agent_name.subscribe(value => {
         agentNameValue = value;
+        if (value) localStorage.setItem('agent_name', value);
     });
 }
 
