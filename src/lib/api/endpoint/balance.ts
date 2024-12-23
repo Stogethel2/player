@@ -4,14 +4,14 @@ import type { AxiosResponse } from 'axios';
 import apiClientWallet from '../apiClientWallet';
 import type { BalanceResponse, PlaceBetResponse } from '$lib/interface/balance.types';
 
-const TOKEN = 'd7ba9db3-af05-4dd7-b051-b15c475c3986';
+const agent_name = 'vmb';
 
 
 export const walletApi = {
     /* Get balance */
     getBalance: async (username: string): Promise<BalanceResponse> => {
         const response: AxiosResponse<ApiResponseBalance<BalanceResponse>> = await apiClientWallet.post('/getBalance', {
-            token: TOKEN,
+            agent_name: agent_name,
             username: username
         });
         if (response.data.status !== 'OK') {
@@ -23,7 +23,7 @@ export const walletApi = {
 
     createBet: async (ticketId: string, roundId: string, amount: number): Promise<PlaceBetResponse> => {
         const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClientWallet.post('/placeBet', {
-            token: TOKEN,
+            agent_name: agent_name,
             username: getUsername(),    
             betAmount: amount,
             tiketId: ticketId,
