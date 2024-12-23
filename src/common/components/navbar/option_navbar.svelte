@@ -44,13 +44,13 @@
           class="w-8 rounded border hover:border-2"
         />
       </div>
-      <button
+      <!-- <button
         on:click={toggleMenu}
         class="menu text-white hover:text-red-800 border-white border-2 rounded p-1 transition duration-300 ease-in-out transform hover:scale-110"
         aria-label="Toggle menu"
       >
         <Menu size={28} />
-      </button>
+      </button> -->
     </div>
   </div>
 </div>

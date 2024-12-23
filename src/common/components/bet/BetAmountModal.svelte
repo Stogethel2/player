@@ -14,6 +14,9 @@
   import Loading from "../loading/loading.svelte";
   import ButtonLoading from "../loading/buttonLoading.svelte";
 
+  // wallet
+  import { walletApi } from "$lib/api/endpoint/balance";
+
   export const QUICK_BET_AMOUNTS = [5, 10, 20, 50, 100] as const;
   export const BET_CONFIG = {
     MIN_BET: 1.0,
@@ -89,7 +92,25 @@
     return await betCalculateApi.createOrder($currentBetSummary);
   }
 
-  onMount(fetchBetCalculations);
+  const getBalance = async (): Promise<void> => {
+    const username = localStorage.getItem("username");
+    try {
+      if (username) {
+        const responseGetBalance = await walletApi.getBalance(username);
+        availableBalance = responseGetBalance.balance;
+      }
+    } catch (error) {
+      console.error("Error in login:", error);
+    }
+  };
+
+  onMount(async () => {
+    try {
+        await Promise.all([getBalance(), fetchBetCalculations()]);
+    } catch (error) {
+        console.error('Error in onMount:', error);
+    }
+  });
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">

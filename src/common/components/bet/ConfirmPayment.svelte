@@ -9,6 +9,7 @@
   } from "$lib/interface/payment.types";
   import { fade, fly } from "svelte/transition";
   import { XCircle, CheckCircle2, AlertCircle } from "lucide-svelte";
+  import { goto } from "$app/navigation";
 
   export let order: Order;
   const dispatch = createEventDispatcher<{
@@ -20,6 +21,7 @@
   let paymentResult: PaymentResult | null = null;
   let isProcessing = false;
   let error: string | null = null;
+  let paymentStatusReturn = '';
 
   $: orderDetails = order;
   $: totalBetAmount = orderDetails.orderBets.reduce(
@@ -52,6 +54,13 @@
         "COMPLETED"
       );
       paymentStatus = paymentResult.status;
+      paymentStatusReturn = paymentResult.status;
+      console.log('paymentStatusReturn:',paymentStatusReturn);
+      if(paymentStatusReturn == 'COMPLETED'){
+        setTimeout(() => {
+          goto("/seamless");
+        }, 3000);
+      }
       dispatch("confirm");
     } catch (err) {
       error = err instanceof Error ? err.message : "Payment failed";
