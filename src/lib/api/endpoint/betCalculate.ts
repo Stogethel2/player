@@ -13,5 +13,10 @@ export const betCalculateApi = {
     createOrder: async (betGroup: BetSummary): Promise<Order> => {
         const response: AxiosResponse<ApiResponse<Order>> = await apiClient.post('/public/bet/order', betGroup);
         return response.data.data;
+    },
+
+    reOrder: async (order_id: string): Promise<Order> => {
+        const response: AxiosResponse<ApiResponse<Order>> = await apiClient.post('/public/bet/reorder', { order_id: order_id });
+        return response.data.data;
     }
 };

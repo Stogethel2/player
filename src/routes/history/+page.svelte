@@ -3,19 +3,22 @@
   import { formatDateTime } from "$lib/utils/dateTime";
   import { orderApi } from "$lib/api/endpoint/order";
   import { CheckCircle2, XCircle, ChevronDown } from "lucide-svelte";
-  import type { OrderResponse } from "$lib/interface/order.types";
+  import type { Order, OrderResponse } from "$lib/interface/order.types";
   import Loading from "../../common/components/loading/loading.svelte";
+  import ConfirmPayment from "../../common/components/bet/ConfirmPayment.svelte";
+  import { betCalculateApi } from "$lib";
 
   let orders: OrderResponse[];
   let selectedOrderId: string | null = null;
   let isLoading = true;
   let error: string | null = null;
+  let showPaymentSummary = false;
+  let reorderedBet: Order;
 
   onMount(async () => {
     try {
       const response = await orderApi.getOrderHistory();
       orders = response.orders;
-      console.log(orders);
     } catch (err) {
       error = "Failed to load orders";
       console.error("Error fetching orders:", err);
@@ -32,6 +35,14 @@
     return status === "SUCCESS"
       ? "bg-green-400 text-white"
       : "bg-red-500 text-white";
+  }
+
+  async function handlePayment(order: OrderResponse) {
+    // TODO: call reOrder api
+    reorderedBet = await betCalculateApi.reOrder(order.id);
+
+    // TODO: open ConfirmPayment component
+    showPaymentSummary = true;
   }
 </script>
 
@@ -114,6 +125,17 @@
                     </div>
                   </div>
                 {/each}
+
+                {#if order.status === "PENDING"}
+                  <div class="flex justify-end mt-4">
+                    <button
+                      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                      on:click={() => handlePayment(order)}
+                    >
+                      จ่ายเงิน
+                    </button>
+                  </div>
+                {/if}
               </div>
             </div>
           {/if}
@@ -125,4 +147,8 @@
       {/if}
     </div>
   </div>
+{/if}
+
+{#if showPaymentSummary}
+  <ConfirmPayment order={reorderedBet} />
 {/if}
