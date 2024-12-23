@@ -20,7 +20,6 @@
       const response = await orderApi.getOrderHistory();
       orders = response.orders;
     } catch (err) {
-      error = "Failed to load orders";
       console.error("Error fetching orders:", err);
     } finally {
       isLoading = false;
@@ -38,10 +37,8 @@
   }
 
   async function handlePayment(order: OrderResponse) {
-    // TODO: call reOrder api
     reorderedBet = await betCalculateApi.reOrder(order.id);
-
-    // TODO: open ConfirmPayment component
+    console.log(reorderedBet);
     showPaymentSummary = true;
   }
 </script>
@@ -127,14 +124,22 @@
                 {/each}
 
                 {#if order.status === "PENDING"}
-                  <div class="flex justify-end mt-4">
-                    <button
-                      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-                      on:click={() => handlePayment(order)}
-                    >
-                      จ่ายเงิน
-                    </button>
-                  </div>
+                  {#if order.orderBets.length > 0}
+                    <div class="flex justify-end mt-4">
+                      <button
+                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                        on:click={() => handlePayment(order)}
+                      >
+                        จ่ายเงินอีกครั้ง
+                      </button>
+                    </div>
+                  {:else}
+                    <div class="bg-gray-50 p-3 rounded-lg text-sm text-center">
+                      <p class="text-gray-600">
+                        ไม่สามารถจ่ายเงินได้กรุณาเดิมพันใหม่อีกครั้ง
+                      </p>
+                    </div>
+                  {/if}
                 {/if}
               </div>
             </div>
