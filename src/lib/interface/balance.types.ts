@@ -12,4 +12,5 @@ export type BalanceResponse = {
 export type PlaceBetResponse = {
     data: unknown;
     status: string;
+    message?: string;
 }

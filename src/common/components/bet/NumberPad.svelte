@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { betStore } from "$lib/stores/BetStore";
   import { NUMPAD_LAYOUT } from "$lib/utils/play";
-  import type { LottoBetType } from "$lib/interface/Lotto.types";
+  import type { LottoBetType } from "$lib/interface/lotto.types";
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
@@ -80,12 +80,9 @@
 
   function submitNumber(): void {
     const betNumber = digits.join("");
-    console.log(betNumber);
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
       betStore.addBet(activeBetType.id, betNumber, activeBetType, defaultAmount);
-
-      console.log(betStore.getSummary());
     }
 
     resetDigits();

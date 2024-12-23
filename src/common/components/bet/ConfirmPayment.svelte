@@ -22,7 +22,7 @@
   let paymentResult: PaymentResult | null = null;
   let isProcessing = false;
   let error: string | null = null;
-  let paymentStatusReturn = '';
+  let paymentStatusReturn = "";
 
   $: orderDetails = order;
   $: totalBetAmount = orderDetails.orderBets.reduce(
@@ -39,37 +39,45 @@
   }
 
   async function handleConfirm() {
-    if (isProcessing) return;
+    if (isProcessing || !validateOrder()) return;
 
-    if (!order.orderBets || order.orderBets.length === 0) {
-      throw new Error('No bets found in order');
-    }
-    const roundId = order.orderBets[0].lotto_round_id;
-    const betResult = await walletApi.createBet(order.order_id, roundId, totalBetAmount);
-   
     try {
-      isProcessing = true;
-      error = null;
-      paymentResult = await paymentApi.createPayment(
-        order.order_id,
-        "COMPLETED"
-      );
-      paymentStatus = paymentResult.status;
-      paymentStatusReturn = paymentResult.status;
-      console.log('paymentStatusReturn:',paymentStatusReturn);
-      if(paymentStatusReturn == 'COMPLETED'){
-        betStore.clearAll;
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
-      }
-      dispatch("confirm");
+      await processPayment();
+      await handlePaymentSuccess();
     } catch (err) {
-      error = err instanceof Error ? err.message : "Payment failed";
-      console.error("Payment failed", err);
+        error = err instanceof Error ? err.message : "Payment failed";
+        console.error("Payment failed", err);
     } finally {
       isProcessing = false;
     }
+  }
+
+  function validateOrder() {
+    if (!order.orderBets?.length) {
+      throw new Error("No bets found in order");
+    }
+    return true;
+  }
+
+  async function processPayment() {
+    const roundId = order.orderBets[0].lotto_round_id;
+    isProcessing = true;
+    error = null;
+
+    await walletApi.createBet(order.order_id, roundId, totalBetAmount);
+    paymentResult = await paymentApi.createPayment(order.order_id, "COMPLETED");
+    paymentStatus = paymentResult.status;
+    paymentStatusReturn = paymentResult.status;
+  }
+
+  async function handlePaymentSuccess() {
+    if (paymentStatusReturn === "COMPLETED") {
+      betStore.clearAll;
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    }
+    dispatch("confirm");
   }
 
   async function handleCancel() {
@@ -85,6 +93,7 @@
       console.error("Payment cancellation failed", err);
     } finally {
       isProcessing = false;
+      dispatch("cancel");
     }
   }
 </script>

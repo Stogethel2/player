@@ -29,7 +29,7 @@ export const walletApi = {
         });
 
         if (response.data.status !== 'OK') {
-            throw new Error(`Bet placement failed: ${response.data.data.status}`);
+            throw new Error(`Bet placement failed: ${response.data.data.message}`);
         }
 
         return response.data.data;
