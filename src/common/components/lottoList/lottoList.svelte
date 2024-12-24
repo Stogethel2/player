@@ -50,12 +50,12 @@
       <CardLotto
         headerColorClass={card.headerColorClass}
         headerImageBackground={"https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
-        icon={"https://cdn-icons-png.flaticon.com/512/630/630635.png"}
+        icon={card.lotto.lotto_image}
         title={card.lotto.lotto_name}
         countDownText={card.round_date}
         details={formatDateTime(card.round_date)}
         open={true}
-        name={"test"}
+        name={card.lotto.lotto_name}
         agent={false}
         lottoId={card.id}
       />
