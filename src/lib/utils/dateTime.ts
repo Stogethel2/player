@@ -1,6 +1,11 @@
-export function formatDateTime(dateString: string): string {
+export function formatDateTime(dateString: string, endBetMin: number): string {
   try {
-    const date = new Date(dateString.replace('T', ' ').split('.')[0])
+    let end_bet_min;
+    let date = new Date(dateString.replace('T', ' ').split('.')[0]);
+    if(endBetMin > 0){
+      end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
+      date = end_bet_min;
+    }
     
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');

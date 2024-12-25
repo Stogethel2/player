@@ -69,7 +69,7 @@
               {/if}
               <div class="text-left">
                 <p class="text-sm font-medium text-gray-900">
-                  {formatDateTime(order.created_at)}
+                  {formatDateTime(order.created_at,0)}
                 </p>
                 <p class="text-sm text-gray-600">
                   ฿{order.total_amount.toFixed(2)}
@@ -117,7 +117,7 @@
                     <div>
                       <p class="text-gray-600">วันที่แทง</p>
                       <p class="font-medium">
-                        {formatDateTime(order.created_at)}
+                        {formatDateTime(order.created_at,0)}
                       </p>
                     </div>
                   </div>

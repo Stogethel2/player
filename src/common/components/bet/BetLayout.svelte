@@ -24,7 +24,6 @@
   import NumberPad from "./NumberPad.svelte";
   import PaymentSummary from "./ConfirmPayment.svelte";
   import SelectedNumbers from "./SelectedNumbers.svelte";
-  import { identity } from "lodash";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -44,6 +43,8 @@
   let showPaymentSummary = false;
   let order: Order | null = null;
   let lotteryRound: LottoRound | null = null;
+
+  let end_bet_min = import.meta.env.VITE_END_BET_MIN;
 
   const selectedBetTypeStore = writable<LottoBetType>();
   const selectedBetType = derived(
@@ -78,10 +79,12 @@
   let hoursToStr,minutesToStr,secondsToStr = '';
 
   // คำนวณเวลาที่เหลือ
-  function calculateTimeLeft1(targetDate: string): string {
+  function calculateTimeLeft(targetDate: string, endBetMin: number): string {
     let now = new Date();
     let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
-    let difference = Number(date) - Number(now);
+    
+    let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
+    let difference = Number(end_bet_min) - Number(now);
 
     if (difference > 0) {
       days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -104,6 +107,7 @@
       // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
       days = 0;
       hoursToStr = minutesToStr = secondsToStr = '00';
+      goto("/seamless");
     }
     return `${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
   }
@@ -115,12 +119,12 @@
     if (!lottoId) return;
     lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
 
-    let targetDate = lotteryRound.round_date
+    let targetDate = lotteryRound.round_date;
 
-    if (lotteryRound) {
+    if (lotteryRound && end_bet_min >= 0) {
       startTimer(300); // Start 5 minute countdown
       timerIntervalTarget = setInterval(() => {
-        dateRun = calculateTimeLeft1(targetDate);
+        dateRun = calculateTimeLeft(targetDate,end_bet_min);
       }, 1000);
     }
   });
@@ -201,7 +205,7 @@
                   <CircleAlert size={16} />
                 </div>
                 <div class="mx-1">
-                  {formatDateTime(lotteryRound.round_date)}
+                  {formatDateTime(lotteryRound.round_date,end_bet_min)}
                 </div>
               </div>
             </div>

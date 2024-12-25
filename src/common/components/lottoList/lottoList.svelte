@@ -9,6 +9,7 @@
 
   let playlist: LottoRound[];
   let isLoading = true;
+  let end_bet_min = import.meta.env.VITE_END_BET_MIN;
 
   export let category: string;
 
@@ -53,11 +54,12 @@
         icon={card.lotto.lotto_image}
         title={card.lotto.lotto_name}
         countDownText={card.round_date}
-        details={formatDateTime(card.round_date)}
+        details={formatDateTime(card.round_date,end_bet_min)}
         open={true}
         name={card.lotto.lotto_name}
         agent={false}
         lottoId={card.id}
+        endBetMin={end_bet_min}
       />
     {/each}
 
@@ -72,6 +74,7 @@
       name={"test"}
       agent={true}
       lottoId={`70fbea68-8a14-44c3-bb69-07c12584c277`}
+      endBetMin={end_bet_min}
     />
   {/if}
 </div>

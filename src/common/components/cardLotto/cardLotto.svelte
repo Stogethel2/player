@@ -13,6 +13,7 @@
   export let agent = false;
   export let name: string;
   export let lottoId: string;
+  export let endBetMin;
 
   let timerIntervalTarget: ReturnType<typeof setInterval>;
 
@@ -33,10 +34,12 @@
   let hoursToStr,minutesToStr,secondsToStr = '';
 
   // คำนวณเวลาที่เหลือ
-  function calculateTimeLeft1(targetDate: string): string {
+  function calculateTimeLeft(targetDate: string, endBetMin: number): string {
     let now = new Date();
     let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
-    let difference = Number(date) - Number(now);
+
+    let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
+    let difference = Number(end_bet_min) - Number(now);
 
     if (difference > 0) {
       days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -59,6 +62,7 @@
       // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
       days = 0;
       hoursToStr = minutesToStr = secondsToStr = '00';
+      open = false;
     }
     return `เวลาเดิมพันเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
   }
@@ -66,9 +70,9 @@
   onMount(() => {
     let targetDate = countDownText;
 
-    if (targetDate) {
+    if (targetDate && endBetMin >= 0) {
       timerIntervalTarget = setInterval(() => {
-        dateRun = calculateTimeLeft1(targetDate);
+        dateRun = calculateTimeLeft(targetDate,endBetMin);
       }, 1000);
     }
   });
