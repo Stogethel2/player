@@ -99,7 +99,7 @@
                     class="bg-gray-50 p-3 rounded-lg grid grid-cols-2 gap-2 text-sm"
                   >
                     <div>
-                      <p class="text-gray-600">เลขที่แทง</p>
+                      <p class="text-gray-600">{bet.bet_type_name}</p>
                       <p class="font-medium">{bet.bet_number}</p>
                     </div>
                     <div>

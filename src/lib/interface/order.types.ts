@@ -22,6 +22,7 @@ export type OrderBet = {
     lotto_round_id: string;
     lotto_bet_type_id: string;
     lotto_round_loss_id: string;
+    bet_type_name: string;
     bet_amount: number;
     bet_number: string;
     payout: number;
