@@ -122,7 +122,7 @@
   <div class="px-2 md:px-4 py-2 bg-white">
     {#if open}
       <ButtonCardLotto
-        text="เดิมพัน"
+        text="ซื้อหวย"
         {agent}
         disabled={false}
         onClick={() => handleButtonClick()}

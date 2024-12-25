@@ -171,13 +171,13 @@
             <div class="rounded-lg bg-gray-50 p-4">
               <p class="text-sm font-medium text-gray-500">ยอดเดิมพันรวม</p>
               <p class="mt-1 text-2xl font-semibold text-gray-900">
-                ฿{totalBetAmount.toFixed(2)}
+                ฿{totalBetAmount}
               </p>
             </div>
             <div class="rounded-lg bg-gray-50 p-4">
               <p class="text-sm font-medium text-gray-500">เรทจ่ายรวม</p>
               <p class="mt-1 text-2xl font-semibold text-green-600">
-                ฿{totalPayout.toFixed(2)}
+                ฿{totalPayout}
               </p>
             </div>
           </div>
@@ -194,14 +194,14 @@
                 >
                   <div>
                     <p class="text-sm font-medium text-gray-900">
-                      เลข: {bet.bet_number}
+                      {bet.bet_type_name}: <span class="text-blue-500">{bet.bet_number}</span>
                     </p>
                     <p class="text-sm text-gray-500">
-                      เดิมพัน: ฿{bet.bet_amount.toFixed(2)}
+                      ซื้อ: ฿{bet.bet_amount}
                     </p>
                   </div>
                   <div class="text-sm font-medium text-green-600">
-                    เรทจ่าย: ฿{bet.payout.toFixed(2)}
+                    เรทจ่าย: ฿{bet.payout}
                   </div>
                 </div>
               {/each}
