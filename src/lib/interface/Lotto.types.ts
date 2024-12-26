@@ -28,6 +28,7 @@ export interface Lotto {
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+    default_close_bet_minutes: number;
 }
 
 export interface LottoBetType {

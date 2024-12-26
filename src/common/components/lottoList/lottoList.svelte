@@ -9,7 +9,7 @@
 
   let playlist: LottoRound[];
   let isLoading = true;
-  let end_bet_min = import.meta.env.VITE_END_BET_MIN;
+  let end_bet_min = 0;
 
   export let category: string;
 
@@ -33,6 +33,7 @@
           colors[Math.floor(Math.random() * colors.length)];
         return card;
       });
+      end_bet_min = playlist[0].lotto.default_close_bet_minutes;
     } catch (error) {
       console.error("Error fetching settings:", error);
     } finally {

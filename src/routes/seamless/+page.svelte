@@ -18,7 +18,6 @@
 
       const lottoData = await lottoApi.getActiveLottos();
       /* Work in progress */
-      console.log('lotteryData', lottoData);
     } catch (error) {
       console.error("Error fetching settings:", error);
     } finally {

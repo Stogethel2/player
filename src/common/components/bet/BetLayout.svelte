@@ -44,7 +44,7 @@
   let order: Order | null = null;
   let lotteryRound: LottoRound | null = null;
 
-  let end_bet_min = import.meta.env.VITE_END_BET_MIN;
+  let end_bet_min = 0;
 
   const selectedBetTypeStore = writable<LottoBetType>();
   const selectedBetType = derived(
@@ -118,7 +118,7 @@
 
     if (!lottoId) return;
     lotteryRound = await lottoRoundApi.getLottoRoundById(lottoId);
-
+    end_bet_min = lotteryRound.lotto.default_close_bet_minutes;
     let targetDate = lotteryRound.round_date;
 
     if (lotteryRound && end_bet_min >= 0) {
