@@ -170,6 +170,17 @@
     function navigateBack() {
         goto("/seamless");
     }
+
+    const betListSummary = derived(betStore, () => {
+        const summary = betStore.getSummary();
+
+        return {
+            totalBet: summary.totals.total_bet,
+        };
+    });
+
+    $: ({ totalBet } = $betListSummary);
+    $: enterPriceButton = totalBet == 0;
 </script>
 
 {#if lotteryRound}
@@ -295,7 +306,9 @@
                             <button
                                 on:click={openBetModal}
                                 class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-                            >ใส่ราคา
+                                disabled={enterPriceButton}
+                            >
+                              ใส่ราคา
                             </button>
                         </div>
                     {:else}
@@ -339,5 +352,11 @@
     .blink {
         @apply font-bold;
         animation: blink 1s infinite;
+    }
+
+    button:disabled {
+      background-color: #9ae6b4;
+      cursor: not-allowed;
+      opacity: 0.7;
     }
 </style>
