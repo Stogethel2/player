@@ -14,7 +14,6 @@ export const betCalculateApi = {
     },
 
     createOrder: async (betGroup: BetSummary): Promise<Order> => {
-        console.log({betGroup});
         const response: AxiosResponse<ApiResponse<Order>> = await apiClient.post('/bet/order', betGroup, {
             headers: { Authorization: `Bearer ${getToken()}` }
         });
