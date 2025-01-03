@@ -1,14 +1,15 @@
 <script lang="ts">
-  import type { Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
   import { get } from "svelte/store";
   import { onMount } from "svelte";
   import { betStore } from "$lib/stores/BetStore";
   import { NUMPAD_LAYOUT } from "$lib/utils/play";
-  import type { LottoBetType } from "$lib/interface/lotto.types";
+  import type { LottoBetType, Lotto } from "$lib/interface/lotto.types";
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
   export let activeLotteryTypesStore: Writable<LottoBetType>;
+
 
   let digits: string[] = [];
   let activeDigitIndex = 0;

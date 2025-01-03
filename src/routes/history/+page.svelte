@@ -18,6 +18,8 @@
     onMount(async () => {
         try {
             const response = await orderApi.getOrderHistory();
+            console.log(response.orders);
+
             orders = response.orders;
         } catch (err) {
             console.error("Error fetching orders:", err);
@@ -68,6 +70,7 @@
                                 <XCircle class="w-7 h-7 text-red-500" />
                             {/if}
                             <div class="text-left">
+                              <!-- <span class="text-sm font-medium text-gray-900">{order.}</span> -->
                                 <p class="text-sm font-medium text-gray-900">
                                     {formatDateTime(order.created_at, 0)}
                                 </p>

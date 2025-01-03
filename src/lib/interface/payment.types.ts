@@ -1,6 +1,8 @@
 export interface PaymentResult {
     id: string;
     order_id: string;
+    lotto_id: string;
+    lotto_name: string;
     amount: number;
     status: PaymentStatus;
     created_at: string;

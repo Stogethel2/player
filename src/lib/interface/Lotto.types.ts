@@ -44,12 +44,15 @@ export interface LottoBetType {
     is_active: boolean;
     is_block: boolean;
     current_round_loss_id?: string;
+    lotto_id: string;
+    lotto_name: string;
     created_at: string;
 }
 
 export interface LottoRound {
     id: string;
     lotto_id: string;
+    lotto_name: string;
     round_date: string;
     possible_loss: number;
     is_active: boolean;

@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
 import type { BetTypeGroup, LotteryBet, BetSummary } from "../interface/bet.types";
-import type { LottoBetType } from "../interface/lotto.types";
+import type { LottoBetType, Lotto } from "../interface/lotto.types";
 import { betUtils } from "../utils/betUtils";
 import { calculateBetSummary } from "$lib/utils/betCalculations";
 
@@ -10,16 +10,17 @@ function createBetStore() {
 
     return {
         subscribe,
-
         addBet(bet_type_id: string, number: string, lottoBetType: LottoBetType, amount: number = 10) {
             update((store) => {
                 const newStore = { ...store };
                 if (!newStore[bet_type_id]) {
                     newStore[bet_type_id] = [];
                 }
-
+                
                 newStore[bet_type_id] = [...newStore[bet_type_id], {
                     temp_id: betUtils.generateTempId(),
+                    lotto_id: lottoBetType.lotto_id,
+                    lotto_name: lottoBetType.lotto_name,
                     number,
                     amount,
                     payout: lottoBetType.current_payout_rate,
@@ -46,7 +47,7 @@ function createBetStore() {
             update((store) => ({ ...store, ...betTypeGroup }));
         },
 
-        updateAmount(bet_type_id: string, temp_id: string, amount: number) {
+        updateAmount(lotto_id: string, lotto_name: string, bet_type_id: string, temp_id: string, amount: number) {
             update((store) => {
                 const newStore = { ...store };
                 if (newStore[bet_type_id]) {

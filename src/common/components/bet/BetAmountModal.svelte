@@ -22,7 +22,7 @@
     MIN_BET: 1.0,
     MAX_BET: 2000,
   } as const;
-  export let availableBalance = 30420.19;
+  export let availableBalance = 0;
 
   let betCalculationResult: BetSummary;
   let isLoading = true;
@@ -32,7 +32,7 @@
   /* Get bet summary from store */
   $: currentBetSummary = derived(betStore, calculateBetSummary);
 
-  $: console.log($currentBetSummary);
+  $: console.log({$currentBetSummary});
 
   async function handleSubmitBet() {
     const order: Order = await createOrder();
@@ -44,7 +44,7 @@
   }
 
   function handleQuickBetAmount(amount: number): void {
-    updateBetsInStore($currentBetSummary.betGroups, amount);
+    updateBetsInStore($currentBetSummary.lotto_id, $currentBetSummary.lotto_name, $currentBetSummary.betGroups, amount);
   }
 
   function handleClearBetAmounts(): void {
@@ -53,13 +53,15 @@
 
   /* Update bets in store */
   function updateBetsInStore(
+    lotto_id: string,
+    lotto_name: string,
     betGroups: BetGroupSummary[],
     amount: number
   ): void {
     betGroups.forEach((betGroup) => {
       betGroup.betList.forEach((betItem) => {
         if (betItem.temp_id !== undefined) {
-          betStore.updateAmount(betGroup.bet_type_id, betItem.temp_id, amount);
+          betStore.updateAmount(lotto_id, lotto_name, betGroup.bet_type_id, betItem.temp_id, amount);
         }
       });
     });
@@ -69,6 +71,7 @@
     try {
       const result = await betCalculateApi.getBetCalculate($currentBetSummary);
       betCalculationResult = result;
+      // console.log("Bet Calculations:", result);
       syncCalculationsWithStore(result);
     } catch (error) {
       console.error("Failed to fetch bet calculations:", error);
@@ -119,7 +122,7 @@
     <header
       class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
     >
-      <h2 class="text-lg font-medium">ใส่ราคา</h2>
+      <h2 class="text-lg font-medium">ใส่ราคา - {$currentBetSummary.lotto_name}</h2>
       <button
         class="text-2xl hover:opacity-80 transition-opacity"
         on:click={handleCloseModal}

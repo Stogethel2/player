@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { LottoBetType } from "$lib/interface/lotto.types";
+  import type { LottoBetType, Lotto } from "$lib/interface/lotto.types";
 
   const dispatch = createEventDispatcher();
 
@@ -24,6 +24,7 @@
       isActive: !isCurrentlySelected,
       activeTypesCount: availableBetTypes.length
     });
+
   }
 
   function isBetTypeSelected(bet_type_id: string): boolean {

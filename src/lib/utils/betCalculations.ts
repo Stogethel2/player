@@ -7,9 +7,10 @@ import type { BetSummary, BetGroupSummary, LotteryBet, BetTypeGroup } from "$lib
  * @returns New BetSummary Object
  */
 export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSummary {
-    const { total_bet, total_amount, betGroups } = calculateBetTotals($store);
-
+    const { lotto_id, lotto_name, total_bet, total_amount, betGroups } = calculateBetTotals($store);
     return {
+        lotto_id,
+        lotto_name,
         betGroups,
         totals: { total_bet, total_amount }
     };
@@ -22,12 +23,16 @@ export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSu
  * @returns Calculated bet totals
  */
 function calculateBetTotals($store: Record<string, LotteryBet[]>): {
+    lotto_id: string;
+    lotto_name: string;
     total_bet: number;
     total_amount: number;
     betGroups: BetGroupSummary[];
 } {
-    let total_bet = 0;
-    let total_amount = 0;
+    let lotto_id: string = "";
+    let lotto_name: string = "";
+    let total_bet: number = 0;
+    let total_amount: number = 0;
 
     const betGroups: BetGroupSummary[] = Object.entries($store).map(([bet_type_id, bets]) => {
         const betList = calculateBetList(bets, (bet: LotteryBet): void => {
@@ -35,8 +40,12 @@ function calculateBetTotals($store: Record<string, LotteryBet[]>): {
             total_amount += bet.amount;
         });
 
+        lotto_id = $store[bet_type_id][0].lotto_id || "";
+        lotto_name = $store[bet_type_id][0].lotto_name || "";
 
         return {
+            lotto_id,
+            lotto_name,
             bet_type_id,
             betList,
             total_ground_amount: calculateGroupAmount(betList),
@@ -44,7 +53,7 @@ function calculateBetTotals($store: Record<string, LotteryBet[]>): {
         };
     });
 
-    return { total_bet, total_amount, betGroups };
+    return { lotto_id, lotto_name, total_bet, total_amount, betGroups };
 }
 
 /**
@@ -83,7 +92,6 @@ export function syncBetSummaryWithStore(
     storeState: BetTypeGroup
 ): BetGroupSummary[] {
     if (!betSummary) return [];
-
     return betSummary.betGroups
         .map(group => ({
             ...group,
