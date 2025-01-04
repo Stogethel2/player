@@ -207,7 +207,7 @@
           {#if isLoading}
             <ButtonLoading />
           {:else}
-            ส่งไป
+            ชำระเงิน
           {/if}
         </button>
       </div>

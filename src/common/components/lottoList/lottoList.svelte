@@ -39,6 +39,8 @@
     } finally {
       isLoading = false;
     }
+
+    console.log(playlist);
   });
 </script>
 

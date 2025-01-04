@@ -64,7 +64,7 @@
       hoursToStr = minutesToStr = secondsToStr = '00';
       open = false;
     }
-    return `เวลาเดิมพันเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
+    return `เวลาซื้อเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
   }
 
   onMount(() => {

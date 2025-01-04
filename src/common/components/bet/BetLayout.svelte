@@ -238,7 +238,7 @@
                             <p
                                 class="text-xs sm:text-sm blink mt-2 md:mt-0 md:ml-2 text-right"
                             >
-                                เวลาเดิมพันเหลือ {dateRun}
+                                เวลาซื้อเหลือ {dateRun}
                             </p>
                         </div>
                     </div>

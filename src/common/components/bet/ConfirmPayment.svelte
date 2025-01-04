@@ -135,11 +135,11 @@
               {(() => {
                 switch (paymentStatus) {
                   case "COMPLETED":
-                    return "ตัดเงินสำเร็จ";
+                    return "ชำระเงินเงินสำเร็จ";
                   case "FAILED":
                     return "การชำระเงินล้มเหลว";
                   default:
-                    return "ยืนยันการเดิมพัน";
+                    return "ยืนยันการชำระเงิน";
                 }
               })()}
             </h3>
@@ -185,7 +185,7 @@
           <!-- Bet Details -->
           <div class="mt-6">
             <h4 class="text-sm font-medium text-gray-900">
-              รายละเอียดการเดิมพัน
+              รายละเอียดการชำระเงิน
             </h4>
             <div class="mt-3 max-h-60 space-y-2 overflow-y-auto rounded-md">
               {#each orderDetails.orderBets as bet, index (getBetKey(bet, index))}
