@@ -18,6 +18,7 @@ export enum BetType {
 }
 
 export interface Lotto {
+    lotto_category: string;
     id: string;
     lotto_name: string;
     draw_frequency: DrawFrequency;
