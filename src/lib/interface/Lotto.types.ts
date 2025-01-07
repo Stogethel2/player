@@ -30,6 +30,10 @@ export interface Lotto {
     updated_at: string;
     deleted_at: string | null;
     default_close_bet_minutes: number;
+    headerColorClass?: string;
+    lottoRound?: LottoRound[] | null;
+    round_date_in_lottoRound?: string;
+    id_in_lottoRound?: string;
 }
 
 export interface LottoBetType {

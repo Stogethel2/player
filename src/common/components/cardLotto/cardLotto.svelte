@@ -15,6 +15,8 @@
   export let lottoId: string;
   export let endBetMin;
 
+  let not_open = false;
+
   let timerIntervalTarget: ReturnType<typeof setInterval>;
 
   function handleButtonClick() {
@@ -68,12 +70,17 @@
   }
 
   onMount(() => {
-    let targetDate = countDownText;
+    if(countDownText != ""){
+      let targetDate = countDownText;
 
-    if (targetDate && endBetMin >= 0) {
-      timerIntervalTarget = setInterval(() => {
-        dateRun = calculateTimeLeft(targetDate,endBetMin);
-      }, 1000);
+      if (targetDate && endBetMin >= 0) {
+        timerIntervalTarget = setInterval(() => {
+          dateRun = calculateTimeLeft(targetDate,endBetMin);
+        }, 1000);
+      }
+    }else{
+      open = false;
+      not_open = true;
     }
   });
 
@@ -119,7 +126,7 @@
       <div
         class="bg-red-500 text-white text-sm font-semibold rounded-full px-3 py-1 inline-block"
       >
-        หมดเวลารับแทง
+        {not_open ? "ยังไม่เปิด" : "หมดเวลารับแทง"}
       </div>
     {/if}
   </div>
@@ -132,7 +139,9 @@
         onClick={() => handleButtonClick()}
       />
     {:else}
-      <p class="text-sm text-gray-500 italic">หมดเวลารับแทงสำหรับงวดนี้</p>
+      <p class="text-sm text-gray-500 italic">
+        {not_open ? "จะเปิดให้บริการเร็วๆนี้" : "หมดเวลารับแทงสำหรับงวดนี้"}
+      </p>
     {/if}
   </div>
 </div>
