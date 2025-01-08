@@ -5,6 +5,7 @@
   import { Wallet, CirclePlus } from "lucide-svelte";
   import ThaiIcon from "$lib/assets/thailand_flag.png";
   import type { menuSetting } from "../../../interface/setting.type";
+  import { Home, Award, History, UserPlus, HelpCircle } from 'lucide-svelte';
 
   let settings: menuSetting = {
     menu: [],
@@ -46,7 +47,7 @@
       </div>
       <button
         on:click={toggleMenu}
-        class="menu text-white hover:text-red-800 border-white border-2 rounded p-1 transition duration-300 ease-in-out transform hover:scale-110"
+        class="toggle-menu menu text-white hover:text-red-800 border-white border-2 rounded p-1 transition duration-300 ease-in-out transform hover:scale-110"
         aria-label="Toggle menu"
       >
         <Menu size={28} />
@@ -117,3 +118,74 @@
     {/if}
   </div>
 </div>
+
+<div class="menu-mobile bg-gradient-to-r from-red-700 to-red-900 w-full">
+  {#each settings.menu as { path, label }}
+    <div class="menu-item-mobile">
+      <a
+        href={path}
+        on:click={closeMenu}
+        class="text-lg font-medium hover:text-red-200 transition duration-300 ease-in-out transform hover:translate-x-2"
+      >
+        {#if label == "หน้าแรก"}
+          <Home size={32}/>
+        {/if}
+        {#if label == "ผลรางวัล"}
+          <Award size={32}/>
+        {/if}
+        {#if label == "ประวัติการเดิมพัน"}
+          <History size={32}/>
+        {/if}
+        {#if label == "แนะนำเพื่อน"}
+          <UserPlus size={32}/>
+        {/if}
+        {#if label == "ช่วยเหลือ"}
+          <HelpCircle size={32}/>
+        {/if}
+      </a>
+    </div>
+  {/each}
+</div>
+
+<style>
+
+  .toggle-menu {
+    display: none;
+  }
+
+  .menu-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* background-color: #7f1d1d; */
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-item-mobile {
+    text-align: -webkit-center;
+    flex: 1;
+  }
+
+  .menu-item-mobile a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .menu-item-mobile a:hover {
+    text-decoration: underline;
+  }
+
+  @media (min-width: 768px) {
+    .menu-mobile {
+      display: none;
+    }
+    .toggle-menu {
+      display: flex;
+    }
+  }
+</style>
