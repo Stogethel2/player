@@ -47,11 +47,12 @@
                     <p>ที่เลือก</p>
                 </div>
             {:else}
-                {#each betGroups as { bet_type_id, betList } (bet_type_id)}
+                {#each betGroups as { bet_type_id, betList, lotto_name } (bet_type_id)}
                     <div class="mb-4">
                         <h3 class="font-semibold mb-2">
-                            {getBetTypeName(bet_type_id)}
+                            {lotto_name}
                         </h3>
+                        <h3 class="font-semibold mb-2">
                         {#each betList as bet (bet.temp_id)}
                             <div
                                 class="mb-2 last:mb-0 relative flex justify-center"

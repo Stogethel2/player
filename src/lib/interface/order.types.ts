@@ -13,6 +13,8 @@ export type OrderResponse = {
     status: string;
     total_amount: number;
     created_at: string;
+    lotto_id: string;
+    lotto_name: string;
     orderBets: OrderBet[];
 }
 

@@ -18,9 +18,9 @@
     onMount(async () => {
         try {
             const response = await orderApi.getOrderHistory();
-            console.log(response.orders);
 
             orders = response.orders;
+            console.log({ orders });
         } catch (err) {
             console.error("Error fetching orders:", err);
         } finally {
@@ -67,12 +67,11 @@
                             {#if order.status === "SUCCESS"}
                                 <CheckCircle2 class="w-7 h-7 text-green-400" />
                             {:else}
-                                <XCircle class="w-7 h-7 text-red-500" />
+                                <XCircle class="w-7 h-7 text-orange-500" />
                             {/if}
                             <div class="text-left">
-                              <!-- <span class="text-sm font-medium text-gray-900">{order.}</span> -->
-                                <p class="text-sm font-medium text-gray-900">
-                                    {formatDateTime(order.created_at, 0)}
+                                <p class="text-sl font-medium text-gray-900">
+                                    {order.lotto_name}
                                 </p>
                                 <p class="text-sm text-gray-600">
                                     ยอดรวมบิล ฿{order.total_amount.toFixed(2)}
@@ -80,6 +79,9 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-3">
+                            <p class="text-sm font-medium text-gray-900">
+                                {formatDateTime(order.created_at, 0)}
+                            </p>
                             <!-- <span class={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}>{order.status}</span> -->
                             <ChevronDown
                                 class={`w-5 h-5 text-gray-400 transition-transform ${
