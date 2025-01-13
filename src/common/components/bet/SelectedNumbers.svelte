@@ -31,10 +31,12 @@
                 ?.bet_type_name || bet_type_id
         );
     }
+
+    console.log({ $betListSummary });
 </script>
 
 <div class="h-full rounded pt-2 flex flex-col">
-    <h2 class="text-md font-light text-center">รายการแทง</h2>
+    <h2 class="text-md font-light text-center">รายการ</h2>
 
     <div class="flex-grow overflow-hidden">
         <div class={`h-full p-1 ${enableScrolling ? "overflow-y-auto" : ""}`}>
@@ -47,10 +49,10 @@
                     <p>ที่เลือก</p>
                 </div>
             {:else}
-                {#each betGroups as { bet_type_id, betList, lotto_name } (bet_type_id)}
+                {#each betGroups as { bet_type_id, betList, lotto_id } (bet_type_id)}
                     <div class="mb-4">
                         <h3 class="font-semibold mb-2">
-                            {lotto_name}
+                            {getBetTypeName(bet_type_id)}
                         </h3>
                         <h3 class="font-semibold mb-2">
                         {#each betList as bet (bet.temp_id)}

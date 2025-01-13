@@ -1,5 +1,7 @@
 export type Order = {
     order_id: string;
+    lotto_id: string;
+    lotto_name: string;
     orderBets: OrderBet[];
 
 }
