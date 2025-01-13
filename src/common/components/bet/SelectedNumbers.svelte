@@ -7,6 +7,9 @@
 
     export let availableBetTypes: LottoBetType[] = [];
 
+    // clear store
+    betStore.clearAll();
+
     const betListSummary = derived(betStore, () => {
         const summary = betStore.getSummary();
 
@@ -31,8 +34,6 @@
                 ?.bet_type_name || bet_type_id
         );
     }
-
-    console.log({ $betListSummary });
 </script>
 
 <div class="h-full rounded pt-2 flex flex-col">

@@ -194,9 +194,6 @@
                 >
                   <div>
                     <p class="text-sm font-medium text-gray-900">
-                      {bet.lotto_name}
-                    </p>
-                    <p class="text-sm font-medium text-gray-900">
                       {bet.bet_type_name}: <span class="text-blue-500">{bet.bet_number}</span>
                     </p>
                   </div>
