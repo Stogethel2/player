@@ -53,7 +53,7 @@
     </div>
 {:else}
     <div class="max-w-4xl mx-auto p-4">
-        <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการเดิมพัน</h1>
+        <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
 
         <div class="space-y-4">
             {#each orders as order}
@@ -170,7 +170,7 @@
 
             {#if orders.length === 0}
                 <div class="text-center py-8 text-gray-500">
-                    ไม่พบประวัติการแทง
+                    ไม่พบประวัติการซื้อ
                 </div>
             {/if}
         </div>

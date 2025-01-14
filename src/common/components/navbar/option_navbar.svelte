@@ -133,7 +133,7 @@
         {#if label == "ผลรางวัล"}
           <Award size={32}/>
         {/if}
-        {#if label == "ประวัติการเดิมพัน"}
+        {#if label == "ประวัติการซื้อ"}
           <History size={32}/>
         {/if}
         {#if label == "แนะนำเพื่อน"}
