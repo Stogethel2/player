@@ -58,10 +58,10 @@
 
   function handleKeypadPress(value: (typeof NUMPAD_LAYOUT)[number]): void {
     switch (value) {
-      case 'Rand':
+      case 'สุ่ม':
         handleDigitEntry(generateRandomDigit());
         break;
-      case 'Del':
+      case 'ลบ':
         deleteLastDigit();
         break;
       default:
@@ -125,13 +125,13 @@
     {#each NUMPAD_LAYOUT as value (value)}
       <button
         class="aspect-square w-full border rounded text-base sm:text-lg font-medium transition-colors duration-200"
-        class:bg-teal-500={value === "Rand"}
-        class:bg-red-500={value === "Del"}
+        class:bg-teal-500={value === "สุ่ม"}
+        class:bg-red-500={value === "ลบ"}
         class:bg-white={typeof value === "number"}
-        class:text-white={value === "Rand" || value === "Del"}
+        class:text-white={value === "สุ่ม" || value === "ลบ"}
         class:text-gray-700={typeof value === "number"}
-        class:hover:bg-teal-600={value === "Rand"}
-        class:hover:bg-red-600={value === "Del"}
+        class:hover:bg-teal-600={value === "สุ่ม"}
+        class:hover:bg-red-600={value === "ลบ"}
         class:hover:bg-gray-50={typeof value === "number"}
         class:active:bg-gray-100={typeof value === "number"}
         on:click={() => handleKeypadPress(value)}

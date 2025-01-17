@@ -8,9 +8,9 @@ export const NUMPAD_LAYOUT = [
     7,
     8,
     9,
-    "Rand",
+    "สุ่ม",
     0,
-    "Del",
+    "ลบ",
 ] as const;
 
 export const colorClasses: Record<string, string> = {
