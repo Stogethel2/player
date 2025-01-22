@@ -35,7 +35,7 @@
 <div class="p-2">
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
     {#each availableBetTypes as betType}
-      {#if betType.id}
+      {#if betType.is_active}
         <button
           class="p-2 rounded-lg text-xs sm:text-sm transition-colors duration-200 ease-in-out"
           class:active={isBetTypeSelected(betType.id)}
@@ -59,7 +59,7 @@
   button.active[aria-pressed="true"] {
     @apply bg-red-600;
   }
-  button.active[aria-pressed="true"]:nth-child(n + 5) {
+  /* button.active[aria-pressed="true"]:nth-child(n + 5) {
     @apply bg-yellow-600;
-  }
+  } */
 </style>
