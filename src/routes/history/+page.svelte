@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import { formatDateTime } from "$lib/utils/dateTime";
     import { orderApi } from "$lib/api/endpoint/order";
     import { CheckCircle2, XCircle, ChevronDown } from "lucide-svelte";
@@ -8,19 +8,42 @@
     import ConfirmPayment from "../../common/components/bet/ConfirmPayment.svelte";
     import { betCalculateApi } from "$lib";
 
-    let orders: OrderResponse[];
+    let orders: OrderResponse[] = [];
     let selectedOrderId: string | null = null;
     let isLoading = true;
     let error: string | null = null;
     let showPaymentSummary = false;
     let reorderedBet: Order;
+    let pageShow = 1;
+
+    let loading = false;
+    let allLoaded = false;
+    let newItems: OrderResponse[]
+
+    async function loadItems() {
+        if (loading || allLoaded) return;
+        loading = true;
+
+        try {
+            const response = await orderApi.getOrderHistory(pageShow);
+            newItems = response.orders;
+
+            if (newItems.length === 0) {
+                allLoaded = true;
+            } else {
+                orders = [...orders, ...newItems];
+                pageShow += 1;
+            }
+        } catch (error) {
+            console.error('Error loading items:', error);
+        } finally {
+            loading = false;
+        }
+    }
 
     onMount(async () => {
         try {
-            const response = await orderApi.getOrderHistory();
-
-            orders = response.orders;
-            console.log({ orders });
+            await loadItems();
         } catch (err) {
             console.error("Error fetching orders:", err);
         } finally {
@@ -43,6 +66,25 @@
         console.log(reorderedBet);
         showPaymentSummary = true;
     }
+
+    function handleScroll() {
+        if (typeof window === 'undefined') return;
+
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 50) {
+            loadItems();
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        window.addEventListener('scroll', handleScroll);
+    }
+
+    onDestroy(() => {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    });
 </script>
 
 {#if isLoading}
@@ -52,7 +94,7 @@
         <p>{error}</p>
     </div>
 {:else}
-    <div class="max-w-4xl mx-auto p-4">
+    <div class="max-w-4xl mx-auto p-4 mb-[50px]">
         <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
 
         <div class="space-y-4">

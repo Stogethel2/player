@@ -5,8 +5,8 @@ import type { Response } from '$lib/interface/order.types';
 import { getToken } from '../../../routes/seamless/auth.store';
 
 export const orderApi = {
-    getOrderHistory: async (): Promise<Response> => {
-        const response: AxiosResponse<ApiResponse<Response>> = await apiClient.get('order', {
+    getOrderHistory: async (page:number): Promise<Response> => {
+        const response: AxiosResponse<ApiResponse<Response>> = await apiClient.get(`order/${page}`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         });
         return response.data.data;

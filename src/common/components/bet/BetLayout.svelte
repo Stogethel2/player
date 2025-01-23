@@ -198,7 +198,7 @@
             </button>
 
             <!-- Header -->
-            <div class="p-2">
+            <div class="p-2 mb-4">
                 <div
                     class="flex flex-col sm:flex-row justify-between border-b pb-4"
                 >

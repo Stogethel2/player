@@ -64,7 +64,7 @@
 
 {#each uniqueLotteries as lottery}
 {#if lottery.lotto_category}
-<div class="grid border-8 border-gray-200 rounded-[1rem] shadow-md bg-white p-4">
+<div class="grid border-8 border-gray-200 rounded-[1rem] shadow-md bg-white p-4 mb-8">
   <div class="flex flex-row items-center border-b border-gray-300 pb-4">
     <p class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4">
       {lottery.lotto_category}
