@@ -23,6 +23,7 @@ export interface Lotto {
     lotto_name: string;
     draw_frequency: DrawFrequency;
     lotto_image: string;
+    lotto_rules: string;
     description: string;
     is_automatic_round: boolean;
     is_active: boolean;

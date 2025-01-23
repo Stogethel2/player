@@ -2,6 +2,8 @@ export type Order = {
     order_id: string;
     lotto_id: string;
     lotto_name: string;
+    lotto_round_id: string;
+    round_date: string;
     orderBets: OrderBet[];
 
 }
@@ -17,6 +19,8 @@ export type OrderResponse = {
     created_at: string;
     lotto_id: string;
     lotto_name: string;
+    lotto_round_id: string;
+    round_date: string;
     orderBets: OrderBet[];
 }
 
@@ -25,6 +29,7 @@ export type OrderBet = {
     lotto_id: string;
     lotto_name: string;
     lotto_round_id: string;
+    round_date: string;
     lotto_bet_type_id: string;
     lotto_round_loss_id: string;
     bet_type_name: string;

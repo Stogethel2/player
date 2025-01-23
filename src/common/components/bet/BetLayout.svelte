@@ -20,6 +20,8 @@
 
     /* Components */
     import BetAmountModal from "./BetAmountModal.svelte";
+    import LottoRulesModal from "./LottoRulesModal.svelte";
+    import LottoNumberBlock from "./LottoNumberBlock.svelte";
     import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
     import NumberPad from "./NumberPad.svelte";
     import PaymentSummary from "./ConfirmPayment.svelte";
@@ -40,6 +42,8 @@
     /* Main state */
     let selectedPlayMode = true;
     let showBetModal = false;
+    let showLottoRuleModal = false;
+    let showLottoNumberBlock = false;
     let showPaymentSummary = false;
     let order: Order | null = null;
     let lotteryRound: LottoRound | null = null;
@@ -157,6 +161,22 @@
         selectedPlayMode = togglePlayMode(selectedPlayMode, mode);
     }
 
+    function openLottoRuleModal() {
+        showLottoRuleModal = true;
+    }
+
+    function closeLottoRuleModal() {
+        showLottoRuleModal = false;
+    }
+
+    function openLottoNumberBlockModal() {
+        showLottoNumberBlock = true;
+    }
+
+    function closeLottoNumberBlockModal() {
+        showLottoNumberBlock = false;
+    }
+
     function openBetModal() {
         showBetModal = true;
     }
@@ -242,10 +262,30 @@
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-center text-gray-500 mt-4">
-                        <CircleHelp size={16} />
-                        <p class="text-xs sm:text-sm mx-1">Rules</p>
-                        <ChevronRight size={16} />
+                    <div class="flex items-center text-white mt-4">
+                        <button
+                            class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2"
+                            on:click={openLottoNumberBlockModal}
+                        >
+                            <div
+                                class="text-amber
+                                -300 font-bold text-sm flex items-center"
+                            >
+                                <p>รายเลขอั้น</p>
+                            </div>
+                        </button>
+
+                        <button
+                            class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2 ml-2"
+                            on:click={openLottoRuleModal}
+                        >
+                            <div
+                                class="text-amber
+                                -300 font-bold text-sm flex items-center"
+                            >
+                                <p>กฏิกา</p>
+                            </div>
+                        </button>
                     </div>
                 </div>
 
@@ -308,7 +348,7 @@
                                 class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
                                 disabled={enterPriceButton}
                             >
-                              ใส่ราคา
+                                ใส่ราคา
                             </button>
                         </div>
                     {:else}
@@ -334,6 +374,14 @@
     <BetAmountModal on:orderCreated={closeBetModal} on:cancel={closeBetModal} />
 {/if}
 
+{#if showLottoRuleModal}
+    <LottoRulesModal on:close={closeLottoRuleModal} />
+{/if}
+
+{#if showLottoNumberBlock}
+    <LottoNumberBlock on:close={closeLottoNumberBlockModal} />
+{/if}
+
 {#if showPaymentSummary && order}
     <PaymentSummary {order} on:cancel={handlePaymentCancel} />
 {/if}
@@ -355,8 +403,8 @@
     }
 
     button:disabled {
-      background-color: #9ae6b4;
-      cursor: not-allowed;
-      opacity: 0.7;
+        background-color: #9ae6b4;
+        cursor: not-allowed;
+        opacity: 0.7;
     }
 </style>

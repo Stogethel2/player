@@ -103,26 +103,37 @@
                     <!-- Order Header -->
                     <button
                         on:click={() => toggleOrderDetails(order.id)}
-                        class="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                        class="w-full p-2 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-1">
                             {#if order.status === "SUCCESS"}
                                 <CheckCircle2 class="w-7 h-7 text-green-400" />
                             {:else}
                                 <XCircle class="w-7 h-7 text-orange-500" />
                             {/if}
                             <div class="text-left">
-                                <p class="text-sl font-medium text-gray-900">
+                                <p
+                                    class="text-sm font-bold text-green-600"
+                                >
                                     {order.lotto_name}
                                 </p>
-                                <p class="text-sm text-gray-600">
+                                <p class="text-sm text-gray-600 font-bold">
                                     ยอดรวมบิล ฿{order.total_amount.toFixed(2)}
+                                </p>
+                                <p class="text-xs text-blue-600">
+                                    รอบ: {formatDateTime(order.round_date, 0)}
+                                </p>
+                                <p class="text-xs text-gray-600">
+                                    เลขที่บิล: {order.id}
                                 </p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <p class="text-sm font-medium text-gray-900">
-                                {formatDateTime(order.created_at, 0)}
+                        <div class="flex items-right space-x-1">
+                            <p class="text-xs text-gray-600">
+                                วันที่ซื้อ: {formatDateTime(
+                                    order.created_at,
+                                    0
+                                )}
                             </p>
                             <!-- <span class={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}>{order.status}</span> -->
                             <ChevronDown
