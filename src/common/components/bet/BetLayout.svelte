@@ -21,7 +21,7 @@
     /* Components */
     import BetAmountModal from "./BetAmountModal.svelte";
     import LottoRulesModal from "./LottoRulesModal.svelte";
-    import LottoNumberBlock from "./LottoNumberBlock.svelte";
+    import LottoNumberBlock from "./LottoNumberBlockModal.svelte";
     import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
     import NumberPad from "./NumberPad.svelte";
     import PaymentSummary from "./ConfirmPayment.svelte";
