@@ -108,8 +108,10 @@
                         <div class="flex items-center space-x-1">
                             {#if order.status === "SUCCESS"}
                                 <CheckCircle2 class="w-7 h-7 text-green-400" />
-                            {:else}
+                            {:else if order.status === "PENDING"}
                                 <XCircle class="w-7 h-7 text-orange-500" />
+                            {:else}
+                                <XCircle class="w-7 h-7 text-red-500" />
                             {/if}
                             <div class="text-left">
                                 <p

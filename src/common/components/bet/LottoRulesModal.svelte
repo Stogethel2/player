@@ -2,7 +2,6 @@
     import { createEventDispatcher, onMount } from "svelte";
     import type { Lotto } from "$lib/interface/lotto.types";
     import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
-    import { formatDateTime } from "$lib/utils/dateTime";
     import { lottoApi, lottoRoundApi } from "$lib";
 
     import Loading from "../loading/loading.svelte";
@@ -52,19 +51,18 @@
         <!-- Content -->
         <div class="p-4 space-y-1 overflow-y-auto">
             {#if lotto}
-                <h3 class="text-lg font-medium">{lotto.lotto_name}</h3>
+                <h3 class="text-lg font-medium"><u>รายละเอียดกฏการเล่น - {lotto.lotto_name}</u></h3>
                 <div style="color: black;">
                     <!-- รายละเอียดกฏการเล่น -->
                     <div class="mt-4">
-                        <h4 class="text-lg font-medium">รายละเอียดกฏการเล่น</h4>
                         <div class="prose">
-                            <p> {lotto.lotto_rules}</p>
+                            <p>{lotto.lotto_rules}</p>
                         </div>
                     </div>
 
                     <!-- รายละเอียดการเดิมพัน -->
                     <table class="border-collapse w-full">
-                        <thead>
+                        <thead class="bg-red-600 text-white">
                             <tr>
                                 <th class="border border-gray-300 px-4 py-2"
                                     >ประเภท</th

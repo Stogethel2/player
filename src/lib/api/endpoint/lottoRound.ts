@@ -17,4 +17,10 @@ export const lottoRoundApi = {
         const response: AxiosResponse<ApiResponse<LottoRound>> = await apiClient.get(`/public/lotto-round/${id}`);
         return response.data.data;
     },
+
+    /* Get lotto block by ID */
+    getLottoBlockById: async (id: string): Promise<LottoRound> => {
+        const response: AxiosResponse<ApiResponse<LottoRound>> = await apiClient.get(`/public/lotto-block/${id}`);
+        return response.data.data;
+    },
 };
