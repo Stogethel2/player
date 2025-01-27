@@ -28,13 +28,15 @@
 
   function handleAmountChange(
     event: CustomEvent<{
+      lotto_id: string,
+      lotto_name: string,
       bet_type_id: string;
       temp_id: string;
       amount: number;
     }>
   ) {
-    const { bet_type_id, temp_id, amount } = event.detail;
-    betStore.updateAmount(bet_type_id, temp_id, amount);
+    const { lotto_id, lotto_name, bet_type_id, temp_id, amount } = event.detail;
+    betStore.updateAmount(lotto_id, lotto_name, bet_type_id, temp_id, amount);
     dispatch("selectionChange", {
       selectedBets: getBetsByTypeId(bet_type_id),
     });

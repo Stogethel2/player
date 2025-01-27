@@ -56,6 +56,8 @@
 
     dispatch("amountChange", {
       bet_type_id,
+      lotto_id: bet.lotto_id,
+      lotto_name: bet.lotto_name,
       temp_id: bet.temp_id,
       amount: newAmount,
     });
