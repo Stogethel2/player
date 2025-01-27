@@ -18,7 +18,7 @@
 
     let loading = false;
     let allLoaded = false;
-    let newItems: OrderResponse[]
+    let newItems: OrderResponse[];
 
     async function loadItems() {
         if (loading || allLoaded) return;
@@ -35,7 +35,7 @@
                 pageShow += 1;
             }
         } catch (error) {
-            console.error('Error loading items:', error);
+            console.error("Error loading items:", error);
         } finally {
             loading = false;
         }
@@ -68,21 +68,22 @@
     }
 
     function handleScroll() {
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
 
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        const { scrollTop, scrollHeight, clientHeight } =
+            document.documentElement;
         if (scrollTop + clientHeight >= scrollHeight - 50) {
             loadItems();
         }
     }
 
-    if (typeof window !== 'undefined') {
-        window.addEventListener('scroll', handleScroll);
+    if (typeof window !== "undefined") {
+        window.addEventListener("scroll", handleScroll);
     }
 
     onDestroy(() => {
-        if (typeof window !== 'undefined') {
-            window.removeEventListener('scroll', handleScroll);
+        if (typeof window !== "undefined") {
+            window.removeEventListener("scroll", handleScroll);
         }
     });
 </script>
@@ -105,41 +106,72 @@
                         on:click={() => toggleOrderDetails(order.id)}
                         class="w-full p-2 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
-                        <div class="flex items-center space-x-1">
-                            {#if order.status === "SUCCESS"}
-                                <CheckCircle2 class="w-7 h-7 text-green-400" />
-                            {:else if order.status === "PENDING"}
-                                <XCircle class="w-7 h-7 text-orange-500" />
-                            {:else}
-                                <XCircle class="w-7 h-7 text-red-500" />
-                            {/if}
-                            <div class="text-left">
-                                <p
-                                    class="text-sm font-bold text-green-600"
-                                >
-                                    {order.lotto_name}
-                                </p>
-                                <p class="text-sm text-gray-600 font-bold">
-                                    ยอดรวมบิล ฿{order.total_amount.toFixed(2)}
-                                </p>
-                                <p class="text-xs text-blue-600">
-                                    รอบ: {formatDateTime(order.round_date, 0)}
-                                </p>
-                                <p class="text-xs text-gray-600">
-                                    เลขที่บิล: {order.id}
-                                </p>
+                        <div class="grid grid-cols-12 w-full text-sm text-gray-800 p-1 gap-1">
+                            <div
+                                class="col-span-12 text-green-600 text-left"
+                            >
+                                <span class="font-bold">{order.lotto_name}</span>
+                                <span class="text-gray-600 font-bold">
+                                    งวดที่:</span>
+                                <span class="text-blue-600">
+                                    {formatDateTime(
+                                        order.round_date,
+                                        0
+                                    )}
+                                </span>
+                            </div>
+                            <div
+                                class="col-span-12 text-left border-b border-gray-400"
+                            >
+                                <span class="font-bold"
+                                    >เลขที่บิล:
+                                </span>
+                                <span class="text-xs text-blue-600">{order.id}</span>
+                            </div>
+                            <!-- First Column -->
+                            <div class="col-span-4 text-left">
+                                <div>
+                                    ยอดรวมบิล
+                                </div>
+                                <div class="text-xs text-gray-600 font-bold">
+                                    ฿{order.total_amount.toFixed(2)}
+                                </div>
+                            </div>
+                            <!-- Second Column -->
+                            <div class="col-span-4">
+                                <div>
+                                    วันที่ซื้อ
+                                </div>
+                                <div class="text-xs text-gray-600 font-bold">
+                                    {formatDateTime(order.created_at, 0)}
+                                </div>
+                            </div>
+                            <!-- Third Column -->
+                            <div class="col-span-4">
+                                <div>
+                                    สถานะชำระเงิน
+                                </div>
+                                <div>
+                                    {#if order.status === "SUCCESS"}
+                                        <span class="text-green-600 font-bold"
+                                            >สำเร็จ</span
+                                        >
+                                    {:else if order.status === "PENDING"}
+                                        <span class="text-orange-600 font-bold"
+                                            >รอชำระ</span
+                                        >
+                                    {:else}
+                                        <span class="text-red-600 font-bold"
+                                            >ไม่สำเร็จ</span
+                                        >
+                                    {/if}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-right space-x-1">
-                            <p class="text-xs text-gray-600">
-                                วันที่ซื้อ: {formatDateTime(
-                                    order.created_at,
-                                    0
-                                )}
-                            </p>
-                            <!-- <span class={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}>{order.status}</span> -->
+                        <!-- Chevron -->
+                        <div>
                             <ChevronDown
-                                class={`w-5 h-5 text-gray-400 transition-transform ${
+                                class={`w-5 h-5 text-gray-600 transition-transform ${
                                     selectedOrderId === order.id
                                         ? "transform rotate-180"
                                         : ""
@@ -154,7 +186,7 @@
                             <div class="space-y-3">
                                 {#each order.orderBets as bet}
                                     <div
-                                        class="bg-gray-50 p-3 rounded-lg grid grid-cols-3 gap-2 text-sm"
+                                        class="bg-gray-50 p-3 rounded-lg grid grid-cols-4 gap-2 text-sm"
                                     >
                                         <div>
                                             <p class="text-gray-600">
@@ -182,17 +214,36 @@
                                                 ฿{bet.payout}
                                             </p>
                                         </div>
-                                        <!-- <div>
-                                            <p class="text-gray-600">
-                                                วันที่แทง
-                                            </p>
-                                            <p class="font-medium">
-                                                {formatDateTime(
-                                                    order.created_at,
-                                                    0
-                                                )}
-                                            </p>
-                                        </div> -->
+                                        <div>
+                                            {#if bet.lotto_result === "WIN"}
+                                                <p class="text-gray-600">
+                                                    ผลรางวัล
+                                                </p>
+                                                <p
+                                                    class="font-medium text-green-600"
+                                                >
+                                                    ถูกรางวัล
+                                                </p>
+                                            {:else if bet.lotto_result === "LOSE"}
+                                                <p class="text-gray-600">
+                                                    ผลรางวัล
+                                                </p>
+                                                <p
+                                                    class="font-medium text-red-600"
+                                                >
+                                                    ไม่ถูกรางวัล
+                                                </p>
+                                            {:else}
+                                                <p class="text-gray-600">
+                                                    ผลรางวัล
+                                                </p>
+                                                <p
+                                                    class="font-medium text-blue-600"
+                                                >
+                                                    รอออกผล
+                                                </p>
+                                            {/if}
+                                        </div>
                                     </div>
                                 {/each}
 

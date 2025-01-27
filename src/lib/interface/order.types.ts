@@ -36,4 +36,5 @@ export type OrderBet = {
     bet_amount: number;
     bet_number: string;
     payout: number;
+    lotto_result: string;
 }
