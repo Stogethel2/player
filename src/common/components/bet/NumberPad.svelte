@@ -92,6 +92,7 @@
   function resetDigits(): void {
     digits = Array(digitsCount).fill("");
     activeDigitIndex = 0;
+    isNumberComplete = false;
     focusDigitInput(activeDigitIndex);
   }
 
