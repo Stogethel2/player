@@ -123,6 +123,11 @@
     }
 
     onMount(async () => {
+        // check Auth
+        const token = localStorage.getItem("token");
+        if (token === 'null') {
+            goto("/seamless");
+        }
         const urlParams = new URLSearchParams(window.location.search);
         const lottoId = urlParams.get("lottoId");
 
@@ -283,7 +288,7 @@
                                 class="text-amber
                                 -300 font-bold text-sm flex items-center"
                             >
-                                <p>กฏิกา</p>
+                                <p>กติกา</p>
                             </div>
                         </button>
                     </div>

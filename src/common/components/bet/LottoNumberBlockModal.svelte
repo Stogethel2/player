@@ -5,7 +5,6 @@
     import type { Lotto } from "$lib/interface/lotto.types";
     import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
 
-
     import { formatDateTime } from "$lib/utils/dateTime";
     import { lottoApi, lottoRoundApi } from "$lib";
 
@@ -40,7 +39,12 @@
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
         >
-            <h2 class="text-lg font-medium">รายการเลขอั้นงวด - {formatDateTime(lotteryRound?.round_date ?? '', 0)}</h2>
+            <h2 class="text-lg font-medium">
+                รายการเลขอั้นงวด - {formatDateTime(
+                    lotteryRound?.round_date ?? "",
+                    0
+                )}
+            </h2>
             <button
                 class="text-2xl hover:opacity-80 transition-opacity"
                 disabled={isLoading}
@@ -51,7 +55,7 @@
         </header>
 
         <!-- Content -->
-        <div class="p-4 space-y-1 overflow-y-auto">
+        <div class="p-4 space-y-1 overflow-x-auto overflow-y-auto max-h-[600px]">
             {#if lotto}
                 <div style="color: black;">
                     <!-- รายละเอียดการเดิมพัน -->
@@ -69,16 +73,18 @@
                         <tbody>
                             {#if lotteryRound}
                                 {#each lotteryRound.lottoBetTypes as betType}
-                                    <tr>
-                                        <td
-                                            class="border border-gray-300 px-4 py-2 text-sm"
-                                            >{betType.bet_type_name}</td
-                                        >
-                                        <td
-                                            class="border border-gray-300 px-4 py-2 text-right text-sm"
-                                            >{betType.current_payout_rate}</td
-                                        >
-                                    </tr>
+                                    {#if betType.is_active}
+                                        <tr>
+                                            <td
+                                                class="border border-gray-300 px-4 py-2 text-sm"
+                                                >{betType.bet_type_name}</td
+                                            >
+                                            <td
+                                                class="border border-gray-300 px-4 py-2 text-right text-sm"
+                                                >{betType.current_payout_rate}</td
+                                            >
+                                        </tr>
+                                    {/if}
                                 {/each}
                             {:else}
                                 <tr>

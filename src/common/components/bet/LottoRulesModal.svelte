@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
-    import type { Lotto } from "$lib/interface/lotto.types";
+    import type { BetType, Lotto } from "$lib/interface/lotto.types";
     import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
     import { lottoApi, lottoRoundApi } from "$lib";
 
@@ -19,6 +19,9 @@
     }
 
     onMount(async () => {
+        // Check Auth token
+        
+
         const urlParams = new URLSearchParams(window.location.search);
         const lottoRoundId = urlParams.get("lottoId");
 
@@ -38,7 +41,7 @@
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
         >
-            <h2 class="text-lg font-medium">กฏิกา</h2>
+            <h2 class="text-lg font-medium">กติกา</h2>
             <button
                 class="text-2xl hover:opacity-80 transition-opacity"
                 disabled={isLoading}
@@ -49,32 +52,45 @@
         </header>
 
         <!-- Content -->
-        <div class="p-4 space-y-1 overflow-y-auto">
+        <div
+            class="p-4 space-y-1 overflow-x-auto overflow-y-auto max-h-[600px]"
+        >
             {#if lotto}
-                <h3 class="text-lg font-medium"><u>รายละเอียดกฏการเล่น - {lotto.lotto_name}</u></h3>
-                <div style="color: black;">
-                    <!-- รายละเอียดกฏการเล่น -->
-                    <div class="mt-4">
-                        <div class="prose">
-                            <p>{lotto.lotto_rules}</p>
-                        </div>
-                    </div>
+                <h3 class="text-lg font-bold">
+                    <u>รายละเอียดกฏการเล่น - {lotto.lotto_name}</u>
+                </h3>
+                <br />
 
-                    <!-- รายละเอียดการเดิมพัน -->
-                    <table class="border-collapse w-full">
-                        <thead class="bg-red-600 text-white">
-                            <tr>
-                                <th class="border border-gray-300 px-4 py-2"
-                                    >ประเภท</th
-                                >
-                                <th class="border border-gray-300 px-4 py-2"
-                                    >อัตราการจ่าย บาทละ</th
-                                >
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {#if lotteryRound}
-                                {#each lotteryRound.lottoBetTypes as betType}
+                <!-- รายละเอียดกฏการเล่น -->
+                <div class="mt-2 space-y-2">
+                    <div class="prose">
+                        {@html lotto.lotto_rules}
+                    </div>
+                </div>
+
+                <p>&nbsp;</p>
+
+                <!-- รายละเอียดการเดิมพัน -->
+                <div style="color: black;">
+                    <h3 class="text-lg font-bold">
+                        <u>อัตราการจ่าย</u>
+                    </h3>
+                </div>
+                <table class="border-collapse w-full">
+                    <thead class="bg-red-600 text-white">
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2"
+                                >ประเภท</th
+                            >
+                            <th class="border border-gray-300 px-4 py-2"
+                                >บาทละ</th
+                            >
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#if lotteryRound}
+                            {#each lotteryRound.lottoBetTypes as betType}
+                                {#if betType.is_active}
                                     <tr>
                                         <td
                                             class="border border-gray-300 px-4 py-2 text-sm"
@@ -85,11 +101,11 @@
                                             >{betType.current_payout_rate}</td
                                         >
                                     </tr>
-                                {/each}
-                            {/if}
-                        </tbody>
-                    </table>
-                </div>
+                                {/if}
+                            {/each}
+                        {/if}
+                    </tbody>
+                </table>
             {:else}
                 <Loading />
             {/if}
