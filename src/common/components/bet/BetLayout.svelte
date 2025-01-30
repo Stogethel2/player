@@ -10,6 +10,7 @@
     import { togglePlayMode } from "$lib/utils/play";
     import { formatDateTime } from "$lib/utils/dateTime";
     import { lottoRoundApi } from "$lib";
+    import { userAuth } from "$lib/utils/userAuth";
 
     import {
         ChevronLeft,
@@ -92,6 +93,7 @@
     function calculateTimeLeft(targetDate: string, endBetMin: number): string {
         let now = new Date();
         let date = new Date(targetDate.replace("T", " ").split(".")[0]);
+        date.setHours(date.getHours() + 7);
 
         let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
         let difference = Number(end_bet_min) - Number(now);
@@ -123,11 +125,8 @@
     }
 
     onMount(async () => {
-        // check Auth
-        const token = localStorage.getItem("token");
-        if (token === 'null') {
-            goto("/seamless");
-        }
+        userAuth();
+
         const urlParams = new URLSearchParams(window.location.search);
         const lottoId = urlParams.get("lottoId");
 
