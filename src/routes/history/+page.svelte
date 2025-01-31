@@ -267,62 +267,73 @@
                     {#if selectedOrderId === order.id}
                         <div class="border-t border-gray-200 p-4">
                             <div class="space-y-3">
-                                <div class="bg-gray-50 p-3 rounded-lg grid grid-cols-5 gap-2 text-sm text-center" >
+                                <div
+                                    class="bg-gray-50 p-3 rounded-lg grid grid-cols-5 gap-2 text-sm text-center"
+                                >
                                     <div>
-                                        <p class="text-gray-600 font-bold">ประเภท</p>
+                                        <p
+                                            class="text-gray-600 font-bold text-left"
+                                        >
+                                            ประเภท
+                                        </p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600 font-bold">เลข</p>
+                                        <p class="text-gray-600 font-bold">
+                                            เลข
+                                        </p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600 font-bold">ซื้อ</p>
+                                        <p
+                                            class="text-gray-600 font-bold text-right"
+                                        >
+                                            ซื้อ
+                                        </p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600 font-bold">อัตราจ่าย</p>
+                                        <p
+                                            class="text-gray-600 font-bold text-right"
+                                        >
+                                            อัตราจ่าย
+                                        </p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600 font-bold">ผลรางวัล</p>
+                                        <p
+                                            class="text-gray-600 font-bold text-right"
+                                        >
+                                            ผลรางวัล
+                                        </p>
                                     </div>
                                     {#each order.orderBets as bet}
-                                        <div>
-                                            <p class="font-medium">
-                                                {bet.bet_type_name}
-                                            </p>
+                                        <div class="text-left">
+                                            {bet.bet_type_name}
                                         </div>
                                         <div>
-                                            <p class="font-medium">
-                                                {bet.bet_number}
-                                            </p>
+                                            {bet.bet_number}
                                         </div>
-                                        <div>
-                                            <p class="font-medium">
-                                                ฿{bet.bet_amount}
-                                            </p>
+                                        <div class="text-right">
+                                            {bet.bet_amount}
                                         </div>
-                                        <div>
-                                            <p
-                                                class={`font-bold ${order.status === "SUCCESS" ? "text-green-600" : "text-red-600"}`}
-                                            >
-                                                ฿{bet.payout}
-                                            </p>
+                                        <div class="text-right">
+                                            {bet.payout}
                                         </div>
-                                        <div>
+                                        <div class="text-right">
                                             {#if bet.lotto_result === "WIN"}
-                                                <p
-                                                    class="font-medium text-green-600"
-                                                >
-                                                    {(bet.payout * bet.bet_amount).toFixed(2)}
+                                                <p class="text-green-600">
+                                                    {(
+                                                        bet.payout *
+                                                        bet.bet_amount
+                                                    ).toFixed(2)}
                                                 </p>
                                             {:else if bet.lotto_result === "LOSE"}
-                                                <p
-                                                    class="font-medium text-red-600"
-                                                >
+                                                <p class="text-orange-600">
                                                     ไม่ถูกรางวัล
                                                 </p>
+                                            {:else if order.status === "FAILED"}
+                                                <p class="text-red-600">
+                                                    ยกเลิก
+                                                </p>
                                             {:else}
-                                                <p
-                                                    class="font-medium text-blue-600"
-                                                >
+                                                <p class="text-blue-600">
                                                     รอออกผล
                                                 </p>
                                             {/if}
