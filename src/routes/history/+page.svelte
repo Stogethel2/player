@@ -7,6 +7,8 @@
     import Loading from "../../common/components/loading/loading.svelte";
     import ConfirmPayment from "../../common/components/bet/ConfirmPayment.svelte";
     import { betCalculateApi } from "$lib";
+    import { userAuth } from "$lib/utils/userAuth";
+
 
     let orders: OrderResponse[] = [];
     let selectedOrderId: string | null = null;
@@ -66,6 +68,8 @@
 
     onMount(async () => {
         try {
+            userAuth();
+            
             lottoResult = "PENDING";
             await loadItems();
         } catch (err) {

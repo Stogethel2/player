@@ -39,7 +39,7 @@
 >
     <div class="flex flex-col sm:flex-row items-center justify-between w-full">
         <h1 class="text-amber-300 font-bold text-2xl mb-4 sm:mb-0">
-            <!-- {settings.logo.value} -->
+            {settings.logo.value}
         </h1>
         <div
             class="flex border-2 rounded-md justify-between items-center w-full sm:w-auto max-w-full sm:max-w-xs"

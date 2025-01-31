@@ -61,5 +61,6 @@
   <Navbar {name} {credits} {currency} />
   {@render children()}
 {:else}
-  <h1>Token doesn't work</h1>
+  <h1>Token has expired</h1>
+  <h1>Please login again</h1>
 {/if}
