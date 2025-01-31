@@ -28,6 +28,7 @@ export function userAuth() {
         const exp = new Date(tokenExp * 1000);
         if (now > exp) {
             localStorage.removeItem("username");
+            localStorage.removeItem("agent_name");
             localStorage.removeItem("token");
             goto("/seamless");
         }
@@ -35,4 +36,11 @@ export function userAuth() {
         console.error(error);
         goto("/seamless");
     }
+}
+
+export function userLogout() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("agent_name");
+    localStorage.removeItem("token");
+    location.reload();
 }

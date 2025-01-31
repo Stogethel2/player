@@ -1,9 +1,10 @@
 <script lang="ts">
     import LogOut from "lucide-svelte/icons/log-out";
     import SquareUserRound from "lucide-svelte/icons/square-user-round";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import type { brandSetting } from "../../../interface/setting.type";
     import { goto } from "$app/navigation";
+    import { userAuth, userLogout } from "$lib/utils/userAuth";
 
     let settings: brandSetting = {
         logo: { type: "text", value: "Loading..." },
@@ -28,11 +29,9 @@
     }
 
     const logout = async (): Promise<void> => {
-        localStorage.removeItem("username");
-        localStorage.removeItem("token");
-        await goto("/seamless?token=null", { replaceState: true });
-        location.reload();
+        userLogout();
     };
+
 </script>
 
 <div

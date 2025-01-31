@@ -19,13 +19,14 @@
     let loading = false;
     let allLoaded = false;
     let newItems: OrderResponse[];
+    let orderResult = "PENDING";
 
     async function loadItems() {
         if (loading || allLoaded) return;
         loading = true;
 
         try {
-            const response = await orderApi.getOrderHistory(pageShow);
+            const response = await orderApi.getOrderHistory(pageShow,orderResult);
             newItems = response.orders;
 
             if (newItems.length === 0) {
@@ -43,6 +44,7 @@
 
     onMount(async () => {
         try {
+            orderResult = "PENDING";
             await loadItems();
         } catch (err) {
             console.error("Error fetching orders:", err);
@@ -96,7 +98,33 @@
     </div>
 {:else}
     <div class="max-w-4xl mx-auto p-4 mb-[50px]">
-        <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
+        <div class="space-y-4 mb-4"> 
+            <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
+
+            <div class="flex items-center text-white mt-4">
+                <button
+                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2"
+                >
+                    <div
+                        class="text-amber
+                    -300 font-bold text-sm flex items-center"
+                    >
+                        <p>ยังไม่ออกผล</p>
+                    </div>
+                </button>
+
+                <button
+                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2 ml-2"
+                >
+                    <div
+                        class="text-amber
+                    -300 font-bold text-sm flex items-center"
+                    >
+                        <p>ออกผลแล้ว</p>
+                    </div>
+                </button>
+            </div>
+        </div>
 
         <div class="space-y-4">
             {#each orders as order}
@@ -106,51 +134,44 @@
                         on:click={() => toggleOrderDetails(order.id)}
                         class="w-full p-2 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
-                        <div class="grid grid-cols-12 w-full text-sm text-gray-800 p-1 gap-1">
-                            <div
-                                class="col-span-12 text-green-600 text-left"
-                            >
-                                <span class="font-bold">{order.lotto_name}</span>
+                        <div
+                            class="grid grid-cols-12 w-full text-sm text-gray-800 p-1 gap-1"
+                        >
+                            <div class="col-span-12 text-green-600 text-left">
+                                <span class="font-bold">{order.lotto_name}</span
+                                >
                                 <span class="text-gray-600 font-bold">
-                                    งวดที่:</span>
+                                    งวดที่:</span
+                                >
                                 <span class="text-blue-600">
-                                    {formatDateTime(
-                                        order.round_date,
-                                        0
-                                    )}
+                                    {formatDateTime(order.round_date, 0)}
                                 </span>
                             </div>
                             <div
                                 class="col-span-12 text-left border-b border-gray-400"
                             >
-                                <span class="font-bold"
-                                    >เลขที่บิล:
-                                </span>
-                                <span class="text-xs text-blue-600">{order.id}</span>
+                                <span class="font-bold">เลขที่บิล: </span>
+                                <span class="text-xs text-blue-600"
+                                    >{order.id}</span
+                                >
                             </div>
                             <!-- First Column -->
                             <div class="col-span-4 text-left">
-                                <div>
-                                    ยอดรวมบิล
-                                </div>
+                                <div>ยอดรวมบิล</div>
                                 <div class="text-xs text-gray-600 font-bold">
                                     ฿{order.total_amount.toFixed(2)}
                                 </div>
                             </div>
                             <!-- Second Column -->
                             <div class="col-span-4">
-                                <div>
-                                    วันที่ซื้อ
-                                </div>
+                                <div>วันที่ซื้อ</div>
                                 <div class="text-xs text-gray-600 font-bold">
                                     {formatDateTime(order.created_at, 0)}
                                 </div>
                             </div>
                             <!-- Third Column -->
                             <div class="col-span-4">
-                                <div>
-                                    สถานะชำระเงิน
-                                </div>
+                                <div>สถานะชำระเงิน</div>
                                 <div>
                                     {#if order.status === "SUCCESS"}
                                         <span class="text-green-600 font-bold"
