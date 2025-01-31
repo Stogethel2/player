@@ -3,7 +3,8 @@
   import AlarmClock from "lucide-svelte/icons/alarm-clock";
   import ButtonCardLotto from "./buttonCardLotto.svelte";
   import { goto } from "$app/navigation";
-  export let headerColorClass = "bg-gradient-to-r from-blue-500 to-purple-600";
+  export let primary_color = "#1E40AF";
+  export let secondary_color = "'#3B82F6";
   export let headerImageBackground: string | null = null;
   export let icon;
   export let title;
@@ -96,7 +97,8 @@
 <div
   class="card w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 ease-in-out transform hover:shadow-lg"
 >
-  <div class="{headerColorClass} rounded-t-xl relative p-4">
+  <div class="rounded-t-xl relative p-4" 
+  style="background: linear-gradient(to right, {primary_color}, {secondary_color})">
     {#if headerImageBackground}
       <img
         src={headerImageBackground}

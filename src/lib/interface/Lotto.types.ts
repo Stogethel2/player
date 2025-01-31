@@ -24,6 +24,9 @@ export interface Lotto {
     lotto_name: string;
     draw_frequency: DrawFrequency;
     lotto_image: string;
+    lotto_background?: string;
+    primary_color?: string;
+    secondary_color?: string;
     lotto_rules: string;
     description: string;
     is_automatic_round: boolean;
@@ -32,7 +35,6 @@ export interface Lotto {
     updated_at: string;
     deleted_at: string | null;
     default_close_bet_minutes: number;
-    headerColorClass?: string;
     lottoRound?: LottoRound[] | null;
     round_date_in_lottoRound?: string;
     id_in_lottoRound?: string;
@@ -69,5 +71,4 @@ export interface LottoRound {
     deleted_at: string | null;
     lotto: Lotto;
     lottoBetTypes: LottoBetType[];
-    headerColorClass?: string;
 }
