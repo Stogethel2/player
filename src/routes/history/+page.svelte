@@ -19,14 +19,13 @@
     let loading = false;
     let allLoaded = false;
     let newItems: OrderResponse[];
-    let orderResult = "PENDING";
 
     async function loadItems() {
         if (loading || allLoaded) return;
         loading = true;
 
         try {
-            const response = await orderApi.getOrderHistory(pageShow,orderResult);
+            const response = await orderApi.getOrderHistory(pageShow);
             newItems = response.orders;
 
             if (newItems.length === 0) {
@@ -44,7 +43,6 @@
 
     onMount(async () => {
         try {
-            orderResult = "PENDING";
             await loadItems();
         } catch (err) {
             console.error("Error fetching orders:", err);
@@ -98,33 +96,7 @@
     </div>
 {:else}
     <div class="max-w-4xl mx-auto p-4 mb-[50px]">
-        <div class="space-y-4 mb-4"> 
-            <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
-
-            <div class="flex items-center text-white mt-4">
-                <button
-                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2"
-                >
-                    <div
-                        class="text-amber
-                    -300 font-bold text-sm flex items-center"
-                    >
-                        <p>ยังไม่ออกผล</p>
-                    </div>
-                </button>
-
-                <button
-                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2 ml-2"
-                >
-                    <div
-                        class="text-amber
-                    -300 font-bold text-sm flex items-center"
-                    >
-                        <p>ออกผลแล้ว</p>
-                    </div>
-                </button>
-            </div>
-        </div>
+        <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
 
         <div class="space-y-4">
             {#each orders as order}
