@@ -2,6 +2,7 @@ import { getUsername, username, getAgentName } from './../../../routes/seamless/
 import type { ApiResponseBalance } from '$lib';
 import type { AxiosResponse } from 'axios';
 import apiClientWallet from '../apiClientWallet';
+import apiClient from '../apiClient';
 import type { BalanceResponse, PlaceBetResponse } from '$lib/interface/balance.types';
 
 
@@ -20,7 +21,7 @@ export const walletApi = {
     },
 
     createBet: async (ticketId: string, roundId: string, amount: number): Promise<PlaceBetResponse> => {
-        const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClientWallet.post('/placeBet', {
+        const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClient.post('/public/placeBet', {
             agent_name: getAgentName(),
             username: getUsername(),    
             betAmount: amount,
