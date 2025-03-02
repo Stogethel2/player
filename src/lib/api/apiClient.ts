@@ -2,7 +2,7 @@ import axios from 'axios';
 import { env } from './config';
 
 const apiClient = axios.create({
-    baseURL: env.API_URL+':'+env.API_PORT,
+    baseURL: env.API_URL,
     timeout: env.API_TIMEOUT,
     headers: {
         'Content-Type': 'application/json',
