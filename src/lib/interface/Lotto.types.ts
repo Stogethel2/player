@@ -66,6 +66,7 @@ export interface LottoRound {
     possible_loss: number;
     is_active: boolean;
     is_loss_round_open: boolean;
+    is_pending_result: boolean;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
