@@ -22,18 +22,25 @@ interface User {
 export const loginApi = {
     /* Get all active lottos */
     seamlesslogin: async (): Promise<LoginData> => {
-        const response: AxiosResponse<LoginData> = await apiClient.post('/users/seamlesslogin', {
-            username: "test01",
-            isMobileLogin: true
-        });
-        return response.data;
+        try {
+            const response: AxiosResponse<LoginData> = await apiClient.post('/users/seamlesslogin');
+            return response.data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     },
 
     getUsers: async (token: string): Promise<User> => {
-        const response: AxiosResponse<User> = await apiClient.get('/users/me', {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        return response.data;
+        try {
+            const response: AxiosResponse<User> = await apiClient.get('/users/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     },
 };
 
