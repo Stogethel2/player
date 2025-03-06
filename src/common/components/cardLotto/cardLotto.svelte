@@ -15,6 +15,7 @@
   export let name: string;
   export let lottoId: string;
   export let endBetMin;
+  export let is_pending_result: boolean;
 
   let not_open = false;
 
@@ -79,6 +80,11 @@
           dateRun = calculateTimeLeft(targetDate,endBetMin);
         }, 1000);
       }
+
+      if(is_pending_result){
+        open = false;
+        not_open = false;
+      }
     }else{
       open = false;
       not_open = true;
@@ -133,7 +139,7 @@
     {/if}
   </div>
   <div class="px-2 md:px-4 py-2 bg-white">
-    {#if open}
+    {#if open }
       <ButtonCardLotto
         text="ซื้อหวย"
         {agent}

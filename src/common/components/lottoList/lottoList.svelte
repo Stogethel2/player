@@ -102,8 +102,8 @@
                 {:else}
                     {#each lottery.lotto_category == "หวยไทย" ? playlistTH : playlistAbroad as card}
                         <CardLotto
-                        primary_color={card.primary_color}
-                        secondary_color={card.secondary_color}
+                            primary_color={card.primary_color}
+                            secondary_color={card.secondary_color}
                             headerImageBackground={card?.lotto_background ||
                                 "https://images.squarespace-cdn.com/content/v1/58cd025a4402439656dae04f/1561314690504-Y25AJHYE86T7YBYI3VV0/Reis+naar+Thailand+boeken-3.JPG"}
                             icon={card.lotto_image}
@@ -116,6 +116,7 @@
                                 card.default_close_bet_minutes
                             )}
                             open={true}
+                            is_pending_result={card.lottoRound && card.lottoRound[0] ? card.lottoRound[0].is_pending_result : false}
                             name={card.lotto_name}
                             agent={false}
                             lottoId={card.id_in_lottoRound
