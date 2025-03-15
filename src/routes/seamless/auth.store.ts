@@ -5,6 +5,7 @@ const browser = typeof window !== 'undefined';
 export const token = writable(browser ? localStorage.getItem('token') ?? '' : '');
 export const username = writable(browser ? localStorage.getItem('username') ?? '' : '');
 export const agent_name = writable(browser ? localStorage.getItem('agent_name') ?? '' : '');
+export const agent_id = writable<string | null>(null);
 
 let tokenValue = '';
 let usernameValue = '';
