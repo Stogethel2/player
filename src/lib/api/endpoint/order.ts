@@ -6,10 +6,15 @@ import { getToken } from '../../../routes/seamless/auth.store';
 
 export const orderApi = {
     getOrderHistory: async (page:number, lottoResult: string): Promise<Response> => {
-        const response: AxiosResponse<ApiResponse<Response>> = await apiClient.get(`order/${page}/${lottoResult}`, {
-            headers: { Authorization: `Bearer ${getToken()}` }
-        });
-        return response.data.data;
+        try {
+            const response: AxiosResponse<ApiResponse<Response>> = await apiClient.get(`order/${page}/${lottoResult}`, {
+                headers: { Authorization: `Bearer ${getToken()}` }
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     },
 };
 
