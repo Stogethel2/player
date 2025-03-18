@@ -9,7 +9,6 @@
     import { betCalculateApi } from "$lib";
     import { userAuth } from "$lib/utils/userAuth";
 
-
     let orders: OrderResponse[] = [];
     let selectedOrderId: string | null = null;
     let isLoading = true;
@@ -69,7 +68,7 @@
     onMount(async () => {
         try {
             userAuth();
-            
+
             lottoResult = "PENDING";
             await loadItems();
         } catch (err) {
@@ -93,6 +92,13 @@
         reorderedBet = await betCalculateApi.reOrder(order.id);
         console.log(reorderedBet);
         showPaymentSummary = true;
+    }
+
+    async function handleCancelPayment(order: OrderResponse) {
+        reorderedBet = await betCalculateApi.cancelOrder(order.id);
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
     }
 
     function handleScroll() {
@@ -216,8 +222,12 @@
                                             >สำเร็จ</span
                                         >
                                     {:else if order.status === "PENDING"}
-                                        <span class="text-orange-600 font-bold"
+                                        <span class="text-pink-500 font-bold"
                                             >รอชำระ</span
+                                        >
+                                    {:else if order.status === "CANCELED"}
+                                        <span class="text-red-600 font-bold"
+                                            >ยกเลิก</span
                                         >
                                     {:else}
                                         <span class="text-red-600 font-bold"
@@ -232,11 +242,17 @@
                                 <div>สถานะ</div>
                                 <div>
                                     {#if order.lotto_result === "PENDING"}
-                                        {#if order.status === "FAILED"}
+                                        {#if order.status === "FAILED" || order.status === "CANCELED"}
                                             <span
                                                 class="bg-red-500 text-white text-xs font-semibold rounded-full px-3 py-1 inline-block"
                                             >
                                                 ยกเลิก</span
+                                            >
+                                        {:else if order.status === "PENDING"}
+                                            <span
+                                                class="bg-pink-500 text-white text-xs font-semibold rounded-full px-3 py-1 inline-block"
+                                            >
+                                                รอชำระเงิน</span
                                             >
                                         {:else}
                                             <span
@@ -332,7 +348,7 @@
                                                 <p class="text-orange-600">
                                                     ไม่ถูกรางวัล
                                                 </p>
-                                            {:else if order.status === "FAILED"}
+                                            {:else if order.status === "FAILED" || order.status === "CANCELED"}
                                                 <p class="text-red-600">
                                                     ยกเลิก
                                                 </p>
@@ -348,11 +364,18 @@
                                     {#if order.orderBets.length > 0}
                                         <div class="flex justify-end mt-4">
                                             <button
-                                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mr-2"
                                                 on:click={() =>
                                                     handlePayment(order)}
                                             >
-                                                จ่ายเงินอีกครั้ง
+                                                ชำระอีกครั้ง
+                                            </button>
+                                            <button
+                                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                                                on:click={() =>
+                                                    handleCancelPayment(order)}
+                                            >
+                                                ยกเลิกบิล
                                             </button>
                                         </div>
                                     {:else}
@@ -364,6 +387,16 @@
                                             </p>
                                         </div>
                                     {/if}
+                                {:else if order.status === "SUCCESS"}
+                                    <div class="flex justify-end mt-4">
+                                        <button
+                                            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                                            on:click={() =>
+                                                handleCancelPayment(order)}
+                                        >
+                                            ยกเลิกการซื้อ
+                                        </button>
+                                    </div>
                                 {/if}
                             </div>
                         </div>
