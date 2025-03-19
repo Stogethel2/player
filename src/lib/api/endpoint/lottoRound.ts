@@ -6,9 +6,7 @@ import type { LottoRound } from '$lib/interface/lotto.types';
 export const lottoRoundApi = {
     /* Get all active lottos */
     getActiveLottoRounds: async (): Promise<LottoRound[]> => {
-        const response: AxiosResponse<ApiResponse<LottoRound[]>> = await apiClient.get('/public/lotto-round', {
-            params: { is_active: true }
-        });
+        const response: AxiosResponse<ApiResponse<LottoRound[]>> = await apiClient.get('/public/lotto-round');
         return response.data.data;
     },
 
