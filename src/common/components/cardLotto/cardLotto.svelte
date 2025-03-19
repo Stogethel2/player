@@ -15,7 +15,7 @@
   export let name: string;
   export let lottoId: string;
   export let endBetMin;
-  export let is_pending_result: boolean;
+  export let round_status: string;
 
   let not_open = false;
 
@@ -81,7 +81,7 @@
         }, 1000);
       }
 
-      if(is_pending_result){
+      if(round_status === "INACTIVE"){
         open = false;
         not_open = false;
       }

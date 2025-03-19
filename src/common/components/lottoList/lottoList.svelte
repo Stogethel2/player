@@ -116,7 +116,7 @@
                                 card.default_close_bet_minutes
                             )}
                             open={true}
-                            is_pending_result={card.lottoRound && card.lottoRound[0] ? card.lottoRound[0].is_pending_result : false}
+                            round_status={card.lottoRound && card.lottoRound[0] ? card.lottoRound[0].round_status : 'INACTIVE'}
                             name={card.lotto_name}
                             agent={false}
                             lottoId={card.id_in_lottoRound
