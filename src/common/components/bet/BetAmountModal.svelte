@@ -112,7 +112,7 @@
         const username = localStorage.getItem("username");
         try {
             if (username) {
-                const responseGetBalance = await walletApi.getBalance(username);
+                const responseGetBalance = await walletApi.getBalance();
                 availableBalance = responseGetBalance.balance;
             }
         } catch (error) {
