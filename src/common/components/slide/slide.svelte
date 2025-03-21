@@ -6,6 +6,7 @@
     import "swiper/css";
 
     import { BannerApi } from "$lib/api/endpoint/slide";
+    import { agent_id } from "../../../routes/seamless/auth.store";
 
     let images: string[] = [];
     let isLoading = true;
@@ -14,7 +15,7 @@
     onMount(async () => {
         try {
             //Get from api
-            const response = await BannerApi.getBanner();
+            const response = await BannerApi.getBannerAgent($agent_id ? $agent_id : '');
             images = response.map((item) => item.image);
         } catch (error) {
             console.error("Error fetching banners:", error);
