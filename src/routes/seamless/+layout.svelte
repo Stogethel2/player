@@ -27,7 +27,7 @@
         agent_name.set(responseGetUsers.agent.name);
         agent_id.set(responseGetUsers.agent.agent_id);
 
-        const responseGetBalance = await walletApi.getBalance(responseGetUsers.username);
+        const responseGetBalance = await walletApi.getBalance();
         name = responseGetBalance.username;
         credits = responseGetBalance.balance;
         currency = responseGetBalance.currency;
