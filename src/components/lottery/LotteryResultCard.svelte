@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade, fly } from "svelte/transition";
   import { AlarmClock } from "lucide-svelte";
-  import type { LotteryResultData, LotteryResult } from "$lib/interface/result.types";
+  import type { LotteryResultData } from "$lib/interface/result.types";
   import { getResultsByType, getBackgroundColorClass, formatLotteryDate } from "$lib/utils/lottery-result.utils";
 
   export let resultData: LotteryResultData;
