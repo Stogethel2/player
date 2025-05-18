@@ -5,26 +5,30 @@
   import { onMount } from "svelte";
   import type { announceSetting } from "../../interface/setting.type";
   import { lottoApi, announcementsApi } from '$lib/api/endpoint';
-  import { agent_id } from "./auth.store";
+  import { agent_id, username } from "./auth.store";
   import type { RunText } from '$lib/interface/announcements.types';
 
   let settings: announceSetting = {
     announcement: "Loading...",
   };
   let isLoading = true;
-  let announcements:RunText;
+  let announcements: RunText;
 
   onMount(async () => {
     try {
-      const response = await fetch("/setting/settings.json"); // ดึงข้อมูลจาก static/settings.json
+      const response = await fetch("/setting/settings.json");
       settings = await response.json();
-      announcements = await announcementsApi.getAnnouncementsById($agent_id ? $agent_id : '');
-      if (announcements) {
-        settings.announcement = announcements.run_message;
-      }
+      
+      // Only fetch data if we have an agent_id (meaning user is logged in)
+      if ($agent_id) {
+        announcements = await announcementsApi.getAnnouncementsById($agent_id);
+        if (announcements) {
+          settings.announcement = announcements.run_message;
+        }
 
-      const lottoData = await lottoApi.getActiveLottos();
-      /* Work in progress */
+        const lottoData = await lottoApi.getActiveLottos();
+        /* Work in progress */
+      }
     } catch (error) {
       console.error("Error fetching settings:", error);
     } finally {
@@ -33,10 +37,14 @@
   });
 </script>
 
-<Announcement details={settings.announcement} />
-{#if isLoading}
-  <p>Loading...</p>
-{:else}
-  <Slide />
+{#if $username}
+  <Announcement details={settings.announcement} />
+  {#if isLoading}
+    <div class="flex justify-center items-center h-64">
+      <p class="text-lg">Loading...</p>
+    </div>
+  {:else}
+    <Slide />
+  {/if}
+  <LottoList category="" />
 {/if}
-<LottoList category="" />

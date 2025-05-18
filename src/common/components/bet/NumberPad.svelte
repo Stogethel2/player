@@ -10,11 +10,11 @@
   export let selectedBetType: string = "";
   export let activeLotteryTypesStore: Writable<LottoBetType>;
 
-
   let digits: string[] = [];
   let activeDigitIndex = 0;
-  const defaultAmount = 5;
   let digitInputRefs: HTMLInputElement[] = [];
+
+  const DEFAULT_AMOUNT = 1;
 
   $: {
     /* Reset input values when digitsCount changes */
@@ -58,14 +58,14 @@
 
   function handleKeypadPress(value: (typeof NUMPAD_LAYOUT)[number]): void {
     switch (value) {
-      case 'สุ่ม':
+      case "สุ่ม":
         handleDigitEntry(generateRandomDigit());
         break;
-      case 'ลบ':
+      case "ลบ":
         deleteLastDigit();
         break;
       default:
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
           handleDigitEntry(value.toString());
         }
     }
@@ -83,7 +83,12 @@
     const betNumber = digits.join("");
     if (selectedBetType) {
       const activeBetType = get(activeLotteryTypesStore);
-      betStore.addBet(activeBetType.id, betNumber, activeBetType, defaultAmount);
+      betStore.addBet(
+        activeBetType.id,
+        betNumber,
+        activeBetType,
+        DEFAULT_AMOUNT
+      );
     }
 
     resetDigits();

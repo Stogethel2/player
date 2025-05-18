@@ -1,17 +1,13 @@
 <script lang="ts">
-  import OptionNavbar from "./option_navbar.svelte";
   import CoreNavbar from "./core_navbar.svelte";
+  import Navigation from "../../../routes/navigation.svelte";
   export let name = "088-888-8888";
   export let credits = 10;
   export let currency = "THB";
 </script>
 
 <div class="sticky w-full navbar">
-  <div class="bg-white shadow-md w-full">
-    <div class="">
-      <OptionNavbar />
-    </div>
-  </div>
+  <Navigation />
   <div class="bg-gradient-to-r from-red-700 to-red-900 w-full">
     <div class="">
       <CoreNavbar {name} {credits} {currency} />

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import { Home, Award, History, UserPlus, HelpCircle } from "lucide-svelte";
   import Menu from "lucide-svelte/icons/menu";
   import X from "lucide-svelte/icons/x";
-  import { Wallet, CirclePlus } from "lucide-svelte";
   import ThaiIcon from "$lib/assets/thailand_flag.png";
-  import type { menuSetting } from "../../../interface/setting.type";
-  import { Home, Award, History, UserPlus, HelpCircle } from 'lucide-svelte';
+  import type { menuSetting } from "../interface/setting.type";
+  import { onMount } from "svelte";
 
   let settings: menuSetting = {
     menu: [],
@@ -28,11 +28,13 @@
     isMenuOpen = !isMenuOpen;
   }
 
-  function closeMenu() {
+  function handleNavigation(path: string) {
     isMenuOpen = false;
+    goto(path);
   }
 </script>
 
+<!-- Header with language selector and menu button -->
 <div
   class="bg-gradient-to-b from-amber-300 via-amber-500 to-yellow-600 p-2 sm:p-3 lg:p-4"
 >
@@ -77,78 +79,52 @@
       <!-- LOGO NAME -->
     </h1>
 
-    <!-- <div class="flex justify-center w-full pb-8">
-      <nav
-        class="flex flex-row items-center text-sm font-normal leading-relaxed antialiased bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md"
-      >
-        <a
-          href="/withdraw"
-          on:click={closeMenu}
-          class="flex flex-col items-center justify-center px-2 py-3 w-1/2 transition-colors duration-200 text-red-500"
-        >
-          <Wallet size={32} />
-          <p class="text-base mt-2">ถอนเงิน</p>
-        </a>
-        <div class="w-px h-full bg-gray-200"></div>
-        <a
-          href="/deposit"
-          on:click={closeMenu}
-          class="flex flex-col items-center justify-center px-2 py-3 w-1/2 transition-colors duration-200 text-green-500"
-        >
-          <CirclePlus size={32} />
-          <p class="text-base mt-2">ฝากเงิน</p>
-        </a>
-      </nav>
-    </div> -->
-
     {#if isLoading}
       <p class="text-center text-xl font-semibold p-2">Loading...</p>
     {:else}
       <nav class="flex flex-col space-y-6 p-2">
         {#each settings.menu as { path, label }}
-          <a
-            href={path}
-            on:click={closeMenu}
-            class="text-lg font-medium hover:text-red-200 transition duration-300 ease-in-out transform hover:translate-x-2"
+          <button
+            class="text-lg font-medium hover:text-red-200 transition duration-300 ease-in-out transform hover:translate-x-2 cursor-pointer"
+            on:click={() => handleNavigation(path)}
           >
             {label}
-          </a>
+          </button>
         {/each}
       </nav>
     {/if}
   </div>
 </div>
 
+<!-- Mobile navigation bar at bottom -->
 <div class="menu-mobile bg-gradient-to-r from-red-700 to-red-900 w-full">
   {#each settings.menu as { path, label }}
     <div class="menu-item-mobile">
-      <a
-        href={path}
-        on:click={closeMenu}
-        class="text-lg font-medium hover:text-red-200 transition duration-300 ease-in-out transform hover:translate-x-2"
+      <button
+        class="text-lg font-medium hover:text-red-200 transition duration-300 ease-in-out transform hover:translate-x-2 cursor-pointer"
+        on:click={() => handleNavigation(path)}
       >
         {#if label == "หน้าแรก"}
-          <Home size={32}/>
+          <Home size={32} />
         {/if}
         {#if label == "ผลรางวัล"}
-          <Award size={32}/>
+          <Award size={32} />
         {/if}
         {#if label == "ประวัติการซื้อ"}
-          <History size={32}/>
+          <History size={32} />
         {/if}
         {#if label == "แนะนำเพื่อน"}
-          <UserPlus size={32}/>
+          <UserPlus size={32} />
         {/if}
         {#if label == "ช่วยเหลือ"}
-          <HelpCircle size={32}/>
+          <HelpCircle size={32} />
         {/if}
-      </a>
+      </button>
     </div>
   {/each}
 </div>
 
 <style>
-
   .toggle-menu {
     display: none;
   }
@@ -158,26 +134,17 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    /* background-color: #7f1d1d; */
     color: white;
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 40;
   }
 
   .menu-item-mobile {
     text-align: -webkit-center;
     flex: 1;
-  }
-
-  .menu-item-mobile a {
-    color: white;
-    text-decoration: none;
-  }
-
-  .menu-item-mobile a:hover {
-    text-decoration: underline;
   }
 
   @media (min-width: 768px) {
@@ -188,4 +155,10 @@
       display: flex;
     }
   }
-</style>
+
+  @media (max-width: 767px) {
+    .navigation-desktop {
+      display: none;
+    }
+  }
+</style> 

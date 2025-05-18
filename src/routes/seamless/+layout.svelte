@@ -7,12 +7,13 @@
   import { token, username, agent_name, agent_id } from "./auth.store";
   import { walletApi } from "$lib/api/endpoint/balance";
   import Navbar from "../../common/components/navbar/navbar.svelte";
+  import Loading from "../../common/components/loading/loading.svelte";
 
-  let isLoginPage = $state(false);
-  let isLoaded = $state(false);
-  let name = $state('');
+  let name = $state("");
   let credits = $state(0);
-  let currency = $state('');
+  let currency = $state("");
+  let isLoggedIn = $state(false);
+  let isLoading = $state(true);
 
   const login = async (): Promise<void> => {
     try {
@@ -33,35 +34,32 @@
         currency = responseGetBalance.currency;
 
         if ($username) {
-          isLoginPage = true;
+          isLoggedIn = true;
         }
       }
     } catch (error) {
       console.error("Error in login:", error);
+    } finally {
+      isLoading = false;
     }
   };
 
   onMount(async () => {
-    try {
-      await login();
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-    } finally {
-      isLoaded = true;
-    }
-  });
-
-  $effect(() => {
-    if ($page.url.pathname === "/login") {
-      isLoginPage = true;
-    }
+    await login();
   });
 </script>
 
-{#if isLoginPage && isLoaded}
+{#if isLoading}
+  <div class="h-screen flex flex-col items-center justify-center">
+    <Loading />
+  </div>
+{:else if isLoggedIn}
   <Navbar {name} {credits} {currency} />
+
   {@render children()}
 {:else}
-  <h1>Token has expired</h1>
-  <h1>Please login again</h1>
+  <div class="h-screen flex flex-col items-center justify-center">
+    <h1 class="text-xl font-bold">Token has expired</h1>
+    <h1 class="text-lg">Please login again</h1>
+  </div>
 {/if}
