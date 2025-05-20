@@ -103,8 +103,8 @@
 <div
   class="card w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 ease-in-out transform hover:shadow-lg"
 >
-  <div class="rounded-t-xl relative p-4" 
-  style="background: linear-gradient(to right, {primary_color}, {secondary_color})">
+  <div class="rounded-t-xl relative p-4"
+  style="background: linear-gradient(to top, {primary_color}, {secondary_color})">
     {#if headerImageBackground}
       <img
         src={headerImageBackground}

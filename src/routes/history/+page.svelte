@@ -135,16 +135,15 @@
         <div class="space-y-4 mb-4">
             <h1 class="text-lg font-bold my-2 text-gray-800">ประวัติการซื้อ</h1>
 
-            <div class="flex items-center text-white mt-4">
+            <div class="flex items-center text-black mt-4">
                 <button
                     class="rounded-md p-2"
-                    style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
                     class:opacity-75={lottoResult !== "PENDING"}
                     on:click={() => handleFilterChange("PENDING")}
                 >
                     <div
-                        class="text-amber
-                    -300 font-bold text-sm flex items-center"
+                        class="text-black font-bold text-sm flex items-center"
                     >
                         <p>ยังไม่ออกผล</p>
                     </div>
@@ -152,13 +151,12 @@
 
                 <button
                     class="rounded-md p-2 ml-2"
-                    style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
                     class:opacity-75={lottoResult !== "CLOSED"}
                     on:click={() => handleFilterChange("CLOSED")}
                 >
                     <div
-                        class="text-amber
-                    -300 font-bold text-sm flex items-center"
+                        class="text-black font-bold text-sm flex items-center"
                     >
                         <p>ออกผลแล้ว</p>
                     </div>
