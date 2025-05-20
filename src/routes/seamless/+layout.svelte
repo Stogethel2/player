@@ -7,7 +7,6 @@
   import { token, username, agent_name, agent_id } from "./auth.store";
   import { walletApi } from "$lib/api/endpoint/balance";
   import Navbar from "../../common/components/navbar/navbar.svelte";
-  import Loading from "../../common/components/loading/loading.svelte";
 
   let name = $state("");
   let credits = $state(0);
@@ -49,17 +48,49 @@
   });
 </script>
 
-{#if isLoading}
-  <div class="h-screen flex flex-col items-center justify-center">
-    <Loading />
-  </div>
-{:else if isLoggedIn}
+<div class="app-container">
   <Navbar {name} {credits} {currency} />
 
-  {@render children()}
-{:else}
-  <div class="h-screen flex flex-col items-center justify-center">
-    <h1 class="text-xl font-bold">Token has expired</h1>
-    <h1 class="text-lg">Please login again</h1>
+  <div class="content-wrapper">
+    {@render children()}
   </div>
-{/if}
+</div>
+
+<style>
+  :global(body) {
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-container {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+  }
+
+  .content-wrapper {
+    padding-bottom: 60px; /* Space for mobile navigation */
+  }
+
+  @media (min-width: 768px) {
+    .content-wrapper {
+      padding-bottom: 0; /* No bottom padding needed on desktop */
+    }
+  }
+
+  :global(.card, .container, .box) {
+    background-color: #1e1e1e;
+    border-color: #333;
+  }
+
+  :global(a) {
+    color: #bb86fc;
+  }
+
+  :global(button:not([class*="bg-"])) {
+    background-color: transparent;
+    color: #e0e0e0;
+  }
+</style>

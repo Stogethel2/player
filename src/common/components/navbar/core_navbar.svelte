@@ -34,36 +34,50 @@
 
 </script>
 
-<div
-    class="w-full bg-gradient-to-r from-red-700 to-red-900 px-4 py-3 sm:px-6 sm:py-4"
->
-    <div class="flex flex-col sm:flex-row items-center justify-between w-full">
-        <h1 class="text-amber-300 font-bold text-2xl mb-4 sm:mb-0">
-            {settings.logo.value}
-        </h1>
-        <div
-            class="flex border-2 rounded-md justify-between items-center w-full sm:w-auto max-w-full sm:max-w-xs"
-        >
-            <div class="p-2 text-white">
-                <SquareUserRound size={32} />
-            </div>
+<div class="w-full bg-black text-white border-b border-gold">
+    <div class="w-full mx-auto px-0 md:px-8 lg:px-16 max-w-7xl">
+        <div class="flex flex-col sm:flex-row items-center justify-between w-full py-3 px-4">
+            <h1 class="text-gold font-bold text-2xl mb-4 sm:mb-0">
+                {settings.logo.value}
+            </h1>
             <div
-                class="text-white mr-4 flex-grow sm:flex-grow-0 overflow-hidden"
+                class="flex border-2 border-gold rounded-md justify-between items-center w-full sm:w-auto max-w-full sm:max-w-xs"
             >
-                <p class="text-xs truncate">username: {name}</p>
-                <p class="text-xs truncate">
-                    ยอดเงินคงเหลือ: {formatCredits(credits)}
-                    {currency}
-                </p>
-            </div>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="text-white p-2 bg-red-950 mx-2 rounded-md cursor-pointer hover:bg-white hover:text-red-950 transition duration-300"
-                on:click={async () => await logout()}
-            >
-                <LogOut size={18} />
+                <div class="p-2 text-white">
+                    <SquareUserRound size={32} />
+                </div>
+                <div
+                    class="text-white mr-4 flex-grow sm:flex-grow-0 overflow-hidden"
+                >
+                    <p class="text-xs truncate">username: {name}</p>
+                    <p class="text-xs truncate">
+                        ยอดเงินคงเหลือ: {formatCredits(credits)}
+                        {currency}
+                    </p>
+                </div>
+
+                <button
+                    class="text-white p-2 bg-black border border-gold mx-2 rounded-md cursor-pointer hover:bg-gold hover:text-black transition duration-300"
+                    on:click={async () => await logout()}
+                >
+                    <LogOut size={18} />
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Custom gold color for consistency with navigation */
+    :root {
+        --gold: #FFD700;
+    }
+
+    .text-gold {
+        color: var(--gold);
+    }
+
+    .border-gold {
+        border-color: var(--gold);
+    }
+</style>

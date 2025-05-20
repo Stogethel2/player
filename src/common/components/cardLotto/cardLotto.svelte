@@ -4,14 +4,12 @@
   import ButtonCardLotto from "./buttonCardLotto.svelte";
   import { goto } from "$app/navigation";
   export let primary_color = "#1E40AF";
-  export let secondary_color = "'#3B82F6";
   export let headerImageBackground: string | null = null;
   export let icon;
   export let title;
   export let countDownText;
   export let details;
   export let open = true;
-  export let agent = false;
   export let name: string;
   export let lottoId: string;
   export let endBetMin;
@@ -32,15 +30,20 @@
 
   let dateRun: string = "";
 
-  // ตัวแปรสำหรับเวลา
-  let days,hours,minutes,seconds = 0;
+  // Variables for time
+  let days,
+    hours,
+    minutes,
+    seconds = 0;
 
-  let hoursToStr,minutesToStr,secondsToStr = '';
+  let hoursToStr,
+    minutesToStr,
+    secondsToStr = "";
 
-  // คำนวณเวลาที่เหลือ
+  // Calculate remaining time
   function calculateTimeLeft(targetDate: string, endBetMin: number): string {
     let now = new Date();
-    let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
+    let date = new Date(targetDate.replace("T", " ").split(".")[0]);
 
     let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
     let difference = Number(end_bet_min) - Number(now);
@@ -53,39 +56,39 @@
       hoursToStr = hours.toString();
       minutesToStr = minutes.toString();
       secondsToStr = seconds.toString();
-      if(hoursToStr.length == 1) {
-        hoursToStr = "0"+hoursToStr;
+      if (hoursToStr.length == 1) {
+        hoursToStr = "0" + hoursToStr;
       }
-      if(minutesToStr.length == 1) {
-        minutesToStr = "0"+minutesToStr;
+      if (minutesToStr.length == 1) {
+        minutesToStr = "0" + minutesToStr;
       }
-      if(secondsToStr.length == 1) {
-        secondsToStr = "0"+secondsToStr;
+      if (secondsToStr.length == 1) {
+        secondsToStr = "0" + secondsToStr;
       }
     } else {
-      // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
+      // Reset all values to zero when time is up
       days = 0;
-      hoursToStr = minutesToStr = secondsToStr = '00';
+      hoursToStr = minutesToStr = secondsToStr = "00";
       open = false;
     }
     return `เวลาซื้อเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
   }
 
   onMount(() => {
-    if(countDownText != ""){
+    if (countDownText != "") {
       let targetDate = countDownText;
 
       if (targetDate && endBetMin >= 0) {
         timerIntervalTarget = setInterval(() => {
-          dateRun = calculateTimeLeft(targetDate,endBetMin);
+          dateRun = calculateTimeLeft(targetDate, endBetMin);
         }, 1000);
       }
 
-      if(round_status === "INACTIVE"){
+      if (round_status === "INACTIVE") {
         open = false;
         not_open = false;
       }
-    }else{
+    } else {
       open = false;
       not_open = true;
     }
@@ -94,24 +97,22 @@
   onDestroy(() => {
     if (timerIntervalTarget) {
       clearInterval(timerIntervalTarget);
-      // console.log('Timer cleared on component destroy seamless');
     }
   });
-
 </script>
 
 <div
   class="card w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 ease-in-out transform hover:shadow-lg"
 >
-  <div class="rounded-t-xl relative p-4" 
-  style="background: linear-gradient(to right, {primary_color}, {secondary_color})">
-    {#if headerImageBackground}
-      <img
-        src={headerImageBackground}
-        alt=""
-        class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30"
-      />
-    {/if}
+  <div
+    class="card-header rounded-t-xl relative p-4 {headerImageBackground
+      ? 'has-bg-image'
+      : 'default-bg'}"
+    style:--primary-color={primary_color}
+    style:--bg-image={headerImageBackground
+      ? `url(${headerImageBackground})`
+      : "none"}
+  >
     <div class="relative z-10 flex items-center mb-3">
       <img
         src={icon}
@@ -138,26 +139,25 @@
       </div>
     {/if}
   </div>
-  <div class="px-2 md:px-4 py-2 bg-white">
-    {#if open }
-      <ButtonCardLotto
-        text="ซื้อหวย"
-        {agent}
-        disabled={false}
-        onClick={() => handleButtonClick()}
-      />
-    {:else}
-      <p class="text-sm text-gray-500 italic">
-        {not_open ? "จะเปิดให้บริการเร็วๆนี้" : "หมดเวลารับแทงสำหรับงวดนี้"}
-      </p>
-    {/if}
-  </div>
 </div>
 
 <style lang="postcss">
-  .card {
-    @apply bg-white rounded-xl shadow-md;
+
+  .card-header {
+    height: 100%;
+    width: 100%;
   }
+
+  .default-bg {
+    background-color: var(--primary-color);
+  }
+
+  .has-bg-image {
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+  }
+
   @keyframes blink {
     0%,
     100% {
