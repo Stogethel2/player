@@ -6,6 +6,7 @@
     import { goto } from "$app/navigation";
     import { userAuth, userLogout } from "$lib/utils/user-auth";
 
+
     let settings: brandSetting = {
         logo: { type: "text", value: "Loading..." },
     };

@@ -213,6 +213,7 @@
             <!-- Navigation -->
             <button
                 class="bg-gradient-to-r from-red-900 to-red-700 rounded-t-md mb-4 p-2 w-full"
+
                 on:click={navigateBack}
             >
                 <div class="text-amber-300 font-bold text-sm flex items-center">
@@ -269,6 +270,7 @@
                     <div class="flex items-center text-white mt-4">
                         <button
                             class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2"
+
                             on:click={openLottoNumberBlockModal}
                         >
                             <div
@@ -281,6 +283,7 @@
 
                         <button
                             class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2 ml-2"
+
                             on:click={openLottoRuleModal}
                         >
                             <div

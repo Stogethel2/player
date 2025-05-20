@@ -3,7 +3,10 @@
   export let details = "-";
 </script>
 
-<div class="bg-gradient-to-r from-red-700 via-red-900 to-red-700 my-1.5 p-1.5">
+<div
+  class="my-1.5 p-1.5"
+  style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+>
   <div class="flex">
     <div class="text-white text-sm flex items-center w-2/6 border-r-2">
       <span class="mr-1">ประกาศจากทางเว็บ</span>

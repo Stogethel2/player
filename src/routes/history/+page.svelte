@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
     import { formatDateTime } from "$lib/utils/date-time";
+
     import { orderApi } from "$lib/api/endpoint/order";
     import { CheckCircle2, XCircle, ChevronDown } from "lucide-svelte";
     import type { Order, OrderResponse } from "$lib/interface/order.types";
@@ -8,6 +9,7 @@
     import ConfirmPayment from "../../common/components/bet/confirmPayment.svelte";
     import { betCalculateApi } from "$lib";
     import { userAuth } from "$lib/utils/user-auth";
+
 
     let orders: OrderResponse[] = [];
     let selectedOrderId: string | null = null;
@@ -135,7 +137,8 @@
 
             <div class="flex items-center text-white mt-4">
                 <button
-                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2"
+                    class="rounded-md p-2"
+                    style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
                     class:opacity-75={lottoResult !== "PENDING"}
                     on:click={() => handleFilterChange("PENDING")}
                 >
@@ -148,7 +151,8 @@
                 </button>
 
                 <button
-                    class="bg-gradient-to-r from-red-700 to-red-900 rounded-md p-2 ml-2"
+                    class="rounded-md p-2 ml-2"
+                    style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
                     class:opacity-75={lottoResult !== "CLOSED"}
                     on:click={() => handleFilterChange("CLOSED")}
                 >

@@ -7,6 +7,7 @@
 
   import { formatDateTime } from "$lib/utils/date-time";
 
+
   let playlist: LottoRound[];
   let isLoading = true;
 
@@ -129,7 +130,7 @@
 <style>
   /* Custom gold color for consistency with navigation */
   :root {
-    --gold: #FFD700;
+    --gold: #dab768;
   }
 
   .text-gold {

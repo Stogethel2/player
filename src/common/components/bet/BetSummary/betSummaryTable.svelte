@@ -2,6 +2,7 @@
   import type { BetSummary } from "$lib/interface/bet.types";
   import { betStore } from "$lib/stores/BetStore";
   import { syncBetSummaryWithStore } from "$lib/utils/bet-calculations";
+
   import BetRow from "./betRow.svelte";
   import TableHeader from "./tableHeader.svelte";
   import { createEventDispatcher } from "svelte";

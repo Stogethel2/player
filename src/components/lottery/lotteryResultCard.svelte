@@ -4,6 +4,7 @@
   import type { LotteryResultData } from "$lib/interface/result.types";
   import { getResultsByType, getBackgroundColorClass, formatLotteryDate } from "$lib/utils/lottery-result.utils";
 
+
   export let resultData: LotteryResultData;
   export let index: number = 0;
 </script>

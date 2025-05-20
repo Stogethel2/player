@@ -4,6 +4,7 @@ import type { LottoBetType, Lotto } from "../interface/lotto.types";
 import { betUtils } from "../utils/bet-utils";
 import { calculateBetSummary } from "$lib/utils/bet-calculations";
 
+
 function createBetStore() {
     const store = writable<BetTypeGroup>({});
     const { subscribe, set, update } = store;
