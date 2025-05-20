@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import type { LotteryResultData } from "$lib/interface/result.types";
   import { resultApi } from "$lib/api/endpoint/result";
-  import LotteryResultCard from "./LotteryResultCard.svelte";
+  import LotteryResultCard from "./lotteryResultCard.svelte";
 
   export let title: string = "ผลสลากกินแบ่ง";
 

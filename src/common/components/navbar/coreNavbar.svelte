@@ -4,7 +4,7 @@
     import { onDestroy, onMount } from "svelte";
     import type { brandSetting } from "../../../interface/setting.type";
     import { goto } from "$app/navigation";
-    import { userAuth, userLogout } from "$lib/utils/userAuth";
+    import { userAuth, userLogout } from "$lib/utils/user_auth";
 
     let settings: brandSetting = {
         logo: { type: "text", value: "Loading..." },
@@ -70,7 +70,7 @@
 <style>
     /* Custom gold color for consistency with navigation */
     :root {
-        --gold: #FFD700;
+        --gold: #dab768;
     }
 
     .text-gold {

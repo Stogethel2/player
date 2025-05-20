@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LotteryResultsView from "../../components/lottery/LotteryResultsView.svelte";
+  import LotteryResultsView from "../../components/lottery/lotteryResultsView.svelte";
 </script>
 
 <LotteryResultsView />

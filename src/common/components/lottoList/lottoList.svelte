@@ -5,7 +5,7 @@
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
 
-  import { formatDateTime } from "$lib/utils/dateTime";
+  import { formatDateTime } from "$lib/utils/date_time";
 
   let playlist: LottoRound[];
   let isLoading = true;
@@ -129,7 +129,7 @@
 <style>
   /* Custom gold color for consistency with navigation */
   :root {
-    --gold: #FFD700;
+    --gold: #dab768;
   }
 
   .text-gold {
