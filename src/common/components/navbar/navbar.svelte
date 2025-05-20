@@ -10,7 +10,7 @@
   <Navigation />
   <div
     class="w-full"
-    style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
   >
     <div>
       <CoreNavbar {name} {credits} {currency} />

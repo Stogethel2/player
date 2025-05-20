@@ -5,15 +5,15 @@
 
 <div
   class="my-1.5 p-1.5"
-  style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+  style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
 >
   <div class="flex">
-    <div class="text-white text-sm flex items-center w-2/6 border-r-2">
+    <div class="text-black text-sm flex items-center w-2/6 border-r-2">
       <span class="mr-1">ประกาศจากทางเว็บ</span>
       <Volume2 size={18} />
     </div>
     <div class="px-1.5 marquee w-4/6">
-      <span class="text-sm text-white marquee-content">{details}</span>
+      <span class="text-sm text-black marquee-content">{details}</span>
     </div>
   </div>
 </div>
