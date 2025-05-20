@@ -8,9 +8,9 @@
 
     /* Utils */
     import { togglePlayMode } from "$lib/utils/play";
-    import { formatDateTime } from "$lib/utils/date_time";
+    import { formatDateTime } from "$lib/utils/date-time";
     import { lottoRoundApi } from "$lib";
-    import { userAuth } from "$lib/utils/user_auth";
+    import { userAuth } from "$lib/utils/user-auth";
 
     import {
         ChevronLeft,
@@ -212,8 +212,8 @@
         <div class="bg-white shadow-lg rounded-lg my-4 w-full max-w-7xl">
             <!-- Navigation -->
             <button
-                class="rounded-t-md mb-4 p-2 w-full"
-                style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                class="bg-gradient-to-r from-red-900 to-red-700 rounded-t-md mb-4 p-2 w-full"
+
                 on:click={navigateBack}
             >
                 <div class="text-amber-300 font-bold text-sm flex items-center">
@@ -269,8 +269,8 @@
                     </div>
                     <div class="flex items-center text-white mt-4">
                         <button
-                            class="rounded-md p-2"
-                            style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                            class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2"
+
                             on:click={openLottoNumberBlockModal}
                         >
                             <div
@@ -282,8 +282,8 @@
                         </button>
 
                         <button
-                            class="rounded-md p-2 ml-2"
-                            style="background: linear-gradient(to right, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                            class="bg-gradient-to-r from-red-900 to-red-700 rounded-md p-2 ml-2"
+
                             on:click={openLottoRuleModal}
                         >
                             <div

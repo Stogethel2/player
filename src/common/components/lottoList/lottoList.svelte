@@ -5,7 +5,8 @@
   import CardLotto from "../cardLotto/cardLotto.svelte";
   import { onMount } from "svelte";
 
-  import { formatDateTime } from "$lib/utils/date_time";
+  import { formatDateTime } from "$lib/utils/date-time";
+
 
   let playlist: LottoRound[];
   let isLoading = true;
