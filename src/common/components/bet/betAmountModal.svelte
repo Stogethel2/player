@@ -1,10 +1,10 @@
 <script lang="ts">
     import { betCalculateApi } from "$lib/api/endpoint/betCalculate";
     import { betStore } from "$lib/stores/BetStore";
-    import { calculateBetSummary } from "$lib/utils/betCalculations";
+    import { calculateBetSummary } from "$lib/utils/bet-calculations";
     import { createEventDispatcher, onMount } from "svelte";
     import { derived } from "svelte/store";
-    import BetSummaryTable from "./BetSummary/BetSummaryTable.svelte";
+    import BetSummaryTable from "./BetSummary/betSummaryTable.svelte";
     import type {
         BetGroupSummary,
         BetSummary,

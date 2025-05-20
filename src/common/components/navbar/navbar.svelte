@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CoreNavbar from "./core_navbar.svelte";
+  import CoreNavbar from "./coreNavbar.svelte";
   import Navigation from "../../../routes/navigation.svelte";
   export let name = "088-888-8888";
   export let credits = 10;

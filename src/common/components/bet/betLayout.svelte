@@ -8,9 +8,9 @@
 
     /* Utils */
     import { togglePlayMode } from "$lib/utils/play";
-    import { formatDateTime } from "$lib/utils/dateTime";
+    import { formatDateTime } from "$lib/utils/date-time";
     import { lottoRoundApi } from "$lib";
-    import { userAuth } from "$lib/utils/userAuth";
+    import { userAuth } from "$lib/utils/user-auth";
 
     import {
         ChevronLeft,
@@ -20,13 +20,13 @@
     } from "lucide-svelte";
 
     /* Components */
-    import BetAmountModal from "./BetAmountModal.svelte";
-    import LottoRulesModal from "./LottoRulesModal.svelte";
-    import LottoNumberBlock from "./LottoNumberBlockModal.svelte";
-    import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-    import NumberPad from "./NumberPad.svelte";
-    import PaymentSummary from "./ConfirmPayment.svelte";
-    import SelectedNumbers from "./SelectedNumbers.svelte";
+    import BetAmountModal from "./betAmountModal.svelte";
+    import LottoRulesModal from "./lottoRulesModal.svelte";
+    import LottoNumberBlock from "./lottoNumberBlockModal.svelte";
+    import LotteryTypeFilter from "./lotteryTypeFilter.svelte";
+    import NumberPad from "./numberPad.svelte";
+    import PaymentSummary from "./confirmPayment.svelte";
+    import SelectedNumbers from "./selectedNumbers.svelte";
 
     /* Timer store and state */
     const timeRemaining = writable(0);
