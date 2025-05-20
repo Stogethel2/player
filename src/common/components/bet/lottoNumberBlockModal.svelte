@@ -5,7 +5,7 @@
     import type { Lotto } from "$lib/interface/lotto.types";
     import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
 
-    import { formatDateTime } from "$lib/utils/dateTime";
+    import { formatDateTime } from "$lib/utils/date_time";
     import { lottoApi, lottoRoundApi } from "$lib";
 
     const dispatch = createEventDispatcher();

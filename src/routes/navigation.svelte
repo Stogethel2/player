@@ -125,9 +125,9 @@
 <style>
   /* Custom gold colors */
   :root {
-    --gold: #FFD700;
-    --gold-light: #FFDF4D;
-    --gold-dark: #CCAC00;
+    --gold: #dab768;
+    --gold-light: #fef7b2;
+    --gold-dark: #a77338;
   }
 
   .text-gold {

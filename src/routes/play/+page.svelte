@@ -1,5 +1,5 @@
 <script>
-  import PlaySection from "../../common/components/bet/BetLayout.svelte";
+  import PlaySection from "../../common/components/bet/betLayout.svelte";
 </script>
 
 <PlaySection />

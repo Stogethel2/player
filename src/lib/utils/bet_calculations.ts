@@ -7,7 +7,7 @@ import type { BetSummary, BetGroupSummary, LotteryBet, BetTypeGroup } from "$lib
  * @returns New BetSummary Object
  */
 export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSummary {
-    const { lotto_id, lotto_name, total_bet, total_amount, betGroups } = calculateBetTotals($store);
+    const { lotto_id, lotto_name, total_bet, total_amount, betGroups } = _calculateBetTotals($store);
     return {
         lotto_id,
         lotto_name,
@@ -22,7 +22,7 @@ export function calculateBetSummary($store: Record<string, LotteryBet[]>): BetSu
  * @param $store - Bet store
  * @returns Calculated bet totals
  */
-function calculateBetTotals($store: Record<string, LotteryBet[]>): {
+function _calculateBetTotals($store: Record<string, LotteryBet[]>): {
     lotto_id: string;
     lotto_name: string;
     total_bet: number;
@@ -35,7 +35,7 @@ function calculateBetTotals($store: Record<string, LotteryBet[]>): {
     let total_amount: number = 0;
 
     const betGroups: BetGroupSummary[] = Object.entries($store).map(([bet_type_id, bets]) => {
-        const betList = calculateBetList(bets, (bet: LotteryBet): void => {
+        const betList = _calculateBetList(bets, (bet: LotteryBet): void => {
             total_bet += 1;
             total_amount += bet.amount;
         });
@@ -48,7 +48,7 @@ function calculateBetTotals($store: Record<string, LotteryBet[]>): {
             lotto_name,
             bet_type_id,
             betList,
-            total_ground_amount: calculateGroupAmount(betList),
+            total_ground_amount: _calculateGroupAmount(betList),
             total_ground_bets: betList.length,
         };
     });
@@ -63,7 +63,7 @@ function calculateBetTotals($store: Record<string, LotteryBet[]>): {
  * @param onEachBet - Callback function
  * @returns Bet list with updated values
  */
-function calculateBetList(bets: LotteryBet[], onEachBet: (bet: LotteryBet) => void): LotteryBet[] {
+function _calculateBetList(bets: LotteryBet[], onEachBet: (bet: LotteryBet) => void): LotteryBet[] {
     return bets.map((bet) => {
         onEachBet(bet);
         return { ...bet };
@@ -76,7 +76,7 @@ function calculateBetList(bets: LotteryBet[], onEachBet: (bet: LotteryBet) => vo
  * @param betList - Lottery bets
  * @returns Group amount
  */
-function calculateGroupAmount(betList: LotteryBet[]): number {
+function _calculateGroupAmount(betList: LotteryBet[]): number {
     return betList.reduce((sum, bet) => sum + bet.amount, 0);
 }
 
