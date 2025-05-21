@@ -10,20 +10,19 @@
 
     let images: string[] = [];
     let isLoading = true;
-    let swiper: Swiper;
+    let swiper: Swiper | null = null;
+    let swiperInitialized = false;
 
-    onMount(async () => {
+    const initSwiper = () => {
+        // Check if container exists before initializing
+        const swiperContainer = document.querySelector('.swiper-container');
+        if (!swiperContainer) return;
+
+        // Ensure there are slides to initialize with
+        const slides = swiperContainer.querySelectorAll('.swiper-slide');
+        if (!slides || slides.length === 0) return;
+
         try {
-            //Get from api
-            const response = await BannerApi.getBannerAgent($agent_id ? $agent_id : '');
-            images = response.map((item) => item.image);
-        } catch (error) {
-            console.error("Error fetching banners:", error);
-        } finally {
-            isLoading = false;
-        }
-
-        setTimeout(() => {
             swiper = new Swiper(".swiper-container", {
                 modules: [Autoplay],
                 grabCursor: true,
@@ -36,12 +35,37 @@
                 spaceBetween: 0,
                 loop: true,
             });
-        }, 0);
+            swiperInitialized = true;
+        } catch (error) {
+            console.error("Error initializing Swiper:", error);
+        }
+    };
+
+    onMount(async () => {
+        try {
+            //Get from api
+            const response = await BannerApi.getBannerAgent($agent_id ? $agent_id : '');
+            images = response.map((item) => item.image);
+        } catch (error) {
+            console.error("Error fetching banners:", error);
+        } finally {
+            isLoading = false;
+        }
+
+        // Initialize Swiper after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            initSwiper();
+        }, 100);
     });
 
     onDestroy(() => {
-        if (swiper) {
-            swiper.destroy();
+        try {
+            if (swiper && swiperInitialized) {
+                swiper.destroy(true, true); // true, true = destroy all events and elements
+                swiper = null;
+            }
+        } catch (error) {
+            console.error("Error destroying Swiper:", error);
         }
     });
 </script>

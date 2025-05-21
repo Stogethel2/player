@@ -1,7 +1,7 @@
 <script lang="ts">
     import { betCalculateApi } from "$lib/api/endpoint/betCalculate";
     import { betStore } from "$lib/stores/BetStore";
-    import { calculateBetSummary } from "$lib/utils/bet-calculations";
+    import { calculateBetSummary } from "$lib/utils/bet-calculations.utils";
 
     import { createEventDispatcher, onMount } from "svelte";
     import { derived } from "svelte/store";
@@ -131,7 +131,7 @@
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
+    <div class="w-11/12 max-w-2xl bg-black rounded-lg overflow-hidden">
         <!-- Header -->
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"

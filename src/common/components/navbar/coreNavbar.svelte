@@ -4,7 +4,7 @@
     import { onDestroy, onMount } from "svelte";
     import type { brandSetting } from "../../../interface/setting.type";
     import { goto } from "$app/navigation";
-    import { userAuth, userLogout } from "$lib/utils/user-auth";
+    import { userAuth, userLogout } from "$lib/utils/user-auth.utils";
 
 
     let settings: brandSetting = {

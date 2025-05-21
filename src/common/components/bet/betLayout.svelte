@@ -7,10 +7,10 @@
     import { betStore } from "$lib/stores/BetStore";
 
     /* Utils */
-    import { togglePlayMode } from "$lib/utils/play";
-    import { formatDateTime } from "$lib/utils/date-time";
+    import { togglePlayMode } from "$lib/utils/play-utils";
+    import { formatDateTime } from "$lib/utils/date-time.utils";
     import { lottoRoundApi } from "$lib";
-    import { userAuth } from "$lib/utils/user-auth";
+    import { userAuth } from "$lib/utils/user-auth.utils";
 
     import {
         ChevronLeft,
@@ -209,7 +209,7 @@
 
 {#if lotteryRound}
     <div class="flex justify-center px-4 sm:px-6 lg:px-8">
-        <div class="bg-white shadow-lg rounded-lg my-4 w-full max-w-7xl">
+        <div class="bg-transparent border border-gray-200 shadow-lg rounded-lg my-4 w-full max-w-7xl">
             <!-- Navigation -->
             <button
                 class="bg-gradient-to-r from-red-900 to-red-700 rounded-t-md mb-4 p-2 w-full"

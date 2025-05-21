@@ -15,10 +15,10 @@
     const username = localStorage.getItem("username");
     try {
       if (username) {
-        const responseGetBalance = await walletApi.getBalance(username);
-        name = responseGetBalance.username;
-        credits = responseGetBalance.balance;
-        currency = responseGetBalance.currency;
+        const responseGetBalance = await walletApi.getBalance();
+        name = responseGetBalance?.username ?? username;
+        credits = responseGetBalance?.balance ?? 0;
+        currency = responseGetBalance?.currency ?? '';
       }
     } catch (error) {
       console.error("Error in login:", error);

@@ -8,6 +8,14 @@ function getLocal(key: string): string {
     return value && value !== 'null' ? value : '';
 }
 
+// Function to clear all auth data from localStorage
+function clearAuthData() {
+    if (!browser) return;
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('agent_name');
+}
+
 export const token = writable(getLocal('token'));
 export const username = writable(getLocal('username'));
 export const agent_name = writable(getLocal('agent_name'));
@@ -23,7 +31,7 @@ if (browser) {
         if (value) {
             localStorage.setItem('token', value);
         } else {
-            localStorage.removeItem('token');
+            clearAuthData();
         }
     });
 
@@ -49,3 +57,14 @@ if (browser) {
 export const getToken = () => tokenValue;
 export const getUsername = () => usernameValue;
 export const getAgentName = () => agentNameValue;
+
+// Function to clear all auth state
+export const clearAuth = () => {
+    token.set('');
+    username.set('');
+    agent_name.set('');
+    agent_id.set(null);
+};
+
+// Function to check if user is authenticated
+export const isAuthenticated = () => !!tokenValue && !!usernameValue;

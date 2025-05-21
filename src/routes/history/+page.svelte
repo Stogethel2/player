@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
-    import { formatDateTime } from "$lib/utils/date-time";
+    import { formatDateTime } from "$lib/utils/date-time.utils";
 
     import { orderApi } from "$lib/api/endpoint/order";
     import { CheckCircle2, XCircle, ChevronDown } from "lucide-svelte";
@@ -8,7 +8,7 @@
     import Loading from "../../common/components/loading/loading.svelte";
     import ConfirmPayment from "../../common/components/bet/confirmPayment.svelte";
     import { betCalculateApi } from "$lib";
-    import { userAuth } from "$lib/utils/user-auth";
+    import { userAuth } from "$lib/utils/user-auth.utils";
 
 
     let orders: OrderResponse[] = [];

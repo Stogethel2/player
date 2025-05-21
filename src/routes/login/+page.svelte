@@ -36,7 +36,7 @@
             type="text"
             id="username"
             bind:value={username}
-            class="w-full pl-10 pr-3 py-2 border border-rose-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 bg-white bg-opacity-75"
+            class="w-full pl-10 pr-3 py-2 border border-rose-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 bg-black bg-opacity-75"
             placeholder="กรอกชื่อผู้ใช้"
             required
           />
@@ -55,7 +55,7 @@
             type="password"
             id="password"
             bind:value={password}
-            class="w-full pl-10 pr-3 py-2 border border-rose-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 bg-white bg-opacity-75"
+            class="w-full pl-10 pr-3 py-2 border border-rose-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 bg-black bg-opacity-75"
             placeholder="กรอกรหัสผ่าน"
             required
           />

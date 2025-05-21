@@ -3,7 +3,7 @@
   import { get } from "svelte/store";
   import { onMount } from "svelte";
   import { betStore } from "$lib/stores/BetStore";
-  import { NUMPAD_LAYOUT } from "$lib/utils/play";
+  import { NUMPAD_LAYOUT } from "$lib/utils/play-utils";
   import type { LottoBetType, Lotto } from "$lib/interface/lotto.types";
 
   export let digitsCount: number = 3;
@@ -108,7 +108,7 @@
   }
 </script>
 
-<div class="bg-white w-full p-4 rounded flex flex-col items-center">
+<div class="bg-transparent w-full p-4 rounded flex flex-col items-center">
   <h2 class="text-lg sm:text-xl font-semibold text-center mb-4">
     กรุณาระบุตัวเลข ({digitsCount} หลัก)
   </h2>

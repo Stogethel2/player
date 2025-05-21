@@ -4,9 +4,17 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { loginApi } from "$lib/api/login";
-  import { token, username, agent_name, agent_id } from "./auth.store";
+  import {
+    token,
+    username,
+    agent_name,
+    agent_id,
+    isAuthenticated,
+    clearAuth,
+  } from "./auth.store";
   import { walletApi } from "$lib/api/endpoint/balance";
   import Navbar from "../../common/components/navbar/navbar.svelte";
+  import { browser } from "$app/environment";
 
   let name = $state("");
   let credits = $state(0);
@@ -19,9 +27,9 @@
       const queryParams = Object.fromEntries($page.url.searchParams.entries());
       const queryToken = queryParams.token;
       const tokenValue =
-        queryToken && queryToken !== 'null' ? queryToken : $token;
+        queryToken && queryToken !== "null" ? queryToken : $token;
 
-      if (tokenValue && tokenValue !== 'null') {
+      if (tokenValue && tokenValue !== "null") {
         token.set(tokenValue);
 
         const responseGetUsers = await loginApi.getUsers(tokenValue);
@@ -30,25 +38,56 @@
         agent_id.set(responseGetUsers.agent.agent_id);
 
         const responseGetBalance = await walletApi.getBalance();
-        name = responseGetBalance.username;
-        credits = responseGetBalance.balance;
-        currency = responseGetBalance.currency;
+        name = responseGetBalance?.username ?? $username;
+        credits = responseGetBalance?.balance ?? 0;
+        currency = responseGetBalance?.currency ?? "";
 
         if ($username) {
           isLoggedIn = true;
         }
       } else {
-        token.set('');
+        clearAuth();
+        isLoggedIn = false;
       }
     } catch (error) {
       console.error("Error in login:", error);
+      // On error, check if we should clear auth
+      if (error instanceof Error && error.message.includes("unauthorized")) {
+        clearAuth();
+        isLoggedIn = false;
+      }
     } finally {
       isLoading = false;
     }
   };
 
-  onMount(async () => {
-    await login();
+  const handleNavigation = () => {
+    if (browser) {
+      if (!isLoggedIn && isAuthenticated()) {
+        login();
+      }
+    }
+  };
+
+  let unsubscribeFromPage: (() => void) | undefined;
+
+  onMount(() => {
+    login().then(() => {
+      if (browser) {
+        window.addEventListener("popstate", handleNavigation);
+
+        unsubscribeFromPage = page.subscribe(() => {
+          handleNavigation();
+        });
+      }
+    });
+
+    return () => {
+      if (browser) {
+        window.removeEventListener("popstate", handleNavigation);
+        if (unsubscribeFromPage) unsubscribeFromPage();
+      }
+    };
   });
 </script>
 

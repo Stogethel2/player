@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { BetSummary } from "$lib/interface/bet.types";
   import { betStore } from "$lib/stores/BetStore";
-  import { syncBetSummaryWithStore } from "$lib/utils/bet-calculations";
+  import { syncBetSummaryWithStore } from "$lib/utils/bet-calculations.utils";
 
   import BetRow from "./betRow.svelte";
   import TableHeader from "./tableHeader.svelte";

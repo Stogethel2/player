@@ -103,7 +103,7 @@
 
 <style lang="postcss">
   .card {
-    @apply bg-white rounded-xl shadow-md;
+    @apply bg-black rounded-xl shadow-md;
   }
   .truncate {
     @apply overflow-hidden text-ellipsis;

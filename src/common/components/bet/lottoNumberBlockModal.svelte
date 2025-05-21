@@ -5,7 +5,7 @@
     import type { Lotto } from "$lib/interface/lotto.types";
     import type { LottoRound, LottoBetType } from "$lib/interface/lotto.types";
 
-    import { formatDateTime } from "$lib/utils/date-time";
+    import { formatDateTime } from "$lib/utils/date-time.utils";
 
     import { lottoApi, lottoRoundApi } from "$lib";
 
@@ -35,7 +35,7 @@
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
+    <div class="w-11/12 max-w-2xl bg-black rounded-lg overflow-hidden">
         <!-- Header -->
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
