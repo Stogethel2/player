@@ -2,9 +2,15 @@ import { writable } from 'svelte/store';
 
 const browser = typeof window !== 'undefined';
 
-export const token = writable(browser ? localStorage.getItem('token') ?? '' : '');
-export const username = writable(browser ? localStorage.getItem('username') ?? '' : '');
-export const agent_name = writable(browser ? localStorage.getItem('agent_name') ?? '' : '');
+function getLocal(key: string): string {
+    if (!browser) return '';
+    const value = localStorage.getItem(key);
+    return value && value !== 'null' ? value : '';
+}
+
+export const token = writable(getLocal('token'));
+export const username = writable(getLocal('username'));
+export const agent_name = writable(getLocal('agent_name'));
 export const agent_id = writable<string | null>(null);
 
 let tokenValue = '';
@@ -14,17 +20,29 @@ let agentNameValue = '';
 if (browser) {
     token.subscribe(value => {
         tokenValue = value;
-        if (value) localStorage.setItem('token', value);
+        if (value) {
+            localStorage.setItem('token', value);
+        } else {
+            localStorage.removeItem('token');
+        }
     });
 
     username.subscribe(value => {
         usernameValue = value;
-        if (value) localStorage.setItem('username', value);
+        if (value) {
+            localStorage.setItem('username', value);
+        } else {
+            localStorage.removeItem('username');
+        }
     });
 
     agent_name.subscribe(value => {
         agentNameValue = value;
-        if (value) localStorage.setItem('agent_name', value);
+        if (value) {
+            localStorage.setItem('agent_name', value);
+        } else {
+            localStorage.removeItem('agent_name');
+        }
     });
 }
 

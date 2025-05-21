@@ -4,8 +4,10 @@ export function userAuth() {
     try {
         // check Auth
         const token = localStorage.getItem("token");
-        if (token === 'null') {
+        if (!token || token === 'null') {
+            localStorage.removeItem('token');
             goto("/seamless");
+            return;
         }
 
         // decode token

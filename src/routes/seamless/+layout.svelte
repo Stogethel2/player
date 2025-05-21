@@ -17,9 +17,11 @@
   const login = async (): Promise<void> => {
     try {
       const queryParams = Object.fromEntries($page.url.searchParams.entries());
-      const tokenValue = queryParams.token ?? $token;
+      const queryToken = queryParams.token;
+      const tokenValue =
+        queryToken && queryToken !== 'null' ? queryToken : $token;
 
-      if (tokenValue) {
+      if (tokenValue && tokenValue !== 'null') {
         token.set(tokenValue);
 
         const responseGetUsers = await loginApi.getUsers(tokenValue);
@@ -35,6 +37,8 @@
         if ($username) {
           isLoggedIn = true;
         }
+      } else {
+        token.set('');
       }
     } catch (error) {
       console.error("Error in login:", error);
