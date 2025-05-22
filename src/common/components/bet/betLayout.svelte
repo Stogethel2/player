@@ -228,7 +228,7 @@
   $: enterPriceButton = totalBet == 0;
 </script>
 
-<div class="w-full mx-auto max-w-7xl bg-[#1A1A1A] min-h-screen flex flex-col items-center ">
+<div class="w-full mx-auto max-w-7xl bg-theme min-h-screen flex flex-col items-center ">
   {#if isLoading}
     <p class="text-white text-xl">กำลังโหลดข้อมูล...</p> <!-- Loading... -->
   {:else if initializationError}
@@ -237,8 +237,7 @@
       <p class="text-red-400 text-xl mb-2">เกิดข้อผิดพลาด</p> <!-- Error -->
       <p class="text-gray-300 mb-6">{initializationError}</p>
       <button
-        style="background: linear-gradient(to right, #a77338, #dab768, #fef7b2, #dab768, #a77338);"
-        class="rounded-md py-2 px-6 text-black font-bold text-sm"
+        class="btn-gradient px-6 text-sm"
         on:click={navigateBack}
       >
         กลับไปหน้าหลัก <!-- Back to Home -->
@@ -251,8 +250,7 @@
       >
         <!-- Navigation -->
         <button
-          style="background: linear-gradient(to right, #a77338, #dab768, #fef7b2, #dab768, #a77338);"
-          class="rounded-t-md mb-4 p-2 w-full"
+          class="btn-gradient rounded-t-md mb-4 p-2 w-full"
           on:click={navigateBack}
         >
           <div class="text-black font-bold text-sm flex items-center">
@@ -301,8 +299,7 @@
             </div>
             <div class="flex items-center text-white mt-4">
               <button
-                style="background: linear-gradient(to right, #a77338, #dab768, #fef7b2, #dab768, #a77338);"
-                class="rounded-md p-2"
+                class="btn-gradient p-2"
                 on:click={openLottoNumberBlockModal}
               >
                 <div class="text-black font-bold text-sm flex items-center">
@@ -311,8 +308,7 @@
               </button>
 
               <button
-                style="background: linear-gradient(to right, #a77338, #dab768, #fef7b2, #dab768, #a77338);"
-                class="rounded-md p-2 ml-2"
+                class="btn-gradient p-2 ml-2"
                 on:click={openLottoRuleModal}
               >
                 <div class="text-black font-bold text-sm flex items-center">
@@ -333,8 +329,7 @@
             <!-- Play Mode Tabs -->
             <div class="flex border-l relative justify-start mt-4">
               <button
-               style="background: linear-gradient(to right, #a77338, #dab768, #fef7b2, #dab768, #a77338);"
-                class="flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
+               class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
                   ? 'border-b-white'
                   : ''}"
                 on:click={() => setPlayMode("custom")}
@@ -370,13 +365,13 @@
               <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
                 <button
                   on:click={betStore.clearAll}
-                  class="bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+                  class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
                 >
                   ลบทั้งหมด
                 </button>
                 <button
                   on:click={openBetModal}
-                  class="bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+                  class="btn bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
                   disabled={enterPriceButton}
                 >
                   ใส่ราคา

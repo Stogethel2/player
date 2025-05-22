@@ -137,8 +137,7 @@
 
             <div class="flex items-center text-black mt-4">
                 <button
-                    class="rounded-md p-2"
-                    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                    class="btn-gradient p-2"
                     class:opacity-75={lottoResult !== "PENDING"}
                     on:click={() => handleFilterChange("PENDING")}
                 >
@@ -150,8 +149,7 @@
                 </button>
 
                 <button
-                    class="rounded-md p-2 ml-2"
-                    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+                    class="btn-gradient p-2 ml-2"
                     class:opacity-75={lottoResult !== "CLOSED"}
                     on:click={() => handleFilterChange("CLOSED")}
                 >

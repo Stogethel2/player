@@ -187,7 +187,7 @@
                 <input
                     id="totalAmount"
                     type="number"
-                    class="w-full p-2 bg-gray-100 rounded text-right"
+                    class="input w-full bg-gray-100 text-right"
                     readonly
                     value={$currentBetSummary.totals.total_amount}
                 />
@@ -212,13 +212,13 @@
             <!-- Action Buttons -->
             <div class="flex justify-between gap-4">
                 <button
-                    class="flex-1 py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+                    class="btn flex-1 py-2 bg-gray-100 hover:bg-gray-200"
                     on:click={handleCloseModal}
                 >
                     ยกเลิกทั้งหมด
                 </button>
                 <button
-                    class="flex-1 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                    class="btn flex-1 py-2 bg-green-500 text-white hover:bg-green-600"
                     disabled={isLoading}
                     on:click={handleSubmitBet}
                 >

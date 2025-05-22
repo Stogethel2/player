@@ -86,7 +86,7 @@
               </p>
               <button
                 on:click={() => copyToClipboard(bankAccount.accountNumber)}
-                class="text-blue-600 hover:text-blue-800 transition-colors"
+                class="btn text-blue-600 hover:text-blue-800"
                 title="Copy account number"
               >
                 <CopyCheck size={20} />
@@ -102,7 +102,7 @@
     <div class="mt-8 text-center">
       <p class="text-sm text-gray-600 mb-3">หลังจากโอนเงินเรียบร้อยแล้ว</p>
       <button
-        class="bg-green-500 text-white px-8 py-3 rounded-full font-medium hover:bg-green-600 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+        class="btn bg-green-500 text-white px-8 py-3 rounded-full font-medium hover:bg-green-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
       >
         แจ้งยอดฝาก
       </button>

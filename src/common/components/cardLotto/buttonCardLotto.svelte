@@ -24,12 +24,10 @@
     aria-disabled={disabled}
   >
     <div
-      class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-      style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+      class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform group-hover:translate-x-0.5 group-hover:translate-y-0.5 bg-gold-gradient"
     ></div>
     <div
-      class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform"
-      style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
+      class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform bg-gold-gradient"
     ></div>
     <div class="relative flex items-center justify-center">
       <span

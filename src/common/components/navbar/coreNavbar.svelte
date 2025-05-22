@@ -58,7 +58,7 @@
                 </div>
 
                 <button
-                    class="text-white p-2 bg-black border border-gold mx-2 rounded-md cursor-pointer hover:bg-gold hover:text-black transition duration-300"
+                    class="btn text-white p-2 bg-black border border-gold mx-2 hover:bg-gold hover:text-black"
                     on:click={async () => await logout()}
                 >
                     <LogOut size={18} />
@@ -69,16 +69,12 @@
 </div>
 
 <style>
-    /* Custom gold color for consistency with navigation */
-    :root {
-        --gold: #FFD700;
-    }
-
+    /* Custom gold color defined in app.css */
     .text-gold {
-        color: var(--gold);
+        color: var(--color-gold);
     }
 
     .border-gold {
-        border-color: var(--gold);
+        border-color: var(--color-gold);
     }
 </style>

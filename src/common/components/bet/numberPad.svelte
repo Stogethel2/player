@@ -115,10 +115,12 @@
   <div class="flex flex-wrap justify-center space-x-2 mb-4">
     {#each digits as digit, index (index)}
       <input
-        type="text"
+        type="number"
         inputmode="numeric"
-        maxlength="1"
-        class="w-12 h-12 sm:w-14 sm:h-14 border border-gray-300 rounded text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+        min="0"
+        max="9"
+        pattern="[0-9]"
+        class="input w-12 h-12 sm:w-14 sm:h-14 text-center text-lg mb-2"
         bind:value={digits[index]}
         on:input={(event) => handleDigitInput(event, index)}
         bind:this={digitInputRefs[index]}
@@ -130,7 +132,7 @@
   >
     {#each NUMPAD_LAYOUT as value (value)}
       <button
-        class="aspect-square w-full border rounded text-base sm:text-lg font-medium transition-colors duration-200"
+        class="btn aspect-square w-full border text-base sm:text-lg"
         class:bg-teal-500={value === "สุ่ม"}
         class:bg-red-500={value === "ลบ"}
         class:bg-white={typeof value === "number"}

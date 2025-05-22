@@ -8,10 +8,7 @@
 
 <div class="sticky w-full navbar">
   <Navigation />
-  <div
-    class="w-full"
-    style="background: linear-gradient(to top, #dab768, #a77338, #fef7b2, #dab768, #a77338);"
-  >
+  <div class="w-full bg-gold-gradient">
     <div>
       <CoreNavbar {name} {credits} {currency} />
     </div>
