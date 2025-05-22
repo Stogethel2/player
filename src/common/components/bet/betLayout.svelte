@@ -327,7 +327,7 @@
 
           {#if $selectedBetType}
             <!-- Play Mode Tabs -->
-            <div class="flex border-l relative justify-start mt-4">
+            <div class="flex relative justify-start mt-4">
               <button
                class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
                   ? 'border-b-white'

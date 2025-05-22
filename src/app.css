@@ -59,15 +59,6 @@ body {
   );
 }
 
-.bg-gold-gradient-simple {
-  background: linear-gradient(
-    to top,
-    var(--color-gold-light),
-    var(--color-gold),
-    var(--color-gold-dark)
-  );
-}
-
 .bg-announcement {
   background: linear-gradient(to top, var(--color-announcement-bg));
 }
@@ -86,5 +77,5 @@ body {
 }
 
 .btn-gradient {
-  @apply btn bg-gold-gradient-right text-black;
+  @apply btn bg-gold-gradient text-black !important;
 }
