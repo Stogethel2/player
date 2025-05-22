@@ -109,7 +109,7 @@
 </script>
 
 <div class="bg-transparent w-full p-4 rounded flex flex-col items-center">
-  <h2 class="text-lg sm:text-xl font-semibold text-center mb-4">
+  <h2 class="text-lg sm:text-xl font-semibold text-center mb-4 text-white">
     กรุณาระบุตัวเลข ({digitsCount} หลัก)
   </h2>
   <div class="flex flex-wrap justify-center space-x-2 mb-4">
@@ -126,7 +126,7 @@
     {/each}
   </div>
   <div
-    class="grid grid-cols-3 gap-2 bg-gray-100 p-3 sm:p-4 rounded-lg w-full max-w-[240px] sm:max-w-[280px]"
+    class="grid grid-cols-3 gap-2 bg-transparent sm:p-4 rounded-lg w-full max-w-[240px] sm:max-w-[280px]"
   >
     {#each NUMPAD_LAYOUT as value (value)}
       <button

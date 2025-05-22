@@ -12,19 +12,16 @@
 
     const isCurrentlySelected = selectedBetType?.id === betType.id;
 
-    selectedBetType = isCurrentlySelected 
-      ? null 
-      : betType;
+    selectedBetType = isCurrentlySelected ? null : betType;
 
     dispatch("typesChanged", {
       availableBetTypes,
       digitCount: betType.bet_digit,
       selectedBetType: betType,
-      changeType: isCurrentlySelected ? "deactivate" : "activate", 
+      changeType: isCurrentlySelected ? "deactivate" : "activate",
       isActive: !isCurrentlySelected,
-      activeTypesCount: availableBetTypes.length
+      activeTypesCount: availableBetTypes.length,
     });
-
   }
 
   function isBetTypeSelected(bet_type_id: string): boolean {
@@ -37,7 +34,8 @@
     {#each availableBetTypes as betType}
       {#if betType.is_active}
         <button
-          class="p-2 rounded-lg text-xs sm:text-sm transition-colors duration-200 ease-in-out"
+          style="background: linear-gradient(to top, #fef7b2, #dab768, #a77338);"
+          class="p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
           class:active={isBetTypeSelected(betType.id)}
           on:click={() => handleBetTypeClick(betType)}
           aria-pressed={isBetTypeSelected(betType.id)}

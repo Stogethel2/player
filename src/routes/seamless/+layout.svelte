@@ -15,6 +15,7 @@
   import { walletApi } from "$lib/api/endpoint/balance";
   import Navbar from "../../common/components/navbar/navbar.svelte";
   import { browser } from "$app/environment";
+  import { CircleAlert } from "lucide-svelte";
 
   let name = $state("");
   let credits = $state(0);
@@ -91,13 +92,33 @@
   });
 </script>
 
-<div class="app-container">
-  <Navbar {name} {credits} {currency} />
-
-  <div class="content-wrapper">
-    {@render children()}
+{#if isLoading}
+  <div
+    class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white"
+  >
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"
+    ></div>
   </div>
-</div>
+{:else if isLoggedIn}
+  <div class="app-container">
+    <Navbar {name} {credits} {currency} />
+
+    <div class="content-wrapper">
+      {@render children()}
+    </div>
+  </div>
+{:else}
+  <div
+    class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4"
+  >
+    <CircleAlert size={64} class="text-red-500 mb-4" />
+    <h1 class="text-2xl font-bold mb-2">การเข้าถึงถูกปฏิเสธ</h1>
+    <p class="text-lg text-center">
+      ไม่สามารถเข้าใช้งานได้เนื่องจาก Token ไม่ถูกต้อง
+    </p>
+  </div>
+{/if}
 
 <style>
   :global(body) {

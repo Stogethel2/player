@@ -36,7 +36,7 @@
       <div class="grid grid-cols-2 gap-4">
         {#if resultsByType.three_top}
           <div class="col-span-2 bg-red-100 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">3 ตัวบน</p>
+            <p class="text-sm font-medium text-white">3 ตัวบน</p>
             <p class="text-3xl font-bold text-red-600">
               {resultsByType.three_top}
             </p>
@@ -45,7 +45,7 @@
 
         {#if resultsByType.three_bottom}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">3 ตัวล่าง</p>
+            <p class="text-sm font-medium text-white">3 ตัวล่าง</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.three_bottom}
             </p>
@@ -54,7 +54,7 @@
 
         {#if resultsByType.two_top}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">2 ตัวบน</p>
+            <p class="text-sm font-medium text-white">2 ตัวบน</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.two_top}
             </p>
@@ -63,7 +63,7 @@
 
         {#if resultsByType.two_bottom}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">2 ตัวล่าง</p>
+            <p class="text-sm font-medium text-white">2 ตัวล่าง</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.two_bottom}
             </p>
@@ -72,7 +72,7 @@
 
         {#if resultsByType.tod}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">3 ตัวโต๊ด</p>
+            <p class="text-sm font-medium text-white">3 ตัวโต๊ด</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.tod}
             </p>
@@ -81,7 +81,7 @@
 
         {#if resultsByType.run_top}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">วิ่งบน</p>
+            <p class="text-sm font-medium text-white">วิ่งบน</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.run_top}
             </p>
@@ -90,7 +90,7 @@
 
         {#if resultsByType.run_bottom}
           <div class="bg-red-50 p-3 rounded-lg">
-            <p class="text-sm font-medium text-black">วิ่งล่าง</p>
+            <p class="text-sm font-medium text-white">วิ่งล่าง</p>
             <p class="text-2xl font-bold text-red-600">
               {resultsByType.run_bottom}
             </p>

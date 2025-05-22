@@ -3,7 +3,7 @@
     import { derived } from "svelte/store";
     import { fade } from "svelte/transition";
     import { getTypeClass } from "$lib/utils/play-utils";
-    import type { LottoBetType } from "$lib/interface/Lotto.types";
+    import type { LottoBetType } from "$lib/interface/lotto.types";
 
     export let availableBetTypes: LottoBetType[] = [];
 
@@ -37,7 +37,7 @@
 </script>
 
 <div class="h-full rounded pt-2 flex flex-col">
-    <h2 class="text-md font-light text-center">รายการ</h2>
+    <h2 class="text-md font-light text-center text-white">รายการ</h2>
 
     <div class="flex-grow overflow-hidden">
         <div class={`h-full p-1 ${enableScrolling ? "overflow-y-auto" : ""}`}>
@@ -46,13 +46,13 @@
                     class="flex flex-col items-center justify-center h-full text-gray-500 text-sm mb-4"
                     transition:fade={{ duration: 200 }}
                 >
-                    <p>ไม่มีรายการ</p>
-                    <p>ที่เลือก</p>
+                    <p class="text-white">ไม่มีรายการ 
+                    ที่เลือก</p>
                 </div>
             {:else}
                 {#each betGroups as { bet_type_id, betList, lotto_id } (bet_type_id)}
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2">
+                        <h3 class="font-semibold mb-2 text-white">
                             {getBetTypeName(bet_type_id)}
                         </h3>
                         <h3 class="font-semibold mb-2">

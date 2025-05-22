@@ -9,7 +9,7 @@
 
   let name = $state("");
   let credits = $state(0);
-  let currency = $state('');
+  let currency = $state("");
 
   const getBalance = async (): Promise<void> => {
     const username = localStorage.getItem("username");
@@ -18,7 +18,7 @@
         const responseGetBalance = await walletApi.getBalance();
         name = responseGetBalance?.username ?? username;
         credits = responseGetBalance?.balance ?? 0;
-        currency = responseGetBalance?.currency ?? '';
+        currency = responseGetBalance?.currency ?? "";
       }
     } catch (error) {
       console.error("Error in login:", error);
@@ -41,6 +41,6 @@
 </script>
 
 {#if $page.url.pathname !== "/seamless"}
-  <Navbar {name} {credits} {currency}/>
+  <Navbar {name} {credits} {currency} />
 {/if}
 {@render children()}

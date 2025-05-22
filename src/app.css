@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: "Noto Sans Thai", sans-serif;
-    background-color: #E5E5E5;
-}
 
 .my-input {
     @apply focus:ring-1 focus:outline-none focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out;

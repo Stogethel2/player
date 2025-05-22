@@ -134,26 +134,12 @@
     color: var(--gold);
   }
 
-  .text-gold-light {
-    color: var(--gold-light);
-  }
-
-  .text-gold-dark {
-    color: var(--gold-dark);
-  }
-
   .border-gold {
     border-color: var(--gold);
   }
-
-  .bg-gold {
-    background-color: var(--gold);
-  }
-
   .toggle-menu {
     display: none;
   }
-
   .menu-mobile {
     position: fixed;
     bottom: 0;
