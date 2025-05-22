@@ -110,15 +110,12 @@
 </div>
 
 <style>
-  :root {
-    --gold: #dab768;
-  }
-
+  /* Gold colors defined globally in app.css */
   .text-gold {
-    color: var(--gold);
+    color: var(--color-gold);
   }
 
   .border-gold {
-    border-color: var(--gold);
+    border-color: var(--color-gold);
   }
 </style>

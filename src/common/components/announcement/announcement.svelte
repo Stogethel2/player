@@ -4,8 +4,7 @@
 </script>
 
 <div
-  class="my-1.5 p-1.5"
-  style="background: linear-gradient(to top, #734b10);"
+  class="my-1.5 p-1.5 bg-announcement"
 >
   <div class="flex">
     <div class="text-white text-sm flex items-center w-2/6 border-r-2">

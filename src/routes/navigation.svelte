@@ -123,19 +123,13 @@
 </div>
 
 <style>
-  /* Custom gold colors */
-  :root {
-    --gold: #dab768;
-    --gold-light: #fef7b2;
-    --gold-dark: #a77338;
-  }
-
+  /* Custom gold colors are defined globally in app.css */
   .text-gold {
-    color: var(--gold);
+    color: var(--color-gold);
   }
 
   .border-gold {
-    border-color: var(--gold);
+    border-color: var(--color-gold);
   }
   .toggle-menu {
     display: none;

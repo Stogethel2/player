@@ -79,7 +79,7 @@
   <td class="px-2 py-4">
     <input
       type="number"
-      class="w-20 md:w-40 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out"
+      class="input w-20 md:w-40 px-2 py-1"
       value={currentAmount}
       min="1"
       on:input={handleAmountChange}
@@ -90,7 +90,7 @@
   <td class="px-2 py-4">
     <button
       on:click={handleDelete}
-      class="text-red-500 hover:text-red-700 transition-colors duration-150"
+      class="btn text-red-500 hover:text-red-700"
       title="Delete bet"
     >
       <Trash2 size={20} />

@@ -3,6 +3,88 @@
 @tailwind utilities;
 
 
+/* Global theme colors */
+:root {
+  --color-bg: #1a1a1a;
+  --color-text: #ffffff;
+  --color-gold: #dab768;
+  --color-gold-light: #fef7b2;
+  --color-gold-dark: #a77338;
+  --color-announcement-bg: #734b10;
+}
+
+body {
+  @apply bg-[var(--color-bg)] text-[var(--color-text)];
+}
+
+.bg-theme {
+  background-color: var(--color-bg);
+}
+
+.text-theme {
+  color: var(--color-text);
+}
+
+.border-theme {
+  border-color: var(--color-text);
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.border-gold {
+  border-color: var(--color-gold);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(
+    to top,
+    var(--color-gold-dark),
+    var(--color-gold),
+    var(--color-gold-light),
+    var(--color-gold),
+    var(--color-gold-dark)
+  );
+}
+
+.bg-gold-gradient-right {
+  background: linear-gradient(
+    to right,
+    var(--color-gold-dark),
+    var(--color-gold),
+    var(--color-gold-light),
+    var(--color-gold),
+    var(--color-gold-dark)
+  );
+}
+
+.bg-gold-gradient-simple {
+  background: linear-gradient(
+    to top,
+    var(--color-gold-light),
+    var(--color-gold),
+    var(--color-gold-dark)
+  );
+}
+
+.bg-announcement {
+  background: linear-gradient(to top, var(--color-announcement-bg));
+}
+
 .my-input {
-    @apply focus:ring-1 focus:outline-none focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out;
+  @apply focus:ring-1 focus:outline-none focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out;
+}
+
+/* Base input and button styles for consistent look */
+.input {
+  @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500 bg-black bg-opacity-75;
+}
+
+.btn {
+  @apply rounded-md font-semibold transition-colors duration-200;
+}
+
+.btn-gradient {
+  @apply btn bg-gold-gradient-right text-black;
 }

@@ -127,12 +127,12 @@
           id="withdrawAmount"
           bind:value={withdrawalAmount}
           placeholder="ใส่จำนวนเงิน"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          class="input w-full px-4 py-2 border-green-500 focus:ring-green-500"
         />
       </div>
       <button
         on:click={handleWithdraw}
-        class="w-full bg-gradient-to-t from-green-700 to-green-900 text-white px-6 py-2 rounded-full text-lg font-semibold hover:from-green-700 hover:to-green-900 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        class="btn w-full bg-gradient-to-t from-green-700 to-green-900 text-white px-6 py-2 rounded-full text-lg font-semibold hover:from-green-700 hover:to-green-900 transform hover:-translate-y-1 focus:ring-green-500"
       >
         แจ้งถอน
       </button>

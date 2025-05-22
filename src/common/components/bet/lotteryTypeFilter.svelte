@@ -34,8 +34,7 @@
     {#each availableBetTypes as betType}
       {#if betType.is_active}
         <button
-          style="background: linear-gradient(to top, #fef7b2, #dab768, #a77338);"
-          class="p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
+          class="btn-gradient p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
           class:active={isBetTypeSelected(betType.id)}
           on:click={() => handleBetTypeClick(betType)}
           aria-pressed={isBetTypeSelected(betType.id)}
