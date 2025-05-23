@@ -1,40 +1,66 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { LottoBetType, Lotto } from "$lib/interface/lotto.types";
-  import { groupBetType, unGroupBetType, type GroupedBetTypes } from "$lib/utils/group-bet-type.util";
+  import type { LottoBetType } from "$lib/interface/lotto.types";
+  import {
+    groupBetType,
+    type GroupedBetTypes,
+  } from "$lib/utils/group-bet-type.util";
 
   const dispatch = createEventDispatcher();
 
   export let selectedBetType: LottoBetType | null = null;
   export let availableBetTypes: LottoBetType[] = [];
   let selectedDigitGroup: number | null = null;
+  let selectedBetTypes: LottoBetType[] = [];
 
   function handleBetTypeClick(betType: LottoBetType) {
     if (!betType.id) return;
 
-    const isCurrentlySelected = selectedBetType?.id === betType.id;
+    const isCurrentlySelected = selectedBetTypes.some(
+      (selected) => selected.id === betType.id
+    );
 
-    selectedBetType = isCurrentlySelected ? null : betType;
+    if (isCurrentlySelected) {
+      selectedBetTypes = selectedBetTypes.filter(
+        (selected) => selected.id !== betType.id
+      );
+    } else {
+      selectedBetTypes = [...selectedBetTypes, betType];
+    }
+
+    selectedBetType = selectedBetTypes.length > 0 ? selectedBetTypes[0] : null;
 
     dispatch("typesChanged", {
       availableBetTypes,
       digitCount: betType.bet_digit,
       selectedBetType: betType,
+      selectedBetTypes,
       changeType: isCurrentlySelected ? "deactivate" : "activate",
       isActive: !isCurrentlySelected,
-      activeTypesCount: availableBetTypes.length,
+      activeTypesCount: selectedBetTypes.length,
     });
   }
 
   function handleDigitGroupClick(digitGroup: number) {
+    if (selectedDigitGroup !== digitGroup) {
+      selectedBetTypes = [];
+      selectedBetType = null;
+      
+      // Dispatch the change to notify parent component that selections are cleared
+      dispatch("typesChanged", {
+        availableBetTypes,
+        digitCount: 0,
+        selectedBetType: null,
+        selectedBetTypes: [],
+        changeType: "clear",
+        isActive: false,
+        activeTypesCount: 0,
+      });
+    }
     selectedDigitGroup = digitGroup;
   }
 
   const groupedBetTypes: GroupedBetTypes[] = groupBetType(availableBetTypes);
-
-  function isBetTypeSelected(bet_type_id: string): boolean {
-    return selectedBetType?.id === bet_type_id;
-  }
 
   function isDigitGroupSelected(digitGroup: number): boolean {
     return selectedDigitGroup === digitGroup;
@@ -59,37 +85,23 @@
   </div>
 
   {#if selectedDigitGroup}
-  <div class="mt-4">
-    <p class="text-xs py-2">เลือกประเภท *เลือกได้มากกว่า 1 ตัวเลือก</p>
-    <div class="grid grid-cols-3 gap-2">
-      {#each groupedBetTypes.find(g => g.digitGroup === selectedDigitGroup)?.betTypes ?? [] as betType}
-        {#if betType.is_active}
-          <button
-            class="btn-gradient p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
-            class:active={isBetTypeSelected(betType.id)}
-            on:click={() => handleBetTypeClick(betType)}
-            aria-pressed={isBetTypeSelected(betType.id)}
-          >
-            {betType.bet_type_name}
-          </button>
-        {/if}
-      {/each}
+    <div class="mt-4">
+      <p class="text-xs py-2">เลือกประเภท *เลือกได้มากกว่า 1 ตัวเลือก</p>
+      <div class="grid grid-cols-3 gap-2">
+        {#each groupedBetTypes.find((g) => g.digitGroup === selectedDigitGroup)?.betTypes ?? [] as betType}
+          {#if betType.is_active}
+            <button
+              class="btn-gradient p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
+              class:active={selectedBetTypes.findIndex(
+                (selected) => selected.id === betType.id
+              ) >= 0}
+              on:click={() => handleBetTypeClick(betType)}
+            >
+              {betType.bet_type_name}
+            </button>
+          {/if}
+        {/each}
+      </div>
     </div>
-  </div>
   {/if}
 </div>
-
-<style lang="postcss">
-  button {
-    @apply bg-gray-200 text-gray-800 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
-  }
-  button.active {
-    @apply font-semibold text-white;
-  }
-  button.active[aria-pressed="true"] {
-    @apply bg-red-600;
-  }
-  /* button.active[aria-pressed="true"]:nth-child(n + 5) {
-    @apply bg-yellow-600;
-  } */
-</style>

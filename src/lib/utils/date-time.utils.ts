@@ -43,14 +43,13 @@ export function calculateTimeLeft(
     // Time is up
     isTimeUp = true;
   }
-
   return {
     days,
     hours: hoursToStr,
     minutes: minutesToStr,
     seconds: secondsToStr,
     isTimeUp,
-    formattedText: `เวลาซื้อเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`,
+    formattedText: `${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`,
   };
 }
 

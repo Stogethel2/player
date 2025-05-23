@@ -8,16 +8,14 @@
 
   /* Utils */
   import { togglePlayMode } from "$lib/utils/play-utils";
-  import { formatDateTime } from "$lib/utils/date-time.utils";
+  import {
+    calculateTimeLeft,
+    formatDateTime,
+  } from "$lib/utils/date-time.utils";
   import { lottoRoundApi } from "$lib";
   import { userAuth } from "$lib/utils/user-auth.utils";
 
-  import {
-    ChevronLeft,
-    ChevronRight,
-    CircleAlert,
-    CircleHelp,
-  } from "lucide-svelte";
+  import { ChevronLeft, CircleAlert } from "lucide-svelte";
 
   /* Components */
   import BetAmountModal from "./betAmountModal.svelte";
@@ -41,7 +39,7 @@
   }
 
   /* Main state */
-  let isLoading = true; // Start in a loading state
+  let isLoading = true;
   let initializationError: string | null = null;
   let selectedPlayMode = true;
   let showBetModal = false;
@@ -53,8 +51,14 @@
   let lotto_name = "";
 
   let end_bet_min = 0;
+  let dateRun: string = "";
 
-  const selectedBetTypeStore = writable<LottoBetType>();
+  const selectedBetTypeStore = writable<LottoBetType | undefined>(undefined);
+  const selectedBetTypesStore = writable<LottoBetType[]>([]);
+  const selectedBetTypesCount = derived(
+    selectedBetTypesStore,
+    ($selectedBetTypesStore) => $selectedBetTypesStore?.length || 0
+  );
   const selectedBetType = derived(
     selectedBetTypeStore,
     ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_type || ""
@@ -79,53 +83,6 @@
     }, 1000);
   }
 
-  let dateRun: string = "";
-
-  // ตัวแปรสำหรับเวลา
-  let days,
-    hours,
-    minutes,
-    seconds = 0;
-
-  let hoursToStr,
-    minutesToStr,
-    secondsToStr = "";
-
-  // คำนวณเวลาที่เหลือ
-  function calculateTimeLeft(targetDate: string, endBetMin: number): string {
-    let now = new Date();
-    let date = new Date(targetDate.replace("T", " ").split(".")[0]);
-    date.setHours(date.getHours() + 7);
-
-    let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
-    let difference = Number(end_bet_min) - Number(now);
-
-    if (difference > 0) {
-      days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      minutes = Math.floor((difference / (1000 * 60)) % 60);
-      seconds = Math.floor((difference / 1000) % 60);
-      hoursToStr = hours.toString();
-      minutesToStr = minutes.toString();
-      secondsToStr = seconds.toString();
-      if (hoursToStr.length == 1) {
-        hoursToStr = "0" + hoursToStr;
-      }
-      if (minutesToStr.length == 1) {
-        minutesToStr = "0" + minutesToStr;
-      }
-      if (secondsToStr.length == 1) {
-        secondsToStr = "0" + secondsToStr;
-      }
-    } else {
-      // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
-      days = 0;
-      hoursToStr = minutesToStr = secondsToStr = "00";
-      goto("/seamless");
-    }
-    return `${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
-  }
-
   onMount(async () => {
     isLoading = true;
     initializationError = null;
@@ -137,17 +94,17 @@
 
       if (!lottoId) {
         initializationError = "ไม่พบรหัสรอบหวย (Lotto ID not found).";
-        isLoading = false; // Stop loading as we have an error
+        isLoading = false;
         return;
       }
 
       const roundData = await lottoRoundApi.getLottoRoundById(lottoId);
       if (!roundData) {
         initializationError = `ไม่สามารถโหลดข้อมูลรอบหวยสำหรับ ID: ${lottoId} (Could not load lottery round data).`;
-        isLoading = false; // Stop loading as we have an error
+        isLoading = false;
         return;
       }
-      lotteryRound = roundData; // Assign directly
+      lotteryRound = roundData;
       end_bet_min = lotteryRound.lotto.default_close_bet_minutes;
       lotto_name = lotteryRound.lotto.lotto_name;
       let targetDate = lotteryRound.round_date;
@@ -155,7 +112,7 @@
       if (lotteryRound && end_bet_min >= 0) {
         startTimer(300); // Start 5 minute countdown
         timerIntervalTarget = setInterval(() => {
-          dateRun = calculateTimeLeft(targetDate, end_bet_min);
+          dateRun = calculateTimeLeft(targetDate, end_bet_min).formattedText;
         }, 1000);
       }
     } catch (error) {
@@ -173,7 +130,19 @@
 
   function handleBetTypeChange(event: CustomEvent) {
     const selectedBetType = event.detail.selectedBetType as LottoBetType;
-    selectedBetTypeStore.set(selectedBetType);
+    const selectedBetTypes = event.detail.selectedBetTypes as LottoBetType[];
+
+    selectedBetTypesStore.set(selectedBetTypes);
+
+    if (event.detail.isActive) {
+      selectedBetTypeStore.set(selectedBetType);
+    } else {
+      if (selectedBetTypes.length > 0) {
+        selectedBetTypeStore.set(selectedBetTypes[0]);
+      } else {
+        selectedBetTypeStore.update(() => undefined);
+      }
+    }
   }
 
   function handlePaymentCancel() {
@@ -243,7 +212,7 @@
   {:else if lotteryRound}
     <div class="flex justify-center px-4 sm:px-6 lg:px-8 mb-20 lg:mb-4 w-full">
       <div
-        class="bg-transparent border border-gold shadow-lg rounded-lg mt-4  w-full max-w-7xl"
+        class="bg-transparent border border-gold shadow-lg rounded-lg mt-4 w-full max-w-7xl"
       >
         <!-- Navigation -->
         <button
@@ -323,7 +292,6 @@
             on:typesChanged={handleBetTypeChange}
           />
 
-          {#if $selectedBetType}
             <!-- Play Mode Tabs -->
             <div class="flex relative justify-start mt-4">
               <button
@@ -343,45 +311,45 @@
             </div>
 
             <!-- Play Area -->
-            {#if selectedBetTypeStore !== null}
-              <div class="py-2 flex w-full">
-                <div class="select-list w-2/6 border-r">
-                  <SelectedNumbers
-                    availableBetTypes={lotteryRound.lottoBetTypes}
-                  />
-                </div>
+            <div class="py-2 flex w-full">
+              <div class="select-list w-2/6 border-r">
+                <SelectedNumbers
+                  availableBetTypes={lotteryRound.lottoBetTypes}
+                />
+              </div>
+              {#if $selectedBetTypeStore}
                 <div class="numpad w-4/6 flex flex-col items-center">
                   <NumberPad
                     digitsCount={$selectedDigitsCount}
                     selectedBetType={$selectedBetType}
                     activeLotteryTypesStore={selectedBetTypeStore}
+                    activeLotteryTypesArrayStore={selectedBetTypesStore}
                   />
                 </div>
-              </div>
+              {:else}
+                <div class="w-4/6 flex flex-col items-center justify-center">
+                  <p class="text-white text-center">
+                    กรุณาเลือกประเภทการเดิมพัน
+                  </p>
+                </div>
+              {/if}
+            </div>
 
-              <div class="flex justify-center items-center mt-4 space-x-1">
-                <button
-                  on:click={betStore.clearAll}
-                  class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-                >
-                  ลบทั้งหมด
-                </button>
-                <button
-                  on:click={openBetModal}
-                  class="btn-gradient px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-                  disabled={enterPriceButton}
-                >
-                  ใส่ราคา
-                </button>
-              </div>
-            {:else}
-              <div class="p-8 text-center text-xs sm:text-sm text-gray-500">
-                <p class="text-xl font-semibold mb-2">เงื่อนไขการแทง</p>
-                <p class="text-lg">แทงขั้นต่ำ : 1.00</p>
-                <p class="text-lg">แทงสูงสุดต่อครั้ง : 2000 / โพย</p>
-              </div>
-            {/if}
-          {/if}
+            <div class="flex justify-center items-center mt-4 space-x-1">
+              <button
+                on:click={betStore.clearAll}
+                class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+              >
+                ลบทั้งหมด
+              </button>
+              <button
+                on:click={openBetModal}
+                class="btn-gradient px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+                disabled={enterPriceButton}
+              >
+                ใส่ราคา
+              </button>
+            </div>
         </div>
       </div>
     </div>
@@ -411,20 +379,6 @@
 </div>
 
 <style lang="postcss">
-  @keyframes blink {
-    0%,
-    100% {
-      @apply text-gray-500;
-    }
-    50% {
-      color: red;
-    }
-  }
-
-  .blink {
-    @apply font-bold;
-    animation: blink 1s infinite;
-  }
 
   button:disabled {
     background: silver !important;

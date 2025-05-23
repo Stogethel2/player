@@ -8,7 +8,10 @@
 
   export let digitsCount: number = 3;
   export let selectedBetType: string = "";
-  export let activeLotteryTypesStore: Writable<LottoBetType>;
+  export let activeLotteryTypesStore: Writable<LottoBetType | undefined>;
+  export let activeLotteryTypesArrayStore:
+    | Writable<LottoBetType[]>
+    | undefined = undefined;
 
   let digits: string[] = [];
   let activeDigitIndex = 0;
@@ -82,13 +85,26 @@
   function submitNumber(): void {
     const betNumber = digits.join("");
     if (selectedBetType) {
-      const activeBetType = get(activeLotteryTypesStore);
-      betStore.addBet(
-        activeBetType.id,
-        betNumber,
-        activeBetType,
-        DEFAULT_AMOUNT
-      );
+      const activeBetTypes = activeLotteryTypesArrayStore
+        ? get(activeLotteryTypesArrayStore)
+        : [];
+
+      if (activeBetTypes.length > 0) {
+        // Add bet for each selected bet type
+        activeBetTypes.forEach((betType) => {
+          betStore.addBet(betType.id, betNumber, betType, DEFAULT_AMOUNT);
+        });
+      } else {
+        const activeBetType = get(activeLotteryTypesStore);
+        if (activeBetType) {
+          betStore.addBet(
+            activeBetType.id,
+            betNumber,
+            activeBetType,
+            DEFAULT_AMOUNT
+          );
+        }
+      }
     }
 
     resetDigits();
@@ -108,8 +124,8 @@
   }
 </script>
 
-<div class="bg-transparent w-full p-4 rounded flex flex-col items-center">
-  <h2 class="text-lg sm:text-xl font-semibold text-center mb-4 text-white">
+<div class="bg-transparent w-full p-3 rounded flex flex-col items-center">
+  <h2 class="text-md sm:text-lg font-semibold text-center mb-4 text-white">
     กรุณาระบุตัวเลข ({digitsCount} หลัก)
   </h2>
   <div class="flex flex-wrap justify-center space-x-2 mb-4">
@@ -131,7 +147,7 @@
   >
     {#each NUMPAD_LAYOUT as value (value)}
       <button
-        class="btn aspect-square w-full text-base sm:text-lg "
+        class="btn aspect-square w-full text-base sm:text-lg"
         class:bg-teal-500={value === "สุ่ม"}
         class:bg-red-500={value === "ลบ"}
         class:bg-gray-700={typeof value === "number"}
@@ -150,10 +166,5 @@
   .no-spinner::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-
-  /* For Firefox */
-  .no-spinner {
-    -moz-appearance: textfield;
   }
 </style>

@@ -52,7 +52,7 @@
             {:else}
                 {#each betGroups as { bet_type_id, betList, lotto_id } (bet_type_id)}
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2 text-white">
+                        <h3 class="font-semibold mb-2 text-white text-xs">
                             {getBetTypeName(bet_type_id)}
                         </h3>
                         <h3 class="font-semibold mb-2">

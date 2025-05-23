@@ -28,7 +28,7 @@ export function getTypeClass(tag: string): string {
     if (tag.startsWith("2-")) {
         return "bg-yellow-600 text-white";
     }
-    return "bg-red-600 text-white";
+    return "bg-[#734b10] text-white";
 }
 
 
