@@ -292,64 +292,60 @@
             on:typesChanged={handleBetTypeChange}
           />
 
-            <!-- Play Mode Tabs -->
-            <div class="flex relative justify-start mt-4">
-              <button
-                class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
-                  ? 'border-b-white'
-                  : ''}"
-                on:click={() => setPlayMode("custom")}
-              >
-                <div
-                  class="absolute 0 h-1 -top-1 {selectedPlayMode
-                    ? 'block'
-                    : 'hidden'}"
-                  style="width: calc(100% + 2px);"
-                ></div>
-                <p>กดเลขเอง</p>
-              </button>
-            </div>
+          <!-- Play Mode Tabs -->
+          <div class="flex relative justify-start mt-4">
+            <button
+              class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
+                ? 'border-b-white'
+                : ''}"
+              on:click={() => setPlayMode("custom")}
+            >
+              <div
+                class="absolute 0 h-1 -top-1 {selectedPlayMode
+                  ? 'block'
+                  : 'hidden'}"
+                style="width: calc(100% + 2px);"
+              ></div>
+              <p>กดเลขเอง</p>
+            </button>
+          </div>
 
-            <!-- Play Area -->
-            <div class="py-2 flex w-full">
-              <div class="select-list w-2/6 border-r">
-                <SelectedNumbers
-                  availableBetTypes={lotteryRound.lottoBetTypes}
+          <!-- Play Area -->
+          <div class="py-2 flex w-full">
+            <div class="select-list w-2/6 border-r">
+              <SelectedNumbers availableBetTypes={lotteryRound.lottoBetTypes} />
+            </div>
+            {#if $selectedBetTypeStore}
+              <div class="numpad w-4/6 flex flex-col items-center">
+                <NumberPad
+                  digitsCount={$selectedDigitsCount}
+                  selectedBetType={$selectedBetType}
+                  activeLotteryTypesStore={selectedBetTypeStore}
+                  activeLotteryTypesArrayStore={selectedBetTypesStore}
                 />
               </div>
-              {#if $selectedBetTypeStore}
-                <div class="numpad w-4/6 flex flex-col items-center">
-                  <NumberPad
-                    digitsCount={$selectedDigitsCount}
-                    selectedBetType={$selectedBetType}
-                    activeLotteryTypesStore={selectedBetTypeStore}
-                    activeLotteryTypesArrayStore={selectedBetTypesStore}
-                  />
-                </div>
-              {:else}
-                <div class="w-4/6 flex flex-col items-center justify-center">
-                  <p class="text-white text-center">
-                    กรุณาเลือกประเภทการเดิมพัน
-                  </p>
-                </div>
-              {/if}
-            </div>
+            {:else}
+              <div class="w-4/6 flex flex-col items-center justify-center">
+                <p class="text-white text-center">กรุณาเลือกประเภทการเดิมพัน</p>
+              </div>
+            {/if}
+          </div>
 
-            <div class="flex justify-center items-center mt-4 space-x-1">
-              <button
-                on:click={betStore.clearAll}
-                class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-              >
-                ลบทั้งหมด
-              </button>
-              <button
-                on:click={openBetModal}
-                class="btn-gradient px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
-                disabled={enterPriceButton}
-              >
-                ใส่ราคา
-              </button>
-            </div>
+          <div class="flex justify-center items-center mt-4 space-x-1">
+            <button
+              on:click={betStore.clearAll}
+              class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+            >
+              ลบทั้งหมด
+            </button>
+            <button
+              on:click={openBetModal}
+              class="btn-gradient px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+              disabled={enterPriceButton}
+            >
+              ใส่ราคา
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -379,7 +375,6 @@
 </div>
 
 <style lang="postcss">
-
   button:disabled {
     background: silver !important;
     cursor: not-allowed;

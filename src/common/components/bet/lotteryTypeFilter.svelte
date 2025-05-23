@@ -46,7 +46,6 @@
       selectedBetTypes = [];
       selectedBetType = null;
       
-      // Dispatch the change to notify parent component that selections are cleared
       dispatch("typesChanged", {
         availableBetTypes,
         digitCount: 0,
@@ -61,6 +60,8 @@
   }
 
   const groupedBetTypes: GroupedBetTypes[] = groupBetType(availableBetTypes);
+
+  console.log(groupedBetTypes);
 
   function isDigitGroupSelected(digitGroup: number): boolean {
     return selectedDigitGroup === digitGroup;
