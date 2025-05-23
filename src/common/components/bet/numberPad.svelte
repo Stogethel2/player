@@ -117,10 +117,9 @@
       <input
         type="number"
         inputmode="numeric"
-        min="0"
-        max="9"
+        maxlength="1"
         pattern="[0-9]"
-        class="input w-12 h-12 sm:w-14 sm:h-14 text-center text-lg mb-2 border-gold"
+        class="input w-12 h-12 sm:w-14 sm:h-14 text-center text-lg mb-2 border-gold no-spinner"
         bind:value={digits[index]}
         on:input={(event) => handleDigitInput(event, index)}
         bind:this={digitInputRefs[index]}
@@ -145,3 +144,16 @@
     {/each}
   </div>
 </div>
+
+<style>
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* For Firefox */
+  .no-spinner {
+    -moz-appearance: textfield;
+  }
+</style>

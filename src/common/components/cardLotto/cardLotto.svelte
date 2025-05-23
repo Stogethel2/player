@@ -3,6 +3,7 @@
   import AlarmClock from "lucide-svelte/icons/alarm-clock";
   import ButtonCardLotto from "./buttonCardLotto.svelte";
   import { goto } from "$app/navigation";
+  import { calculateTimeLeft, type TimeLeft } from "$lib/utils/date-time.utils";
   export let headerImageBackground: string | null = null;
   export let icon;
   export let title;
@@ -16,66 +17,15 @@
   export let round_status: string;
 
   let not_open = false;
-
   let timerIntervalTarget: ReturnType<typeof setInterval>;
+  let dateRun: string = "";
 
   function handleButtonClick() {
-    console.log("Button clicked for:", name);
     if (name === "yeekee") {
       goto("/yeekee");
     } else {
       goto("/play?lottoId=" + lottoId);
     }
-  }
-
-  let dateRun: string = "";
-
-  // ตัวแปรสำหรับเวลา
-  let days,
-    hours,
-    minutes,
-    seconds = 0;
-
-  let hoursToStr,
-    minutesToStr,
-    secondsToStr = "";
-
-  // คำนวณเวลาที่เหลือ
-  function calculateTimeLeft(targetDate: string, endBetMin: number): string {
-    // set now to timezone UTC+7
-    let now = new Date();
-
-    // set date to timezone UTC+7
-    let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
-    date.setHours(date.getHours() + 7);
-
-    let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
-    let difference = Number(end_bet_min) - Number(now);
-
-    if (difference > 0) {
-      days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      minutes = Math.floor((difference / (1000 * 60)) % 60);
-      seconds = Math.floor((difference / 1000) % 60);
-      hoursToStr = hours.toString();
-      minutesToStr = minutes.toString();
-      secondsToStr = seconds.toString();
-      if (hoursToStr.length == 1) {
-        hoursToStr = "0" + hoursToStr;
-      }
-      if (minutesToStr.length == 1) {
-        minutesToStr = "0" + minutesToStr;
-      }
-      if (secondsToStr.length == 1) {
-        secondsToStr = "0" + secondsToStr;
-      }
-    } else {
-      // ตั้งค่าทุกค่าเป็นศูนย์เมื่อถึงเวลาที่กำหนด
-      days = 0;
-      hoursToStr = minutesToStr = secondsToStr = "00";
-      open = false;
-    }
-    return `เวลาซื้อเหลือ ${days} วัน ${hoursToStr}:${minutesToStr}:${secondsToStr}`;
   }
 
   onMount(() => {
@@ -84,7 +34,12 @@
 
       if (targetDate && endBetMin >= 0) {
         timerIntervalTarget = setInterval(() => {
-          dateRun = calculateTimeLeft(targetDate, endBetMin);
+          const timeLeft = calculateTimeLeft(targetDate, endBetMin);
+          dateRun = timeLeft.formattedText;
+
+          if (timeLeft.isTimeUp) {
+            open = false;
+          }
         }, 1000);
       }
 

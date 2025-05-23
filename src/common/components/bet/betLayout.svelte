@@ -168,10 +168,7 @@
   });
 
   onDestroy(() => {
-    clearInterval(timerInterval);
-    if (timerIntervalTarget) {
-      clearInterval(timerIntervalTarget);
-    }
+    clearInterval(timerIntervalTarget ?? timerInterval);
   });
 
   function handleBetTypeChange(event: CustomEvent) {
