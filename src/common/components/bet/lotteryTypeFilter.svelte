@@ -61,7 +61,6 @@
 
   const groupedBetTypes: GroupedBetTypes[] = groupBetType(availableBetTypes);
 
-  console.log(groupedBetTypes);
 
   function isDigitGroupSelected(digitGroup: number): boolean {
     return selectedDigitGroup === digitGroup;

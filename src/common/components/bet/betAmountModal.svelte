@@ -5,7 +5,7 @@
 
     import { createEventDispatcher, onMount } from "svelte";
     import { derived } from "svelte/store";
-    import BetSummaryTable from "./BetSummary/BetSummaryTable.svelte";
+    import BetSummaryTable from "./BetSummary/betSummaryTable.svelte";
     import type {
         BetGroupSummary,
         BetSummary,
@@ -15,7 +15,7 @@
     import Loading from "../loading/loading.svelte";
     import ButtonLoading from "../loading/buttonLoading.svelte";
 
-    // wallet
+    // wallet api
     import { walletApi } from "$lib/api/endpoint/balance";
 
     export const QUICK_BET_AMOUNTS = [5, 10, 20, 50, 100] as const;
@@ -32,8 +32,6 @@
 
     /* Get bet summary from store */
     $: currentBetSummary = derived(betStore, calculateBetSummary);
-
-    // $: console.log({ $currentBetSummary });
 
     async function handleSubmitBet() {
         const order: Order = await createOrder();
@@ -131,7 +129,7 @@
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="w-11/12 max-w-2xl bg-black rounded-lg overflow-hidden">
+    <div class="modal-container w-11/12 max-w-2xl rounded-lg overflow-hidden">
         <!-- Header -->
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
@@ -158,7 +156,7 @@
         <div class="p-4 space-y-4">
             <div class="space-y-2">
                 <button
-                    class="w-full py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+                    class="w-full py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
                     on:click={handleClearBetAmounts}
                 >
                     เคลียร์จำนวนเงิน
@@ -167,14 +165,14 @@
                 <div class="grid grid-cols-3 gap-2">
                     {#each QUICK_BET_AMOUNTS as amount}
                         <button
-                            class="py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+                            class="py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
                             on:click={() => handleQuickBetAmount(amount)}
                         >
                             {amount}฿
                         </button>
                     {/each}
                     <button
-                        class="py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+                        class="py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
                     >
                         ระบุ
                     </button>
@@ -187,7 +185,7 @@
                 <input
                     id="totalAmount"
                     type="number"
-                    class="input w-full bg-gray-100 text-right"
+                    class="input w-full text-right"
                     readonly
                     value={$currentBetSummary.totals.total_amount}
                 />
@@ -212,7 +210,7 @@
             <!-- Action Buttons -->
             <div class="flex justify-between gap-4">
                 <button
-                    class="btn flex-1 py-2 bg-gray-100 hover:bg-gray-200"
+                    class="btn flex-1 py-2 bg-gray-700 text-white hover:bg-gray-600"
                     on:click={handleCloseModal}
                 >
                     ยกเลิกทั้งหมด

@@ -29,6 +29,12 @@ body {
   border-color: var(--color-text);
 }
 
+/* Base modal container styling */
+.modal-container {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
 .text-gold {
   color: var(--color-gold);
 }

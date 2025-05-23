@@ -26,17 +26,8 @@
   import PaymentSummary from "./confirmPayment.svelte";
   import SelectedNumbers from "./selectedNumbers.svelte";
 
-  /* Timer store and state */
-  const timeRemaining = writable(0);
-  let timerInterval: ReturnType<typeof setInterval>;
-  let displayTime = "";
+  /* Countdown state */
   let timerIntervalTarget: ReturnType<typeof setInterval>;
-
-  $: {
-    const remainingMinutes = Math.floor($timeRemaining / 60);
-    const remainingSeconds = $timeRemaining % 60;
-    displayTime = `${remainingMinutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-  }
 
   /* Main state */
   let isLoading = true;
@@ -48,17 +39,12 @@
   let showPaymentSummary = false;
   let order: Order | null = null;
   let lotteryRound: LottoRound | null = null;
-  let lotto_name = "";
 
   let end_bet_min = 0;
   let dateRun: string = "";
 
   const selectedBetTypeStore = writable<LottoBetType | undefined>(undefined);
   const selectedBetTypesStore = writable<LottoBetType[]>([]);
-  const selectedBetTypesCount = derived(
-    selectedBetTypesStore,
-    ($selectedBetTypesStore) => $selectedBetTypesStore?.length || 0
-  );
   const selectedBetType = derived(
     selectedBetTypeStore,
     ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_type || ""
@@ -68,20 +54,6 @@
     ($selectedBetTypeStore) => $selectedBetTypeStore?.bet_digit || 3
   );
 
-  function startTimer(seconds: number) {
-    timeRemaining.set(seconds);
-    clearInterval(timerInterval);
-
-    timerInterval = setInterval(() => {
-      timeRemaining.update((time) => {
-        if (time <= 0) {
-          clearInterval(timerInterval);
-          return 0;
-        }
-        return time - 1;
-      });
-    }, 1000);
-  }
 
   onMount(async () => {
     isLoading = true;
@@ -106,11 +78,9 @@
       }
       lotteryRound = roundData;
       end_bet_min = lotteryRound.lotto.default_close_bet_minutes;
-      lotto_name = lotteryRound.lotto.lotto_name;
       let targetDate = lotteryRound.round_date;
 
       if (lotteryRound && end_bet_min >= 0) {
-        startTimer(300); // Start 5 minute countdown
         timerIntervalTarget = setInterval(() => {
           dateRun = calculateTimeLeft(targetDate, end_bet_min).formattedText;
         }, 1000);
@@ -125,7 +95,7 @@
   });
 
   onDestroy(() => {
-    clearInterval(timerIntervalTarget ?? timerInterval);
+    clearInterval(timerIntervalTarget);
   });
 
   function handleBetTypeChange(event: CustomEvent) {

@@ -1,14 +1,20 @@
 <script lang="ts">
     import { betStore } from "$lib/stores/BetStore";
     import { derived } from "svelte/store";
+    import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import { getTypeClass } from "$lib/utils/play-utils";
     import type { LottoBetType } from "$lib/interface/lotto.types";
 
     export let availableBetTypes: LottoBetType[] = [];
 
-    // clear store
-    betStore.clearAll();
+    let betGroups;
+    let totalBet = 0;
+    let enableScrolling = false;
+
+    onMount(() => {
+        betStore.clearAll();
+    });
 
     const betListSummary = derived(betStore, () => {
         const summary = betStore.getSummary();

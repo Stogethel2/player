@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
-import type { BetTypeGroup, LotteryBet, BetSummary } from "../interface/bet.types";
-import type { LottoBetType, Lotto } from "../interface/lotto.types";
+import type { BetTypeGroup, BetSummary } from "../interface/bet.types";
+import type { LottoBetType } from "../interface/lotto.types";
 import { betUtils } from "../utils/bet.utils";
 import { calculateBetSummary } from "$lib/utils/bet-calculations.utils";
 
