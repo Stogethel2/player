@@ -5,7 +5,7 @@
 
     import { createEventDispatcher, onMount } from "svelte";
     import { derived } from "svelte/store";
-    import BetSummaryTable from "./BetSummary/betSummaryTable.svelte";
+    import BetSummaryTable from "./BetSummary/BetSummaryTable.svelte";
     import type {
         BetGroupSummary,
         BetSummary,
@@ -33,7 +33,7 @@
     /* Get bet summary from store */
     $: currentBetSummary = derived(betStore, calculateBetSummary);
 
-    $: console.log({ $currentBetSummary });
+    // $: console.log({ $currentBetSummary });
 
     async function handleSubmitBet() {
         const order: Order = await createOrder();

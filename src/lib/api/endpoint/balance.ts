@@ -24,18 +24,23 @@ export const walletApi = {
     },
 
     createBet: async (ticketId: string, roundId: string, amount: number): Promise<PlaceBetResponse> => {
-        const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClient.post('/public/placeBet', {
-            agent_name: getAgentName(),
-            username: getUsername(),
-            betAmount: amount,
-            tiketId: ticketId,
-            roundId: roundId,
-        });
+        try {
+            const response: AxiosResponse<ApiResponseBalance<PlaceBetResponse>> = await apiClient.post('/public/createBet', {
+                agent_name: getAgentName(),
+                username: getUsername(),
+                betAmount: amount,
+                tiketId: ticketId,
+                roundId: roundId,
+            });
 
-        if (response.data.status !== 'OK') {
-            throw new Error(`Bet placement failed: ${response.data.data.message}`);
+            if (!response.data.status) {
+                throw new Error(`Bet placement failed:`);
+            }
+
+            return response.data.data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
         }
-
-        return response.data.data;
     }
 };

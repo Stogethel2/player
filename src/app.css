@@ -34,7 +34,7 @@ body {
 }
 
 .border-gold {
-  border-color: var(--color-gold);
+  border-color: var(--color-gold) !important;
 }
 
 .bg-gold-gradient {

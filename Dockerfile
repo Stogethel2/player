@@ -25,10 +25,10 @@ COPY --from=builder /app/build ./build
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=3001
 
 # Expose internal port
-EXPOSE 3000
+EXPOSE 3001
 
 # Start the application
 CMD ["node", "build"]

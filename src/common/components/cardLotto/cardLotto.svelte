@@ -42,8 +42,12 @@
 
   // คำนวณเวลาที่เหลือ
   function calculateTimeLeft(targetDate: string, endBetMin: number): string {
+    // set now to timezone UTC+7
     let now = new Date();
-    let date = new Date(targetDate.replace("T", " ").split(".")[0]);
+
+    // set date to timezone UTC+7
+    let date = new Date(targetDate.replace('T', ' ').split('.')[0]);
+    date.setHours(date.getHours() + 7);
 
     let end_bet_min = new Date(date.getTime() - endBetMin * 60 * 1000);
     let difference = Number(end_bet_min) - Number(now);

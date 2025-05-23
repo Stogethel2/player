@@ -3,8 +3,8 @@
   import { betStore } from "$lib/stores/BetStore";
   import { syncBetSummaryWithStore } from "$lib/utils/bet-calculations.utils";
 
-  import BetRow from "./betRow.svelte";
-  import TableHeader from "./tableHeader.svelte";
+  import BetRow from "./BetRow.svelte";
+  import TableHeader from "./TableHeader.svelte";
   import { createEventDispatcher } from "svelte";
   import { derived } from "svelte/store";
 

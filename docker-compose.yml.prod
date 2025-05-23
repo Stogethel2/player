@@ -16,11 +16,13 @@ services:
       VITE_API_URL: ${VITE_API_URL}
       VITE_API_VERSION: ${VITE_API_VERSION}
       VITE_API_TIMEOUT: ${VITE_API_TIMEOUT}
-    restart: always
+    expose:
+      -  "3001"
+    restart: unless-stopped
     networks:
       - app-network
-    deploy:
-      replicas: 2
+    # deploy:
+    #   replicas: 2
       
 networks:
   app-network:

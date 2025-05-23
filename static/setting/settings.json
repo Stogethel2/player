@@ -17,12 +17,8 @@
             "path": "/history"
         },
         {
-            "label": "แนะนำเพื่อน",
-            "path": "/"
-        },
-        {
             "label": "ช่วยเหลือ",
-            "path": "/"
+            "path": "/lottoRule"
         }
     ],
     "announcement": "1234 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, perferendis?"

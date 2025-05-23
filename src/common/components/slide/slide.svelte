@@ -44,7 +44,7 @@
     onMount(async () => {
         try {
             //Get from api
-            const response = await BannerApi.getBannerAgent($agent_id ? $agent_id : '');
+            const response = await BannerApi.getBannerAgent($agent_id ?? '');
             images = response.map((item) => item.image);
         } catch (error) {
             console.error("Error fetching banners:", error);

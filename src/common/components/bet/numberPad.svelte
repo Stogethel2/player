@@ -120,7 +120,7 @@
         min="0"
         max="9"
         pattern="[0-9]"
-        class="input w-12 h-12 sm:w-14 sm:h-14 text-center text-lg mb-2"
+        class="input w-12 h-12 sm:w-14 sm:h-14 text-center text-lg mb-2 border-gold"
         bind:value={digits[index]}
         on:input={(event) => handleDigitInput(event, index)}
         bind:this={digitInputRefs[index]}
@@ -132,15 +132,11 @@
   >
     {#each NUMPAD_LAYOUT as value (value)}
       <button
-        class="btn aspect-square w-full border text-base sm:text-lg"
+        class="btn aspect-square w-full text-base sm:text-lg "
         class:bg-teal-500={value === "สุ่ม"}
         class:bg-red-500={value === "ลบ"}
-        class:bg-white={typeof value === "number"}
+        class:bg-gray-700={typeof value === "number"}
         class:text-white={value === "สุ่ม" || value === "ลบ"}
-        class:text-gray-700={typeof value === "number"}
-        class:hover:bg-teal-600={value === "สุ่ม"}
-        class:hover:bg-red-600={value === "ลบ"}
-        class:hover:bg-gray-50={typeof value === "number"}
         class:active:bg-gray-100={typeof value === "number"}
         on:click={() => handleKeypadPress(value)}
       >

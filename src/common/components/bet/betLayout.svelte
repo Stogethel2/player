@@ -20,13 +20,13 @@
   } from "lucide-svelte";
 
   /* Components */
-  import BetAmountModal from "./betAmountModal.svelte";
-  import LottoRulesModal from "./lottoRulesModal.svelte";
-  import LottoNumberBlock from "./lottoNumberBlockModal.svelte";
-  import LotteryTypeFilter from "./lotteryTypeFilter.svelte";
-  import NumberPad from "./numberPad.svelte";
-  import PaymentSummary from "./confirmPayment.svelte";
-  import SelectedNumbers from "./selectedNumbers.svelte";
+  import BetAmountModal from "./BetAmountModal.svelte";
+  import LottoRulesModal from "./LottoRulesModal.svelte";
+  import LottoNumberBlock from "./LottoNumberBlockModal.svelte";
+  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
+  import NumberPad from "./NumberPad.svelte";
+  import PaymentSummary from "./ConfirmPayment.svelte";
+  import SelectedNumbers from "./SelectedNumbers.svelte";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -230,23 +230,23 @@
 
 <div class="w-full mx-auto max-w-7xl bg-theme min-h-screen flex flex-col items-center ">
   {#if isLoading}
-    <p class="text-white text-xl">กำลังโหลดข้อมูล...</p> <!-- Loading... -->
+    <p class="text-white text-xl mt-8">กำลังโหลดข้อมูล...</p>
   {:else if initializationError}
     <div class="text-center p-8">
       <CircleAlert size={48} class="mx-auto mb-4 text-red-500" />
-      <p class="text-red-400 text-xl mb-2">เกิดข้อผิดพลาด</p> <!-- Error -->
+      <p class="text-red-400 text-xl mb-2">เกิดข้อผิดพลาด</p>
       <p class="text-gray-300 mb-6">{initializationError}</p>
       <button
         class="btn-gradient px-6 text-sm"
         on:click={navigateBack}
       >
-        กลับไปหน้าหลัก <!-- Back to Home -->
+        กลับไปหน้าหลัก
       </button>
     </div>
   {:else if lotteryRound}
     <div class="flex justify-center px-4 sm:px-6 lg:px-8 w-full">
       <div
-        class="bg-transparent border border-[#dab768] shadow-lg rounded-lg my-4 w-full max-w-7xl"
+        class="bg-transparent border border-gold  shadow-lg rounded-lg my-4 w-full max-w-7xl"
       >
         <!-- Navigation -->
         <button
@@ -261,7 +261,7 @@
 
         <!-- Header -->
         <div class="p-2 mb-4">
-          <div class="flex flex-col sm:flex-row justify-between border-b pb-4">
+          <div class="flex flex-col sm:flex-row justify-between border-b pb-4 border-gold ">
             <div class="flex flex-wrap items-center mb-2 sm:mb-0">
               <div
                 class="flex flex-row items-center justify-between md:justify-start"
@@ -371,7 +371,7 @@
                 </button>
                 <button
                   on:click={openBetModal}
-                  class="btn bg-green-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
+                  class="btn-gradient px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"
                   disabled={enterPriceButton}
                 >
                   ใส่ราคา
@@ -427,8 +427,8 @@
   }
 
   button:disabled {
-    background-color: #9ae6b4;
+    background: silver !important;
     cursor: not-allowed;
-    opacity: 0.7;
+    opacity: 0.9;
   }
 </style>
