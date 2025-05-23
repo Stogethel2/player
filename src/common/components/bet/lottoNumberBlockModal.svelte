@@ -35,7 +35,7 @@
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="w-11/12 max-w-2xl bg-black rounded-lg overflow-hidden">
+    <div class="modal-container w-11/12 max-w-2xl rounded-lg overflow-hidden">
         <!-- Header -->
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
@@ -58,7 +58,7 @@
         <!-- Content -->
         <div class="p-4 space-y-1 overflow-x-auto overflow-y-auto max-h-[600px]">
             {#if lotto}
-                <div style="color: black;">
+                <div style="color: var(--color-text);">
                     <!-- รายละเอียดการเดิมพัน -->
                     <table class="border-collapse w-full">
                         <thead class="bg-red-600 text-white">

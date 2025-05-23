@@ -61,8 +61,8 @@
 
   /* Success handling */
   async function handlePaymentSuccess() {
-    if (paymentStatusReturn === "COMPLETED") {
-      betStore.clearAll;
+      if (paymentStatusReturn === "COMPLETED") {
+        betStore.clearAll();
       setTimeout(() => {
         window.location.reload();
       }, 3000);
@@ -112,7 +112,7 @@
     class="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
   >
     <div
-      class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden"
+      class="modal-container w-11/12 max-w-2xl rounded-lg overflow-hidden"
       in:fly={{ y: 20, duration: 200 }}
       out:fade
     >
@@ -156,7 +156,7 @@
 
       <!-- Error Message -->
       {#if error}
-        <div class="px-4 py-3 bg-red-50" transition:fade>
+        <div class="px-4 py-3 bg-red-900" transition:fade>
           <div class="flex items-center">
             <AlertCircle class="text-red-500 mr-2" size={20} />
             <p class="text-red-700">{error}</p>
@@ -168,14 +168,14 @@
         <!-- Summary Cards -->
         <div class="px-4 py-5 sm:p-6">
           <div class="grid grid-cols-2 gap-4">
-            <div class="rounded-lg bg-gray-50 p-4">
-              <p class="text-sm font-medium text-gray-500">ยอดเดิมพันรวม</p>
-              <p class="mt-1 text-2xl font-semibold text-gray-900">
+            <div class="rounded-lg bg-gray-800 p-4">
+              <p class="text-sm font-medium text-gray-300">ยอดเดิมพันรวม</p>
+              <p class="mt-1 text-2xl font-semibold text-gray-100">
                 ฿{totalBetAmount.toFixed(2)}
               </p>
             </div>
-            <div class="rounded-lg bg-gray-50 p-4">
-              <p class="text-sm font-medium text-gray-500">เรทจ่ายรวม</p>
+            <div class="rounded-lg bg-gray-800 p-4">
+              <p class="text-sm font-medium text-gray-300">เรทจ่ายรวม</p>
               <p class="mt-1 text-2xl font-semibold text-green-600">
                 ฿{totalPayout.toFixed(2)}
               </p>
@@ -184,21 +184,21 @@
 
           <!-- Bet Details -->
           <div class="mt-6">
-            <h4 class="text-sm font-medium text-gray-900">
+            <h4 class="text-sm font-medium text-gray-100">
               รายละเอียดการชำระเงิน
             </h4>
             <div class="mt-3 max-h-60 space-y-2 overflow-y-auto rounded-md">
               {#each orderDetails.orderBets as bet, index (getBetKey(bet, index))}
                 <div
-                  class="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3"
+                  class="flex items-center justify-between rounded-lg bg-gray-800 px-4 py-3"
                 >
                   <div>
-                    <p class="text-sm font-medium text-gray-900">
+                    <p class="text-sm font-medium text-gray-100">
                       {bet.bet_type_name}: <span class="text-blue-500">{bet.bet_number}</span>
                     </p>
                   </div>
                   <div>
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm text-gray-300">
                       ซื้อ: ฿{bet.bet_amount.toFixed(2)}
                     </p>
                   </div>
@@ -236,7 +236,7 @@
             <p class="text-lg font-medium text-red-600 mb-2">
               การชำระเงินล้มเหลว
             </p>
-            <p class="text-gray-600">
+            <p class="text-gray-300">
               เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองใหม่อีกครั้ง
             </p>
             {#if error}
@@ -251,7 +251,7 @@
       <!-- Pending Message -->
       {#if paymentStatus === "PENDING"}
         <div
-          class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 space-x-reverse space-x-3"
+          class="bg-gray-800 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 space-x-reverse space-x-3"
         >
           <button
             type="button"
@@ -268,7 +268,7 @@
           </button>
           <button
             type="button"
-            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:mt-0 sm:w-auto sm:text-sm"
+            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-base font-medium text-gray-200 shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:mt-0 sm:w-auto sm:text-sm"
             on:click={handleCancel}
             disabled={isProcessing}
           >

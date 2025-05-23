@@ -36,7 +36,7 @@
 </script>
 
 <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="w-11/12 max-w-2xl bg-white rounded-lg overflow-hidden">
+    <div class="modal-container w-11/12 max-w-2xl rounded-lg overflow-hidden">
         <!-- Header -->
         <header
             class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
@@ -71,7 +71,7 @@
                 <p>&nbsp;</p>
 
                 <!-- รายละเอียดการเดิมพัน -->
-                <div style="color: black;">
+                <div style="color: var(--color-text);">
                     <h3 class="text-lg font-bold">
                         <u>อัตราการจ่าย</u>
                     </h3>
