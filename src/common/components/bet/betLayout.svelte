@@ -241,9 +241,9 @@
       </button>
     </div>
   {:else if lotteryRound}
-    <div class="flex justify-center px-4 sm:px-6 lg:px-8 w-full">
+    <div class="flex justify-center px-4 sm:px-6 lg:px-8 mb-20 lg:mb-4 w-full">
       <div
-        class="bg-transparent border border-gold shadow-lg rounded-lg my-4 w-full max-w-7xl"
+        class="bg-transparent border border-gold shadow-lg rounded-lg mt-4  w-full max-w-7xl"
       >
         <!-- Navigation -->
         <button
@@ -344,7 +344,7 @@
 
             <!-- Play Area -->
             {#if selectedBetTypeStore !== null}
-              <div class="p-2 flex w-full">
+              <div class="py-2 flex w-full">
                 <div class="select-list w-2/6 border-r">
                   <SelectedNumbers
                     availableBetTypes={lotteryRound.lottoBetTypes}
@@ -359,7 +359,7 @@
                 </div>
               </div>
 
-              <div class="flex justify-center items-center mt-4 space-x-1 mb-6">
+              <div class="flex justify-center items-center mt-4 space-x-1">
                 <button
                   on:click={betStore.clearAll}
                   class="btn bg-red-500 text-white px-6 sm:px-8 py-2 rounded-lg text-sm sm:text-base"

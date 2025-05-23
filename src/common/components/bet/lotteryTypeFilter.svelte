@@ -30,10 +30,7 @@
     selectedDigitGroup = digitGroup;
   }
 
-  console.log("availableBetTypes", groupBetType(availableBetTypes));
-  // availableBetTypes = unGroupBetType(groupBetType(availableBetTypes));
   const groupedBetTypes: GroupedBetTypes[] = groupBetType(availableBetTypes);
-  console.log("groupedBetTypes", groupedBetTypes);
 
   function isBetTypeSelected(bet_type_id: string): boolean {
     return selectedBetType?.id === bet_type_id;
