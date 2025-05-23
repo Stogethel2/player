@@ -20,13 +20,13 @@
   } from "lucide-svelte";
 
   /* Components */
-  import BetAmountModal from "./BetAmountModal.svelte";
-  import LottoRulesModal from "./LottoRulesModal.svelte";
-  import LottoNumberBlock from "./LottoNumberBlockModal.svelte";
-  import LotteryTypeFilter from "./LotteryTypeFilter.svelte";
-  import NumberPad from "./NumberPad.svelte";
-  import PaymentSummary from "./ConfirmPayment.svelte";
-  import SelectedNumbers from "./SelectedNumbers.svelte";
+  import BetAmountModal from "./betAmountModal.svelte";
+  import LottoRulesModal from "./lottoRulesModal.svelte";
+  import LottoNumberBlock from "./lottoNumberBlockModal.svelte";
+  import LotteryTypeFilter from "./lotteryTypeFilter.svelte";
+  import NumberPad from "./numberPad.svelte";
+  import PaymentSummary from "./confirmPayment.svelte";
+  import SelectedNumbers from "./selectedNumbers.svelte";
 
   /* Timer store and state */
   const timeRemaining = writable(0);
@@ -160,7 +160,8 @@
       }
     } catch (error) {
       console.error("Error during component initialization:", error);
-      initializationError = "เกิดข้อผิดพลาดในการโหลดข้อมูล (An error occurred while loading data).";
+      initializationError =
+        "เกิดข้อผิดพลาดในการโหลดข้อมูล (An error occurred while loading data).";
     } finally {
       isLoading = false;
     }
@@ -228,7 +229,9 @@
   $: enterPriceButton = totalBet == 0;
 </script>
 
-<div class="w-full mx-auto max-w-7xl bg-theme min-h-screen flex flex-col items-center ">
+<div
+  class="w-full mx-auto max-w-7xl bg-theme min-h-screen flex flex-col items-center"
+>
   {#if isLoading}
     <p class="text-white text-xl mt-8">กำลังโหลดข้อมูล...</p>
   {:else if initializationError}
@@ -236,17 +239,14 @@
       <CircleAlert size={48} class="mx-auto mb-4 text-red-500" />
       <p class="text-red-400 text-xl mb-2">เกิดข้อผิดพลาด</p>
       <p class="text-gray-300 mb-6">{initializationError}</p>
-      <button
-        class="btn-gradient px-6 text-sm"
-        on:click={navigateBack}
-      >
+      <button class="btn-gradient p-2 text-sm" on:click={navigateBack}>
         กลับไปหน้าหลัก
       </button>
     </div>
   {:else if lotteryRound}
     <div class="flex justify-center px-4 sm:px-6 lg:px-8 w-full">
       <div
-        class="bg-transparent border border-gold  shadow-lg rounded-lg my-4 w-full max-w-7xl"
+        class="bg-transparent border border-gold shadow-lg rounded-lg my-4 w-full max-w-7xl"
       >
         <!-- Navigation -->
         <button
@@ -261,11 +261,11 @@
 
         <!-- Header -->
         <div class="p-2 mb-4">
-          <div class="flex flex-col sm:flex-row justify-between border-b pb-4 border-gold ">
-            <div class="flex flex-wrap items-center mb-2 sm:mb-0">
-              <div
-                class="flex flex-row items-center justify-between md:justify-start"
-              >
+          <div
+            class="flex flex-col sm:flex-row justify-between border-b pb-4 border-gold"
+          >
+            <div class="flex flex-wrap items-center mb-2 sm:mb-0 w-full">
+              <div class="flex flex-row items-center justify-between w-full">
                 <div class="flex flex-row items-center">
                   <img
                     src={lotteryRound.lotto.lotto_image}
@@ -273,7 +273,9 @@
                     class="w-8 h-8"
                   />
 
-                  <p class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4 text-white">
+                  <p
+                    class="text-xl sm:text-2xl font-bold mx-2 sm:mx-4 pr-4 text-white"
+                  >
                     {lotteryRound.lotto.lotto_name}
                   </p>
                 </div>
@@ -289,32 +291,31 @@
                   </div>
                 </div>
               </div>
-              <div class="flex flex-row justify-end">
-                <p
-                  class="text-xs sm:text-sm blink mt-2 md:mt-0 md:ml-2 text-right"
-                >
+              <div class="flex flex-row items-center justify-between w-full">
+                <p class="text-sm blink mt-2 md:mt-0">
                   เวลาซื้อเหลือ {dateRun}
                 </p>
-              </div>
-            </div>
-            <div class="flex items-center text-white mt-4">
-              <button
-                class="btn-gradient p-2"
-                on:click={openLottoNumberBlockModal}
-              >
-                <div class="text-black font-bold text-sm flex items-center">
-                  <p>รายเลขอั้น</p>
-                </div>
-              </button>
 
-              <button
-                class="btn-gradient p-2 ml-2"
-                on:click={openLottoRuleModal}
-              >
-                <div class="text-black font-bold text-sm flex items-center">
-                  <p>กติกา</p>
+                <div class="flex gap-2 mt-1">
+                  <button
+                    class="btn-gradient px-4 py-1 !rounded-full text-xs"
+                    on:click={openLottoNumberBlockModal}
+                  >
+                    <div class="text-black font-bold flex items-center">
+                      <p>รายเลขอั้น</p>
+                    </div>
+                  </button>
+
+                  <button
+                    class="btn-gradient px-4 py-1 !rounded-full text-xs"
+                    on:click={openLottoRuleModal}
+                  >
+                    <div class="text-black font-bold flex items-center">
+                      <p>กติกา</p>
+                    </div>
+                  </button>
                 </div>
-              </button>
+              </div>
             </div>
           </div>
 
@@ -329,13 +330,12 @@
             <!-- Play Mode Tabs -->
             <div class="flex relative justify-start mt-4">
               <button
-               class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
+                class="btn-gradient flex items-center justify-center text-center cursor-pointer py-2 px-3 sm:px-4 text-xs sm:text-sm border-r border-t relative border-b {selectedPlayMode
                   ? 'border-b-white'
                   : ''}"
                 on:click={() => setPlayMode("custom")}
               >
                 <div
-                
                   class="absolute 0 h-1 -top-1 {selectedPlayMode
                     ? 'block'
                     : 'hidden'}"
@@ -393,7 +393,10 @@
   <!-- Modals: Only render if not loading and no init error, and show flag is true -->
   {#if !isLoading && !initializationError}
     {#if showBetModal}
-      <BetAmountModal on:orderCreated={closeBetModal} on:cancel={closeBetModal} />
+      <BetAmountModal
+        on:orderCreated={closeBetModal}
+        on:cancel={closeBetModal}
+      />
     {/if}
 
     {#if showLottoRuleModal}

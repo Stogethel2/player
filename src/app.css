@@ -64,18 +64,31 @@ body {
 }
 
 .my-input {
-  @apply focus:ring-1 focus:outline-none focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out;
+  @apply focus:ring-1 focus:outline-none focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] transition duration-150 ease-in-out;
 }
 
 /* Base input and button styles for consistent look */
 .input {
-  @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500 bg-black bg-opacity-75;
+  @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)] bg-black bg-opacity-75;
 }
 
 .btn {
   @apply rounded-md font-semibold transition-colors duration-200;
 }
 
+.btn:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 1px var(--color-gold) !important;
+}
+
 .btn-gradient {
-  @apply btn bg-gold-gradient text-black !important;
+  @apply btn bg-gold-gradient text-black focus:outline-none !important;
+}
+
+.btn-gradient.active,
+.btn-gradient[aria-pressed=true] {
+  color: white !important;
+  border: 1px solid var(--color-gold) !important;
+  background: transparent !important;
+  @apply shadow-inner;
 }

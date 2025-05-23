@@ -38,18 +38,22 @@
   function isBetTypeSelected(bet_type_id: string): boolean {
     return selectedBetType?.id === bet_type_id;
   }
+
+  function isDigitGroupSelected(digitGroup: number): boolean {
+    return selectedDigitGroup === digitGroup;
+  }
 </script>
 
 <div class="py-2">
-  <p>เลือกรูปแบบ</p>
+  <p class="text-xs py-2">เลือกรูปแบบ</p>
   <div class="grid grid-cols-3 gap-2">
     {#each groupedBetTypes as groupedBetType}
       {#if groupedBetType.digitGroup}
         <button
-          class="btn-gradient p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
-          class:active={isBetTypeSelected(groupedBetType.betTypes[0].id)}
+          class="btn btn-gradient p-2 rounded-lg text-md sm:text-md transition-colors duration-200 ease-in-out"
+          class:active={isDigitGroupSelected(groupedBetType.digitGroup)}
           on:click={() => handleDigitGroupClick(groupedBetType.digitGroup)}
-          aria-pressed={isBetTypeSelected(groupedBetType.betTypes[0].id)}
+          aria-pressed={isDigitGroupSelected(groupedBetType.digitGroup)}
         >
           {groupedBetType.groupName}
         </button>
@@ -59,7 +63,7 @@
 
   {#if selectedDigitGroup}
   <div class="mt-4">
-    <p>เลือกประเภท *เลือกได้มากกว่า 1 ตัวเลือก</p>
+    <p class="text-xs py-2">เลือกประเภท *เลือกได้มากกว่า 1 ตัวเลือก</p>
     <div class="grid grid-cols-3 gap-2">
       {#each groupedBetTypes.find(g => g.digitGroup === selectedDigitGroup)?.betTypes ?? [] as betType}
         {#if betType.is_active}
