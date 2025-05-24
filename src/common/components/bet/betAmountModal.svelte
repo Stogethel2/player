@@ -50,7 +50,6 @@
             amount
         );
     }
-
     function handleClearBetAmounts(): void {
         handleQuickBetAmount(0);
     }
