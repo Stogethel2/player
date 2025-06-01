@@ -127,17 +127,17 @@
     });
 </script>
 
-<div class="fixed inset-0 bg-black/50 flex items-center justify-center">
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-[10000]">
     <div class="modal-container w-11/12 max-w-2xl rounded-lg overflow-hidden">
         <!-- Header -->
         <header
-            class="bg-red-600 text-white px-4 py-2 flex justify-between items-center"
+            class="bg-gold-gradient   text-black px-4 py-2 flex justify-between items-center"
         >
             <h2 class="text-lg font-medium">
                 ใส่ราคา - {$currentBetSummary.lotto_name}
             </h2>
             <button
-                class="text-2xl hover:opacity-80 transition-opacity"
+                class="text-2xl hover:opacity-80 transition-opacity !text-black"
                 on:click={handleCloseModal}
             >
                 &times;
@@ -215,7 +215,7 @@
                     ยกเลิกทั้งหมด
                 </button>
                 <button
-                    class="btn flex-1 py-2 bg-green-500 text-white hover:bg-green-600"
+                    class="btn flex-1 py-2 bg-gold-gradient text-black hover:bg-green-600"
                     disabled={isLoading}
                     on:click={handleSubmitBet}
                 >

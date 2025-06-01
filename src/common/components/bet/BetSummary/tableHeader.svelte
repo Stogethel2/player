@@ -1,5 +1,5 @@
 <thead
-  class="text-xs text-gray-700 uppercase bg-red-100 border-red-500 border-b sticky top-0 z-10"
+  class="text-xs text-black uppercase bg-gold-gradient-right border-gold border-b sticky top-0 z-10"
 >
   <tr>
     <th scope="col" class="px-2 py-3">ประเภท</th>

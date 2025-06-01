@@ -67,7 +67,8 @@
 </script>
 
 <tr
-  class="transition-colors duration-150 ease-in-out hover:bg-gray-50"
+  class="transition-colors duration-150 ease-in-out 
+         dark:bg-[#1a1a1a] "
   class:bg-red-50={currentAmount < 1}
 >
   <td class="px-2 py-4">

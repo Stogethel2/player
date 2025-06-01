@@ -52,7 +52,7 @@
   <div
     class="overflow-x-auto overflow-y-auto max-h-[350px] scrollbar-hide hover:scrollbar-default"
   >
-    <table class="w-full text-sm text-left text-gray-500 border-red-500 border">
+    <table class="w-full text-sm text-left text-white border-gold border">
       <TableHeader />
       <tbody>
         {#each $currentBetGroups as group (group.bet_type_id)}

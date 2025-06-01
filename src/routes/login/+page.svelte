@@ -69,9 +69,9 @@
       </button>
     </form>
     <div class="bg-rose-100 bg-opacity-50 px-4 py-3 text-center">
-      <a href="#" class="text-sm text-rose-600 hover:text-rose-800">
+      <button class="text-sm text-rose-600 hover:text-rose-800">
         ลืมรหัสผ่าน?
-      </a>
+      </button>
     </div>
   </div>
 </div>

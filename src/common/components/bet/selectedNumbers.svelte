@@ -61,7 +61,6 @@
                         <h3 class="font-semibold mb-2 text-white text-xs">
                             {getBetTypeName(bet_type_id)}
                         </h3>
-                        <h3 class="font-semibold mb-2">
                         {#each betList as bet (bet.temp_id)}
                             <div
                                 class="mb-2 last:mb-0 relative flex justify-center"
